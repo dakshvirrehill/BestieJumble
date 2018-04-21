@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.SceneManagement;
+using TMPro;
 public class Select2DorVR : MonoBehaviour {
 
 	// Use this for initialization
@@ -30,6 +31,15 @@ public class Select2DorVR : MonoBehaviour {
 			SceneManager.LoadSceneAsync ("2DPuzzleScene");
 		} else {
 			StartCoroutine (SwitchToVR());
+		}
+	}
+	public void SetNamesForLoad(GameObject inpfield) {
+		string name = inpfield.transform.GetChild(0).GetChild(1).gameObject.GetComponent<TextMeshProUGUI> ().text;
+		if (!name.Equals ("")) {
+			string allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames");
+			string fallNames = allNames + ", " + name;
+			PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
+			inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 		}
 	}
 }
