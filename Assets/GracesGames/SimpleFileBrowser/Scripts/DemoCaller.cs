@@ -95,6 +95,7 @@ namespace GracesGames.SimpleFileBrowser.Scripts {
 				Texture2D abc = new Texture2D (8, 8);
 				abc.LoadImage (file);
 				image.GetComponent<RawImage>().texture=abc;
+				SaveData.control.cubeTex = abc;
 				// Convert the file from a byte array into a string
 				//string fileData = bFormatter.Deserialize(file) as string;
 				// We're done working with the file so we can close it
