@@ -46,6 +46,9 @@ public class SaveData : MonoBehaviour {
 			
 		}
 	}
+	public void DeleteAllSaveData(string[] names) {
+		
+	}
 }
 class SaveDataHolder {
 	public string username;
