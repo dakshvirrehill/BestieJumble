@@ -40,6 +40,14 @@ public class Select2DorVR : MonoBehaviour {
 			string fallNames = allNames + ", " + name;
 			PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
 			inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
+			SaveData.control.username = name;
 		}
+	}
+	public void QuitGame() {
+		#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+		#else
+			Application.Quit();
+		#endif
 	}
 }
