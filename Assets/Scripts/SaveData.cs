@@ -42,8 +42,6 @@ public class SaveData : MonoBehaviour {
 			file.Close ();
 			username = data.username;
 			cubeTex = data.cubeTex;
-		} else {
-			
 		}
 	}
 	public void DeleteAllSaveData(string[] names) {

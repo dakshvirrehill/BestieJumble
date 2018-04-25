@@ -9,10 +9,14 @@ public class MainSceenLogic : MonoBehaviour {
 	public GameObject mainUI;
 	// Use this for initialization
 	void Start () {
+		if (SaveData.control.cubeTex != null) {
+			mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
 	}
 	public void SetNamesForLoad(GameObject inpfield) {
 		string name = inpfield.GetComponent<TMP_InputField> ().text;
@@ -22,6 +26,7 @@ public class MainSceenLogic : MonoBehaviour {
 			PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
 			inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 			SaveData.control.username = name;
+			mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = name;
 		}
 	}
 	public void QuitGame() {
@@ -53,8 +58,11 @@ public class MainSceenLogic : MonoBehaviour {
 		}
 	}
 	public void LoadTextClicked(string name) {
+		SaveData.control.username = name;
 		//SaveData.control.Load (name);
 		Destroy(GameObject.Find ("LoadGameUI"));
+		mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = SaveData.control.username;
+		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 	}
 	public void DeleteAllPlayers() {
 		string[] allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames").Split(',');
