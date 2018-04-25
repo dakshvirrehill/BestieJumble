@@ -36,6 +36,7 @@ public class MainSceenLogic : MonoBehaviour {
 		if (!allNames.Equals ("")) {
 			GameObject LoadGameUI = Instantiate (LoadGamePrefab, mainUI.transform, false);
 			LoadGameUI.name = "LoadGameUI";
+			LoadGameUI.GetComponent<ScrollRect>().viewport.GetChild(0).gameObject.GetComponent<Button> ().onClick.AddListener (() => DeleteAllPlayers ());
 			GameObject content = LoadGameUI.GetComponent<ScrollRect> ().content.gameObject;
 			string[] names = allNames.Split (',');
 			float height = 60f + 60f * (names.Length - 1);
@@ -47,11 +48,12 @@ public class MainSceenLogic : MonoBehaviour {
 				lgnb.GetComponent<RectTransform> ().localPosition = firstpos;
 				firstpos = firstpos + new Vector3 (0f, -60f, 0f);
 				lgnb.GetComponent<TextMeshProUGUI> ().SetText (name);
+				lgnb.GetComponent<Button> ().onClick.AddListener (() => LoadTextClicked (name));
 			}
 		}
 	}
-	public void LoadTextClicked() {
-		
+	public void LoadTextClicked(string name) {
+		//SaveData.control.Load (name);
 		Destroy(GameObject.Find ("LoadGameUI"));
 	}
 	public void DeleteAllPlayers() {
