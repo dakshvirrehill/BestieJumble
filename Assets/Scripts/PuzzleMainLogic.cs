@@ -24,16 +24,23 @@ public class PuzzleMainLogic : MonoBehaviour {
 		int count = 0;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				PuzzleCubes[i,j]=new GameObject();
 				PuzzleCubes [i,j] = gameObject.transform.GetChild (count).gameObject;
-				//PuzzleCubePosition [i] [j] = new Vector2 ();
+				count++;
+				PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
 				PuzzleCubePosition [i,j] = new Vector2(PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.x,PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.y);
+				//Debug.Log (PuzzleCubePosition [i, j]);
 			}
 		}
+		StartCoroutine (JumblePuzzle());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+	IEnumerator JumblePuzzle() {
+		
+		yield return new WaitForSeconds (5.0f);
 	}
 }

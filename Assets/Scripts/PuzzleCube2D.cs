@@ -8,7 +8,7 @@ public class PuzzleCube2D : MonoBehaviour {
 	public bool isCorrect;
 	// Use this for initialization
 	void Start () {
-		
+		isCorrect = false;
 	}
 	
 	// Update is called once per frame
