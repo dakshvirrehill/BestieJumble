@@ -10,8 +10,10 @@ public class PuzzleMainLogic : MonoBehaviour {
 	private Vector2[,] PuzzleCubePosition;
 	//private GameObject selected1,selected2;
 	private Vector2 sel1ap, sel2ap;
+	private GameObject eventsystem;
 	// Use this for initialization
 	void Start () {
+		eventsystem = EventSystem.current.gameObject;
 		int n=0,m=0;
 		if (OrientationAndScale.Equals ("Landscape")) {
 			n = 6;
@@ -34,9 +36,10 @@ public class PuzzleMainLogic : MonoBehaviour {
 				PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
 				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
-				PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected(PuzzleCubes[i,j]));
+				GameObject pctrial = PuzzleCubes [i, j];
+				PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected(pctrial));
 				PuzzleCubePosition [i,j] = new Vector2(PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.x,PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.y);
-			//	Debug.Log ("Value for i=" + i + " and j=" + j);
+				//Debug.Log ("Value for i=" + i + " and j=" + j);
 			//	Debug.Log (PuzzleCubePosition [i, j]);
 			}
 		}
@@ -73,8 +76,6 @@ public class PuzzleMainLogic : MonoBehaviour {
 					if (actualpos.x == currentpos.x) {
 						m = (m + 1) % column;
 					}
-					PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition = PuzzleCubePosition [n, m];
-					PuzzleCubes [n, m].GetComponent<RectTransform> ().localPosition = PuzzleCubePosition [i, j];
 					sel1ap = new Vector2 (i, j);
 					sel2ap = new Vector2 (n, m);
 					swappingcpnp ();
@@ -88,31 +89,32 @@ public class PuzzleMainLogic : MonoBehaviour {
 		}
 	}
 	public void SetSelected(GameObject selected) {
-		if (sel1ap == null) {
+		if (sel1ap.x == -1) {
 			sel1ap = selected.GetComponent<PuzzleCube2D> ().actualPos;
 			iTween.ScaleTo (selected, new Vector3 (0.8f, 0.8f, 1f), 0f);
-		} else if (sel2ap == null) {
+		} else if (sel2ap.x == -1) {
 			sel2ap = selected.GetComponent<PuzzleCube2D> ().actualPos;
 			iTween.ScaleTo (selected, new Vector3 (0.8f, 0.8f, 1f), 0f);
 			MoveTheCubes ();
 		} else if (sel1ap == selected.GetComponent<PuzzleCube2D> ().actualPos) {
-			sel1ap = null;
+			sel1ap = new Vector2(-1,-1);
 			iTween.ScaleTo (selected, new Vector3 (1f, 1f, 1f), 0f);
 		} else if (sel2ap == selected.GetComponent<PuzzleCube2D> ().actualPos) {
-			sel2ap = null;
+			sel2ap = new Vector2(-1,-1);
 			iTween.ScaleTo (selected, new Vector3 (1f, 1f, 1f), 0f);
 		}
 	}
 	void MoveTheCubes() {
-		EventSystem.current.gameObject.SetActive (false);
-		iTween.MoveTo (PuzzleCubes[sel1ap.x,sel1ap.y], PuzzleCubePosition[sel2ap.x,sel2ap.y] , 0.3f);
-		iTween.MoveTo (PuzzleCubes [sel2ap.x, sel2ap.y], iTween.Hash ("position", PuzzleCubePosition [sel1ap.x, sel1ap.y], "time", 0.3f, "oncomplete", "swappingcpnp", "oncompletetarget", gameObject));
+		eventsystem.SetActive (false);
+		swappingcpnp ();
 	}
 	void swappingcpnp() {
-		int i = sel1ap.x;
-		int j = sel1ap.y;
-		int n = sel2ap.x;
-		int m = sel2ap.y;
+		int i = (int)sel1ap.x;
+		int j = (int)sel1ap.y;
+		int n = (int)sel2ap.x;
+		int m = (int)sel2ap.y;
+		PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition = PuzzleCubePosition [n, m];
+		PuzzleCubes [n, m].GetComponent<RectTransform> ().localPosition = PuzzleCubePosition [i, j];
 		Vector2 currentpos = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos;
 		PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos;
 		PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos = currentpos;
@@ -120,7 +122,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 		PuzzleCubePosition [n, m] = PuzzleCubes [n, m].GetComponent<RectTransform> ().localPosition;
 		iTween.ScaleTo (PuzzleCubes[i,j], new Vector3 (1f, 1f, 1f), 0f);
 		iTween.ScaleTo (PuzzleCubes[n,m], new Vector3 (1f, 1f, 1f), 0f);
-		sel1ap = sel2ap = null;
-		EventSystem.current.gameObject.SetActive (true);
+		sel1ap = sel2ap = new Vector2(-1,-1);
+		eventsystem.SetActive (true);
 	}
 }
