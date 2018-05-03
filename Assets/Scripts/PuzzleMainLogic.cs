@@ -34,6 +34,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 				PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
 				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
+				PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected(PuzzleCubes[i,j]));
 				PuzzleCubePosition [i,j] = new Vector2(PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.x,PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.y);
 			//	Debug.Log ("Value for i=" + i + " and j=" + j);
 			//	Debug.Log (PuzzleCubePosition [i, j]);
