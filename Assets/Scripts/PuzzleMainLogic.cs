@@ -8,10 +8,10 @@ public class PuzzleMainLogic : MonoBehaviour {
 	public string OrientationAndScale;
 	private GameObject[,] PuzzleCubes;
 	private Vector2[,] PuzzleCubePosition;
-	private GameObject selected1,selected2; 
+	//private GameObject selected1,selected2;
+	private Vector2 sel1ap, sel2ap;
 	// Use this for initialization
 	void Start () {
-		selected1 = selected2 = null;
 		int n=0,m=0;
 		if (OrientationAndScale.Equals ("Landscape")) {
 			n = 6;
@@ -64,20 +64,19 @@ public class PuzzleMainLogic : MonoBehaviour {
 					if (actualpos.y == currentpos.y) {
 						m = (m + 1) % column;
 					}
-					Vector2 actualposij = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos;
-					Vector2 currentposmn = PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos;
-					if (actualposij.x == currentposmn.x) {
+					actualpos = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos;
+					currentpos = PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos;
+					if (actualpos.x == currentpos.x) {
 						n = (n + 1) % row;
 					}
-					if (actualposij.x == currentposmn.x) {
+					if (actualpos.x == currentpos.x) {
 						m = (m + 1) % column;
 					}
-					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos;
-					PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos = currentpos;
 					PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition = PuzzleCubePosition [n, m];
 					PuzzleCubes [n, m].GetComponent<RectTransform> ().localPosition = PuzzleCubePosition [i, j];
-					PuzzleCubePosition [i, j] = PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition;
-					PuzzleCubePosition [n, m] = PuzzleCubes [n, m].GetComponent<RectTransform> ().localPosition;
+					sel1ap = new Vector2 (i, j);
+					sel2ap = new Vector2 (n, m);
+					swappingcpnp ();
 					//Debug.Log ("i=" + i + " j=" + j + " n=" + n + " m=" + m);
 					//Debug.Log ("CurrentPos of ij= " + PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos);
 					//Debug.Log ("CurrentPos of nm= " + PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos);
@@ -88,24 +87,39 @@ public class PuzzleMainLogic : MonoBehaviour {
 		}
 	}
 	public void SetSelected(GameObject selected) {
-		if (selected1 == null) {
-			selected1 = selected;
+		if (sel1ap == null) {
+			sel1ap = selected.GetComponent<PuzzleCube2D> ().actualPos;
 			iTween.ScaleTo (selected, new Vector3 (0.8f, 0.8f, 1f), 0f);
-		} else if (selected2 == null) {
-			selected2 = selected;
+		} else if (sel2ap == null) {
+			sel2ap = selected.GetComponent<PuzzleCube2D> ().actualPos;
 			iTween.ScaleTo (selected, new Vector3 (0.8f, 0.8f, 1f), 0f);
 			MoveTheCubes ();
-		} else if (selected1 == selected) {
-			selected1 = null;
+		} else if (sel1ap == selected.GetComponent<PuzzleCube2D> ().actualPos) {
+			sel1ap = null;
 			iTween.ScaleTo (selected, new Vector3 (1f, 1f, 1f), 0f);
-		} else if (selected2 == selected) {
-			selected2 = null;
+		} else if (sel2ap == selected.GetComponent<PuzzleCube2D> ().actualPos) {
+			sel2ap = null;
 			iTween.ScaleTo (selected, new Vector3 (1f, 1f, 1f), 0f);
-		} else {
-			//play sound here
 		}
 	}
 	void MoveTheCubes() {
 		EventSystem.current.gameObject.SetActive (false);
+		iTween.MoveTo (PuzzleCubes[sel1ap.x,sel1ap.y], PuzzleCubePosition[sel2ap.x,sel2ap.y] , 0.3f);
+		iTween.MoveTo (PuzzleCubes [sel2ap.x, sel2ap.y], iTween.Hash ("position", PuzzleCubePosition [sel1ap.x, sel1ap.y], "time", 0.3f, "oncomplete", "swappingcpnp", "oncompletetarget", gameObject));
+	}
+	void swappingcpnp() {
+		int i = sel1ap.x;
+		int j = sel1ap.y;
+		int n = sel2ap.x;
+		int m = sel2ap.y;
+		Vector2 currentpos = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos;
+		PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos;
+		PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos = currentpos;
+		PuzzleCubePosition [i, j] = PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition;
+		PuzzleCubePosition [n, m] = PuzzleCubes [n, m].GetComponent<RectTransform> ().localPosition;
+		iTween.ScaleTo (PuzzleCubes[i,j], new Vector3 (1f, 1f, 1f), 0f);
+		iTween.ScaleTo (PuzzleCubes[n,m], new Vector3 (1f, 1f, 1f), 0f);
+		sel1ap = sel2ap = null;
+		EventSystem.current.gameObject.SetActive (true);
 	}
 }
