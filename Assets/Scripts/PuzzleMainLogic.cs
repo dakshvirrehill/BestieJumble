@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class PuzzleMainLogic : MonoBehaviour {
 	public string OrientationAndScale;
 	private GameObject[,] PuzzleCubes;
 	private Vector2[,] PuzzleCubePosition;
+	private GameObject selected1,selected2; 
 	// Use this for initialization
 	void Start () {
+		selected1 = selected2 = null;
 		int n=0,m=0;
 		if (OrientationAndScale.Equals ("Landscape")) {
 			n = 6;
@@ -83,5 +86,26 @@ public class PuzzleMainLogic : MonoBehaviour {
 				}
 			}
 		}
+	}
+	public void SetSelected(GameObject selected) {
+		if (selected1 == null) {
+			selected1 = selected;
+			iTween.ScaleTo (selected, new Vector3 (0.8f, 0.8f, 1f), 0f);
+		} else if (selected2 == null) {
+			selected2 = selected;
+			iTween.ScaleTo (selected, new Vector3 (0.8f, 0.8f, 1f), 0f);
+			MoveTheCubes ();
+		} else if (selected1 == selected) {
+			selected1 = null;
+			iTween.ScaleTo (selected, new Vector3 (1f, 1f, 1f), 0f);
+		} else if (selected2 == selected) {
+			selected2 = null;
+			iTween.ScaleTo (selected, new Vector3 (1f, 1f, 1f), 0f);
+		} else {
+			//play sound here
+		}
+	}
+	void MoveTheCubes() {
+		EventSystem.current.gameObject.SetActive (false);
 	}
 }
