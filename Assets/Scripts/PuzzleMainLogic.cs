@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using TMPro;
 public class PuzzleMainLogic : MonoBehaviour {
 	public string OrientationAndScale;
 	private GameObject[,] PuzzleCubes;
@@ -43,6 +45,10 @@ public class PuzzleMainLogic : MonoBehaviour {
 			//	Debug.Log (PuzzleCubePosition [i, j]);
 			}
 		}
+		gameObject.transform.GetChild (count).gameObject.GetComponent<TextMeshProUGUI> ().SetText ("Player: " + SaveData.control.username);
+		//gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveData.control.Save (SaveData.control.username));
+		gameObject.transform.GetChild(count+2).gameObject.GetComponent<Button>().onClick.AddListener(() => BackToMainMenu());
+		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveData.control.GetComponent<MainSceenLogic> ().QuitGame ());
 		JumblePuzzle();
 	}
 	
@@ -124,5 +130,8 @@ public class PuzzleMainLogic : MonoBehaviour {
 		iTween.ScaleTo (PuzzleCubes[n,m], new Vector3 (1f, 1f, 1f), 0f);
 		sel1ap = sel2ap = new Vector2(-1,-1);
 		eventsystem.SetActive (true);
+	}
+	public void BackToMainMenu() {
+		SceneManager.LoadSceneAsync ("MainScene");
 	}
 }
