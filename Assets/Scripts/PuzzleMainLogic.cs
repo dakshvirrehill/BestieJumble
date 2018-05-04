@@ -17,6 +17,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 			eventsystem = EventSystem.current.gameObject;
+		    sel1ap = sel2ap = new Vector2(-1,-1);
 			int n = 0, m = 0;
 			if (OrientationAndScale.Equals ("Landscape")) {
 				n = 6;
@@ -36,9 +37,11 @@ public class PuzzleMainLogic : MonoBehaviour {
 				for (int j = 0; j < m; j++) {
 					PuzzleCubes [i, j] = gameObject.transform.GetChild (count).gameObject;
 					count++;
-					PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
-					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
-					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
+					if (SaveData.control.Puzzle2DPanel == null) {	
+						PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+						PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
+						PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
+					}
 					GameObject pctrial = PuzzleCubes [i, j];
 					PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected (pctrial));
 					PuzzleCubePosition [i, j] = new Vector2 (PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.x, PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.y);
@@ -50,7 +53,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 		gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => Save());
 			gameObject.transform.GetChild (count + 2).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu ());
 			gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveData.control.GetComponent<MainSceenLogic> ().QuitGame ());
-		if (!SaveData.control.Puzzle2DPanel != null) {	
+		if (SaveData.control.Puzzle2DPanel == null) {	
 			JumblePuzzle ();
 		}
 	}
