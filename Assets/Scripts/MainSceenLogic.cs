@@ -26,7 +26,7 @@ public class MainSceenLogic : MonoBehaviour {
 			PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
 			inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 			SaveData.control.username = name;
-			mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = name;
+			mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = "Player: "+name;
 		}
 	}
 	public void QuitGame() {
