@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+//using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -63,7 +64,6 @@ public class PuzzleMainLogic : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		
 	}
 	void JumblePuzzle() {
 		System.Random r = new System.Random ();
@@ -122,6 +122,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 	void MoveTheCubes() {
 		eventsystem.SetActive (false);
 		swappingcpnp ();
+		checkAll ();
 	}
 	void swappingcpnp() {
 		int i = (int)sel1ap.x;
@@ -143,5 +144,23 @@ public class PuzzleMainLogic : MonoBehaviour {
 	public void BackToMainMenu() {
 		Save ();
 		SceneManager.LoadSceneAsync ("MainScene");
+	}
+	void checkAll() {
+		bool complete = true;
+		for (int i = 0; i < PuzzleCubes.GetLength (0); i++) {
+			for (int j = 0; j < PuzzleCubes.GetLength (1); j++) {
+				complete = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().isCorrect;
+				if (!complete) {
+					break;
+				}
+			}
+			if (!complete) {
+				break;
+			}
+		}
+		if (complete) {
+			Save ();
+			SceneManager.LoadSceneAsync ("FinalScene");
+		}
 	}
 }
