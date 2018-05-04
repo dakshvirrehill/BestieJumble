@@ -8,6 +8,7 @@ public class SaveData : MonoBehaviour {
 	public static SaveData control;
 	public string username;
 	public Texture cubeTex;
+	public GameObject Puzzle2DPanel;
 	// Use this for initialization
 	void Awake() {
 		if (control == null) {
@@ -29,7 +30,7 @@ public class SaveData : MonoBehaviour {
 		} else {
 			file = File.Open (Application.persistentDataPath + "/" + name + ".dat", FileMode.Open);
 		}
-		SaveDataHolder data = new SaveDataHolder (username,cubeTex);
+		SaveDataHolder data = new SaveDataHolder (username,cubeTex,Puzzle2DPanel);
 		bf.Serialize (file, data);
 		file.Close ();
 	}
@@ -42,6 +43,7 @@ public class SaveData : MonoBehaviour {
 			file.Close ();
 			username = data.username;
 			cubeTex = data.cubeTex;
+			Puzzle2DPanel = data.Puzzle2DPanel;
 		}
 	}
 	public void DeleteAllSaveData(string[] names) {
@@ -51,8 +53,10 @@ public class SaveData : MonoBehaviour {
 class SaveDataHolder {
 	public string username;
 	public Texture cubeTex;
-	public SaveDataHolder(string user,Texture ct) {
+	public GameObject Puzzle2DPanel;
+	public SaveDataHolder(string user,Texture ct, GameObject Puzzle2DPanel) {
 		this.username = user;
 		this.cubeTex = ct;
+		this.Puzzle2DPanel = Puzzle2DPanel;
 	}
 }
