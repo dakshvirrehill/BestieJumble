@@ -285,6 +285,7 @@ MonoBehaviour:
   - {fileID: 1052602206753256, guid: 53500cbcb58677b499c79de0d608520c, type: 2}
   - {fileID: 1972025418195450, guid: f7ef8b91c578f154fbb341fda1920020, type: 2}
   PuzzleCanvas: {fileID: 798521776}
+  PuzzlePanel: {fileID: 0}
 --- !u!1 &1573483903
 GameObject:
   m_ObjectHideFlags: 0
