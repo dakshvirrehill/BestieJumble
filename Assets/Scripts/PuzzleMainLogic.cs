@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 using TMPro;
 public class PuzzleMainLogic : MonoBehaviour {
 	public string OrientationAndScale;
@@ -15,43 +16,48 @@ public class PuzzleMainLogic : MonoBehaviour {
 	private GameObject eventsystem;
 	// Use this for initialization
 	void Start () {
-		eventsystem = EventSystem.current.gameObject;
-		int n=0,m=0;
-		if (OrientationAndScale.Equals ("Landscape")) {
-			n = 6;
-			m = 9;
-		} else if (OrientationAndScale.Equals ("Portrait")) {
-			n = 6;
-			m = 4;
-		} else {
-			n = 6;
-			m = 6;
-		}
-		PuzzleCubes= new GameObject[n,m];
-		PuzzleCubePosition = new Vector2[n,m];
-		int count = 0;
-		//Debug.Log ("Starting PuzzleCubePositions");
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				PuzzleCubes [i,j] = gameObject.transform.GetChild (count).gameObject;
-				count++;
-				PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
-				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
-				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
-				GameObject pctrial = PuzzleCubes [i, j];
-				PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected(pctrial));
-				PuzzleCubePosition [i,j] = new Vector2(PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.x,PuzzleCubes [i,j].GetComponent<RectTransform> ().localPosition.y);
-				//Debug.Log ("Value for i=" + i + " and j=" + j);
-			//	Debug.Log (PuzzleCubePosition [i, j]);
+			eventsystem = EventSystem.current.gameObject;
+			int n = 0, m = 0;
+			if (OrientationAndScale.Equals ("Landscape")) {
+				n = 6;
+				m = 9;
+			} else if (OrientationAndScale.Equals ("Portrait")) {
+				n = 6;
+				m = 4;
+			} else {
+				n = 6;
+				m = 6;
 			}
+			PuzzleCubes = new GameObject[n, m];
+			PuzzleCubePosition = new Vector2[n, m];
+			int count = 0;
+			//Debug.Log ("Starting PuzzleCubePositions");
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < m; j++) {
+					PuzzleCubes [i, j] = gameObject.transform.GetChild (count).gameObject;
+					count++;
+					PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
+					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
+					GameObject pctrial = PuzzleCubes [i, j];
+					PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected (pctrial));
+					PuzzleCubePosition [i, j] = new Vector2 (PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.x, PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.y);
+					//Debug.Log ("Value for i=" + i + " and j=" + j);
+					//	Debug.Log (PuzzleCubePosition [i, j]);
+				}
+			}
+			gameObject.transform.GetChild (count).gameObject.GetComponent<TextMeshProUGUI> ().SetText ("Player: " + SaveData.control.username);
+		gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => Save());
+			gameObject.transform.GetChild (count + 2).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu ());
+			gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveData.control.GetComponent<MainSceenLogic> ().QuitGame ());
+		if (!SaveData.control.Puzzle2DPanel != null) {	
+			JumblePuzzle ();
 		}
-		gameObject.transform.GetChild (count).gameObject.GetComponent<TextMeshProUGUI> ().SetText ("Player: " + SaveData.control.username);
-		//gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveData.control.Save (SaveData.control.username));
-		gameObject.transform.GetChild(count+2).gameObject.GetComponent<Button>().onClick.AddListener(() => BackToMainMenu());
-		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveData.control.GetComponent<MainSceenLogic> ().QuitGame ());
-		JumblePuzzle();
 	}
-	
+	public void Save() {
+		SaveData.control.Puzzle2DPanel = PrefabUtility.CreatePrefab("Assets/Prefabs/Puzzle2DPanel.prefab", gameObject, ReplacePrefabOptions.ReplaceNameBased);
+		//SaveData.control.Save (SaveData.control.username);
+	}
 	// Update is called once per frame
 	void Update () {
 		
@@ -132,6 +138,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 		eventsystem.SetActive (true);
 	}
 	public void BackToMainMenu() {
+		Save ();
 		SceneManager.LoadSceneAsync ("MainScene");
 	}
 }
