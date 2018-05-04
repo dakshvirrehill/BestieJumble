@@ -52,7 +52,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 			gameObject.transform.GetChild (count).gameObject.GetComponent<TextMeshProUGUI> ().SetText ("Player: " + SaveData.control.username);
 		gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => Save());
 			gameObject.transform.GetChild (count + 2).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu ());
-			gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveData.control.GetComponent<MainSceenLogic> ().QuitGame ());
+		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => new MainSceenLogic ().QuitGame ());
 		if (SaveData.control.Puzzle2DPanel == null) {	
 			JumblePuzzle ();
 		}
