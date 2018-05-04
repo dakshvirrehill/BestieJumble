@@ -3622,7 +3622,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.7406506, y: 93.765396, z: -20.91959, w: 21.13621}
+  m_margin: {x: -0.7406506, y: 6.979508, z: -4.34286, w: 2.3287437}
   m_textInfo:
     textComponent: {fileID: 114505272566534398}
     characterCount: 0
@@ -4195,7 +4195,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 26.2
+  m_fontSize: 26.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4232,7 +4232,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 98.3378, y: 24.532227, z: 96.97234, w: 26.154219}
+  m_margin: {x: -0.21265858, y: 0.23862058, z: 2.3934746, w: 0.029198965}
   m_textInfo:
     textComponent: {fileID: 114630386516872602}
     characterCount: 9
@@ -4744,7 +4744,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 29.1
+  m_fontSize: 31.35
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4781,7 +4781,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -5.05837, y: 82.95561, z: -55.636127, w: -100.17752}
+  m_margin: {x: -5.05837, y: 5.0808063, z: 4.0451117, w: -4.706608}
   m_textInfo:
     textComponent: {fileID: 114751507214445230}
     characterCount: 156
@@ -5625,7 +5625,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 26.2
+  m_fontSize: 26.8
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5662,7 +5662,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 98.3378, y: 24.532227, z: 96.97234, w: 26.154219}
+  m_margin: {x: 0.2787197, y: 0.24420744, z: 1.9837505, w: -0.2312576}
   m_textInfo:
     textComponent: {fileID: 114912814530435526}
     characterCount: 9
@@ -6786,7 +6786,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224097936344198376
 RectTransform:
@@ -6803,8 +6803,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 417.9999, y: -140}
-  m_SizeDelta: {x: -990, y: -460.75812}
+  m_AnchoredPosition: {x: 450.4, y: -60.879}
+  m_SizeDelta: {x: -942.8, y: -414.74}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224105471756165340
 RectTransform:
@@ -6876,7 +6876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 474.99997, y: 274}
+  m_AnchoredPosition: {x: 451, y: 274}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224164038942130190
@@ -7205,8 +7205,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 418, y: -269}
-  m_SizeDelta: {x: -990, y: -460.75812}
+  m_AnchoredPosition: {x: 422.4, y: -250.3}
+  m_SizeDelta: {x: -998.8, y: -597.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224353153567857972
 RectTransform:
@@ -7656,7 +7656,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 475, y: 142}
+  m_AnchoredPosition: {x: 450.9999, y: 142}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224801638002639964
@@ -7728,8 +7728,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0.7}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224870552491074290
 RectTransform:
