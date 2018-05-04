@@ -61,7 +61,7 @@ public class MainSceenLogic : MonoBehaviour {
 		SaveData.control.username = name;
 		//SaveData.control.Load (name);
 		Destroy(GameObject.Find ("LoadGameUI"));
-		mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = SaveData.control.username;
+		mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = "Player: "+SaveData.control.username;
 		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 	}
 	public void DeleteAllPlayers() {
