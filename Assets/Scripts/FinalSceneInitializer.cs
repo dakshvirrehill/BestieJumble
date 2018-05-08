@@ -11,6 +11,7 @@ public class FinalSceneInitializer : MonoBehaviour {
 			ToBeDestroyed = Object.Instantiate (WinningScenePrefabs [0], new Vector3 (0f, 0f, 0f), new Quaternion (0f, 0f, 0f, 0f));
 		} else {
 			ToBeDestroyed = Object.Instantiate (WinningScenePrefabs [1], new Vector3 (0f, 0f, 0f), new Quaternion (0f, 0f, 0f, 0f));
+			//ToBeDestroyed.transform.GetChild(6).gameObject.GetComponent<TwoDFinalLogic>().winningPanel=ToBeDestroyed.transform.GetChild (1).GetChild (1);
 		}
 		ToBeDestroyed.transform.DetachChildren ();
 		Destroy (ToBeDestroyed);
