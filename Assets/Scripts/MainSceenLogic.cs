@@ -7,16 +7,32 @@ public class MainSceenLogic : MonoBehaviour {
 	public GameObject LoadGamePrefab;
 	public GameObject LoadGameNameButton;
 	public GameObject mainUI;
+	private GameObject[] openpuzzlebuttons;
+	private bool uponce;
+	private GameObject username;
 	// Use this for initialization
 	void Start () {
+		openpuzzlebuttons = new GameObject[2];
+		openpuzzlebuttons [0] = mainUI.transform.GetChild (0).GetChild (2).gameObject;
+		openpuzzlebuttons [1] = mainUI.transform.GetChild (0).GetChild (3).gameObject;
+		uponce = true;
+		username = mainUI.transform.GetChild (0).GetChild (0).gameObject;
 		if (SaveData.control.cubeTex != null) {
 			mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+		} 
+		if(SaveData.control.username.Equals("")) {
+			openpuzzlebuttons[0].SetActive (false);
+			openpuzzlebuttons[1].SetActive (false);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(uponce&&!username.GetComponent<TextMeshProUGUI> ().text.Equals("")) {
+			uponce = false;
+			openpuzzlebuttons[0].SetActive (true);
+			openpuzzlebuttons[1].SetActive (true);
+		}
 	}
 	public void SetNamesForLoad(GameObject inpfield) {
 		string name = inpfield.GetComponent<TMP_InputField> ().text;
@@ -26,7 +42,7 @@ public class MainSceenLogic : MonoBehaviour {
 			PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
 			inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 			SaveData.control.username = name;
-			mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = "Player: "+name;
+			username.GetComponent<TextMeshProUGUI> ().text = "Player: "+name;
 		}
 	}
 	public void QuitGame() {
@@ -61,7 +77,7 @@ public class MainSceenLogic : MonoBehaviour {
 		SaveData.control.username = name;
 		//SaveData.control.Load (name);
 		Destroy(GameObject.Find ("LoadGameUI"));
-		mainUI.transform.GetChild (0).GetChild (0).gameObject.GetComponent<TextMeshProUGUI> ().text = "Player: "+SaveData.control.username;
+		username.GetComponent<TextMeshProUGUI> ().text = "Player: "+SaveData.control.username;
 		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 	}
 	public void DeleteAllPlayers() {
