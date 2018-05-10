@@ -15,45 +15,49 @@ public class PuzzleMainLogic : MonoBehaviour {
 	//private GameObject selected1,selected2;
 	private Vector2 sel1ap, sel2ap;
 	private GameObject eventsystem;
+	private bool won;
+	private MainSceenLogic mcl;
 	// Use this for initialization
 	void Start () {
-			eventsystem = EventSystem.current.gameObject;
-		    sel1ap = sel2ap = new Vector2(-1,-1);
-			int n = 0, m = 0;
-			if (OrientationAndScale.Equals ("Landscape")) {
-				n = 6;
-				m = 9;
-			} else if (OrientationAndScale.Equals ("Portrait")) {
-				n = 6;
-				m = 4;
-			} else {
-				n = 6;
-				m = 6;
-			}
-			PuzzleCubes = new GameObject[n, m];
-			PuzzleCubePosition = new Vector2[n, m];
-			int count = 0;
-			//Debug.Log ("Starting PuzzleCubePositions");
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < m; j++) {
-					PuzzleCubes [i, j] = gameObject.transform.GetChild (count).gameObject;
-					count++;
-					if (SaveData.control.Puzzle2DPanel == null) {	
-						PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
-						PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
-						PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
-					}
-					GameObject pctrial = PuzzleCubes [i, j];
-					PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected (pctrial));
-					PuzzleCubePosition [i, j] = new Vector2 (PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.x, PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.y);
-					//Debug.Log ("Value for i=" + i + " and j=" + j);
-					//	Debug.Log (PuzzleCubePosition [i, j]);
+		won = false;
+		eventsystem = EventSystem.current.gameObject;
+	    sel1ap = sel2ap = new Vector2(-1,-1);
+		int n = 0, m = 0;
+		if (OrientationAndScale.Equals ("Landscape")) {
+			n = 6;
+			m = 9;
+		} else if (OrientationAndScale.Equals ("Portrait")) {
+			n = 6;
+			m = 4;
+		} else {
+			n = 6;
+			m = 6;
+		}
+		PuzzleCubes = new GameObject[n, m];
+		PuzzleCubePosition = new Vector2[n, m];
+		int count = 0;
+		//Debug.Log ("Starting PuzzleCubePositions");
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				PuzzleCubes [i, j] = gameObject.transform.GetChild (count).gameObject;
+				count++;
+				if (SaveData.control.Puzzle2DPanel == null) {	
+					PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
+					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
 				}
+				GameObject pctrial = PuzzleCubes [i, j];
+				PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected (pctrial));
+				PuzzleCubePosition [i, j] = new Vector2 (PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.x, PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.y);
+				//Debug.Log ("Value for i=" + i + " and j=" + j);
+				//	Debug.Log (PuzzleCubePosition [i, j]);
 			}
-			gameObject.transform.GetChild (count).gameObject.GetComponent<TextMeshProUGUI> ().SetText ("Player: " + SaveData.control.username);
+		}
+		gameObject.transform.GetChild (count).gameObject.GetComponent<TextMeshProUGUI> ().SetText ("Player: " + SaveData.control.username);
 		gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => Save());
-			gameObject.transform.GetChild (count + 2).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu ());
-		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => new MainSceenLogic ().QuitGame ());
+		gameObject.transform.GetChild (count + 2).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu ());
+		mcl = new MainSceenLogic ();
+		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => mcl.QuitGame ());
 		if (SaveData.control.Puzzle2DPanel == null) {	
 			JumblePuzzle ();
 		}
@@ -64,6 +68,10 @@ public class PuzzleMainLogic : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+		if (won) {
+			Save ();
+			SceneManager.LoadSceneAsync ("FinalScene");
+		}
 	}
 	void JumblePuzzle() {
 		System.Random r = new System.Random ();
@@ -93,7 +101,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 					}
 					sel1ap = new Vector2 (i, j);
 					sel2ap = new Vector2 (n, m);
-					swappingcpnp ();
+					StartCoroutine(swappingcpnp ());
 					//Debug.Log ("i=" + i + " j=" + j + " n=" + n + " m=" + m);
 					//Debug.Log ("CurrentPos of ij= " + PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos);
 					//Debug.Log ("CurrentPos of nm= " + PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos);
@@ -121,10 +129,13 @@ public class PuzzleMainLogic : MonoBehaviour {
 	}
 	void MoveTheCubes() {
 		eventsystem.SetActive (false);
-		swappingcpnp ();
-		checkAll ();
+		StartCoroutine (CallSwapAndCheck ());
 	}
-	void swappingcpnp() {
+	IEnumerator CallSwapAndCheck() {
+		yield return StartCoroutine(swappingcpnp ());
+		yield return StartCoroutine(checkAll ());
+	}
+	IEnumerator swappingcpnp() {
 		int i = (int)sel1ap.x;
 		int j = (int)sel1ap.y;
 		int n = (int)sel2ap.x;
@@ -134,22 +145,26 @@ public class PuzzleMainLogic : MonoBehaviour {
 		Vector2 currentpos = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos;
 		PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos;
 		PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().currentPos = currentpos;
+		PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().UpdateIsCorrect ();
+		PuzzleCubes [n, m].GetComponent<PuzzleCube2D> ().UpdateIsCorrect ();
 		PuzzleCubePosition [i, j] = PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition;
 		PuzzleCubePosition [n, m] = PuzzleCubes [n, m].GetComponent<RectTransform> ().localPosition;
 		iTween.ScaleTo (PuzzleCubes[i,j], new Vector3 (1f, 1f, 1f), 0f);
 		iTween.ScaleTo (PuzzleCubes[n,m], new Vector3 (1f, 1f, 1f), 0f);
 		sel1ap = sel2ap = new Vector2(-1,-1);
 		eventsystem.SetActive (true);
+		yield return new WaitForSeconds (0f);
 	}
 	public void BackToMainMenu() {
 		Save ();
 		SceneManager.LoadSceneAsync ("MainScene");
 	}
-	void checkAll() {
+	IEnumerator checkAll() {
 		bool complete = true;
 		for (int i = 0; i < PuzzleCubes.GetLength (0); i++) {
 			for (int j = 0; j < PuzzleCubes.GetLength (1); j++) {
 				complete = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().isCorrect;
+				Debug.Log (complete);
 				if (!complete) {
 					break;
 				}
@@ -158,9 +173,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 				break;
 			}
 		}
-		if (complete) {
-			Save ();
-			SceneManager.LoadSceneAsync ("FinalScene");
-		}
+		won = complete;
+		yield return new WaitForSeconds (0f);
 	}
 }

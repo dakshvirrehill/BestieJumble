@@ -35,7 +35,8 @@ public class TwoDFinalLogic : MonoBehaviour {
 		Destroy (tex);
 		tex1.SetPixels (cols);
 		tex1.Apply ();
-		string path = Application.persistentDataPath + "/" + SaveData.control.username + ".png";
+		//string path = Application.persistentDataPath + "/" + SaveData.control.username + ".png";
+		string path = Application.dataPath+"/"+SaveData.control.username+".png";
 		if (Application.platform == RuntimePlatform.Android) {
 			AndroidJavaClass environment = new AndroidJavaClass ("android.os.Environment");
 			AndroidJavaObject filepath = environment.CallStatic<AndroidJavaObject> ("getExternalStoragePublicDirectory", environment.GetStatic<string> ("DIRECTORY_PICTURES"));

@@ -13,8 +13,12 @@ public class PuzzleCube2D : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+	}
+	public void UpdateIsCorrect() {
 		if (currentPos == actualPos) {
 			isCorrect = true;
+		} else {
+			isCorrect = false;
 		}
 	}
 }
