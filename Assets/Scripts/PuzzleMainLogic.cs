@@ -191,8 +191,6 @@ public class PuzzleMainLogic : MonoBehaviour {
 	void SavedPuzzle() {
 		int n = PuzzleCubes.GetLength (0);
 		int m = PuzzleCubes.GetLength (1);
-		/*Vector2[,] tempPositions = new Vector2[n, m];
-		*/
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				Vector2 a = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = SaveData.control.Puzzle2DCubePositions [i, j].Value;
