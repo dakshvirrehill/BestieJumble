@@ -33,15 +33,19 @@ public class PuzzleMainLogic : MonoBehaviour {
 			n = 6;
 			m = 6;
 		}
+		//Debug.Log ("n= " + n + " , m= " + m);
 		PuzzleCubes = new GameObject[n, m];
 		PuzzleCubePosition = new Vector2[n, m];
 		int count = 0;
 		//Debug.Log ("Starting PuzzleCubePositions");
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
+				//Debug.Log ("count= "+count);
 				PuzzleCubes [i, j] = gameObject.transform.GetChild (count).gameObject;
+				//Debug.Log (PuzzleCubes [i, j].name);
 				count++;
-				if (SaveData.control.Puzzle2DPanel == null) {	
+				if (SaveData.control.Puzzle2DPanel == null) {
+				//	Debug.Log ("in here");	
 					PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
 					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
