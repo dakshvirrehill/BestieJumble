@@ -20,7 +20,7 @@ public class TwoDFinalLogic : MonoBehaviour {
 		BackButton.GetComponent<Button> ().onClick.AddListener (() => BackToMain ());
 		PrintButton.GetComponent<Button> ().onClick.AddListener (() => Printed ());
 		DeactivateButtons ("default");
-		winningPanel.transform.GetChild (8).gameObject.GetComponent<Button> ().onClick.AddListener (() => new MainSceenLogic ().QuitGame ());
+		winningPanel.transform.GetChild (8).gameObject.GetComponent<Button> ().onClick.AddListener (() => QuitGame ());
 	}
 	
 	// Update is called once per frame
@@ -56,5 +56,12 @@ public class TwoDFinalLogic : MonoBehaviour {
 	public void DeactivateButtons(string defaulte) {
 		BackButton.SetActive(false);
 		PrintButton.SetActive(false);
+	}
+	public void QuitGame() {
+		#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+		#else
+		Application.Quit();
+		#endif
 	}
 }

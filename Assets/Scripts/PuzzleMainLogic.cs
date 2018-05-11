@@ -16,7 +16,6 @@ public class PuzzleMainLogic : MonoBehaviour {
 	private Vector2 sel1ap, sel2ap;
 	private GameObject eventsystem;
 	private bool won;
-	private MainSceenLogic mcl;
 	// Use this for initialization
 	void Start () {
 		won = false;
@@ -60,8 +59,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 		gameObject.transform.GetChild (count).gameObject.GetComponent<TextMeshProUGUI> ().SetText ("Player: " + SaveData.control.username);
 		gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => Save());
 		gameObject.transform.GetChild (count + 2).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu ());
-		mcl = new MainSceenLogic ();
-		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => mcl.QuitGame ());
+		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => QuitGame ());
 		if (SaveData.control.Puzzle2DPanel == null) {	
 			JumblePuzzle ();
 		}
@@ -179,5 +177,12 @@ public class PuzzleMainLogic : MonoBehaviour {
 		}
 		won = complete;
 		yield return new WaitForSeconds (0f);
+	}
+	public void QuitGame() {
+		#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+		#else
+		Application.Quit();
+		#endif
 	}
 }
