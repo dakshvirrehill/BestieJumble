@@ -8,7 +8,7 @@ public class SaveData : MonoBehaviour {
 	public static SaveData control;
 	public string username;
 	public Texture cubeTex;
-	public GameObject Puzzle2DPanel;
+	public Vector2?[,] Puzzle2DCubePositions;
 	// Use this for initialization
 	void Awake() {
 		if (control == null) {
@@ -30,7 +30,7 @@ public class SaveData : MonoBehaviour {
 		} else {
 			file = File.Open (Application.persistentDataPath + "/" + name + ".dat", FileMode.Open);
 		}
-		SaveDataHolder data = new SaveDataHolder (username,cubeTex,Puzzle2DPanel);
+		SaveDataHolder data = new SaveDataHolder (username,cubeTex,Puzzle2DCubePositions);
 		bf.Serialize (file, data);
 		file.Close ();
 	}
@@ -43,7 +43,7 @@ public class SaveData : MonoBehaviour {
 			file.Close ();
 			username = data.username;
 			cubeTex = data.cubeTex;
-			Puzzle2DPanel = data.Puzzle2DPanel;
+			Puzzle2DCubePositions = data.Puzzle2DCubePositions;
 		}
 	}
 	public void DeleteAllSaveData(string[] names) {
@@ -53,10 +53,10 @@ public class SaveData : MonoBehaviour {
 class SaveDataHolder {
 	public string username;
 	public Texture cubeTex;
-	public GameObject Puzzle2DPanel;
-	public SaveDataHolder(string user,Texture ct, GameObject Puzzle2DPanel) {
+	public Vector2?[,] Puzzle2DCubePositions;
+	public SaveDataHolder(string user,Texture ct, Vector2?[,] Puzzle2DCubePositions) {
 		this.username = user;
 		this.cubeTex = ct;
-		this.Puzzle2DPanel = Puzzle2DPanel;
+		this.Puzzle2DCubePositions = Puzzle2DCubePositions;
 	}
 }

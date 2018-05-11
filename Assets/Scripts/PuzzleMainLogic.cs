@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-//using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEditor;
 using TMPro;
 public class PuzzleMainLogic : MonoBehaviour {
 	public string OrientationAndScale;
@@ -43,12 +41,10 @@ public class PuzzleMainLogic : MonoBehaviour {
 				PuzzleCubes [i, j] = gameObject.transform.GetChild (count).gameObject;
 				//Debug.Log (PuzzleCubes [i, j].name);
 				count++;
-				if (SaveData.control.Puzzle2DPanel == null) {
 				//	Debug.Log ("in here");	
-					PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
-					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
-					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
-				}
+				PuzzleCubes [i, j].GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j);
+				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (i, j);
 				GameObject pctrial = PuzzleCubes [i, j];
 				PuzzleCubes [i, j].GetComponent<Button> ().onClick.AddListener (() => SetSelected (pctrial));
 				PuzzleCubePosition [i, j] = new Vector2 (PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.x, PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition.y);
@@ -60,12 +56,19 @@ public class PuzzleMainLogic : MonoBehaviour {
 		gameObject.transform.GetChild (count + 1).gameObject.GetComponent<Button> ().onClick.AddListener (() => Save());
 		gameObject.transform.GetChild (count + 2).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu ());
 		gameObject.transform.GetChild (count + 4).gameObject.GetComponent<Button> ().onClick.AddListener (() => QuitGame ());
-		if (SaveData.control.Puzzle2DPanel == null) {	
+		if (SaveData.control.Puzzle2DCubePositions == null) {	
 			JumblePuzzle ();
+		} else {
+			SavedPuzzle ();
 		}
 	}
 	public void Save() {
-		SaveData.control.Puzzle2DPanel = PrefabUtility.CreatePrefab("Assets/Prefabs/Puzzle2DPanel.prefab", gameObject, ReplacePrefabOptions.ReplaceNameBased);
+		SaveData.control.Puzzle2DCubePositions = new Vector2?[PuzzleCubePosition.GetLength(0),PuzzleCubePosition.GetLength(1)];
+		for (int i = 0; i < PuzzleCubePosition.GetLength (0); i++) {
+			for (int j = 0; j < PuzzleCubePosition.GetLength (1); j++) {
+				SaveData.control.Puzzle2DCubePositions [i, j] = (Vector2?)PuzzleCubes [i, j].GetComponent<PuzzleCube2D>().currentPos;
+			}
+		}
 		//SaveData.control.Save (SaveData.control.username);
 	}
 	// Update is called once per frame
@@ -166,7 +169,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 		for (int i = 0; i < PuzzleCubes.GetLength (0); i++) {
 			for (int j = 0; j < PuzzleCubes.GetLength (1); j++) {
 				complete = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().isCorrect;
-				Debug.Log (complete);
+				//Debug.Log (complete);
 				if (!complete) {
 					break;
 				}
@@ -184,5 +187,23 @@ public class PuzzleMainLogic : MonoBehaviour {
 		#else
 		Application.Quit();
 		#endif
+	}
+	void SavedPuzzle() {
+		int n = PuzzleCubes.GetLength (0);
+		int m = PuzzleCubes.GetLength (1);
+		/*Vector2[,] tempPositions = new Vector2[n, m];
+		*/
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				Vector2 a = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = SaveData.control.Puzzle2DCubePositions [i, j].Value;
+				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().UpdateIsCorrect ();
+				PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition = PuzzleCubePosition [(int)a.x,(int)a.y];
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				PuzzleCubePosition[i,j]=PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition;
+			}
+		}
 	}
 }
