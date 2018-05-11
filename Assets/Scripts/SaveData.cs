@@ -50,6 +50,7 @@ public class SaveData : MonoBehaviour {
 		
 	}
 }
+[Serializable]
 class SaveDataHolder {
 	public string username;
 	public Texture cubeTex;
