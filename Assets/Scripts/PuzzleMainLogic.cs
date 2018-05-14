@@ -69,7 +69,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 				SaveData.control.Puzzle2DCubePositions [i, j] = (Vector2?)PuzzleCubes [i, j].GetComponent<PuzzleCube2D>().currentPos;
 			}
 		}
-		//SaveData.control.Save (SaveData.control.username);
+		SaveData.control.Save (SaveData.control.username);
 	}
 	// Update is called once per frame
 	void Update () {
@@ -182,6 +182,7 @@ public class PuzzleMainLogic : MonoBehaviour {
 		yield return new WaitForSeconds (0f);
 	}
 	public void QuitGame() {
+		Save ();
 		#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 		#else

@@ -54,6 +54,7 @@ public class TwoDFinalLogic : MonoBehaviour {
 		PrintButton.SetActive(false);
 	}
 	public void QuitGame() {
+		SaveData.control.Save (SaveData.control.username);
 		#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 		#else

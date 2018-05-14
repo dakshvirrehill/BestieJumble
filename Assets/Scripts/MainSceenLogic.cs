@@ -39,15 +39,28 @@ public class MainSceenLogic : MonoBehaviour {
 	public void SetNamesForLoad(GameObject inpfield) {
 		string name = inpfield.GetComponent<TMP_InputField> ().text;
 		if (!name.Equals ("")) {
-			string allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames");
-			string fallNames = allNames + ", " + name;
-			PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
-			inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
-			SaveData.control.username = name;
-			username.GetComponent<TextMeshProUGUI> ().text = "Player: "+name;
+			string[] allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames").Split (',');
+			bool already = false;
+			for (int i = 0; i < allNames.Length; i++) {
+				if (allNames [i].ToLower ().Equals (name.ToLower ())) {
+					already = true;
+					break;
+				}
+			}
+			if (already) {
+				LoadTextClicked (name);
+				inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
+			} else {
+				string fallNames = allNames + "," + name;
+				PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
+				inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
+				SaveData.control.username = name;
+				username.GetComponent<TextMeshProUGUI> ().text = "Player: " + name;
+			}
 		}
 	}
 	public void QuitGame() {
+		SaveData.control.Save (SaveData.control.username);
 		#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 		#else
@@ -77,8 +90,10 @@ public class MainSceenLogic : MonoBehaviour {
 	}
 	public void LoadTextClicked(string name) {
 		SaveData.control.username = name;
-		//SaveData.control.Load (name);
-		Destroy(GameObject.Find ("LoadGameUI"));
+		SaveData.control.Load (name);
+		if (GameObject.Find ("LoadGameUI") != null) {
+			Destroy (GameObject.Find ("LoadGameUI"));
+		}
 		username.GetComponent<TextMeshProUGUI> ().text = "Player: "+SaveData.control.username;
 		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 	}
@@ -86,9 +101,16 @@ public class MainSceenLogic : MonoBehaviour {
 		string[] allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames").Split(',');
 		PlayerPrefs.DeleteKey ("BestieJumbleFriendNames");
 		Destroy(GameObject.Find ("LoadGameUI"));
-		//SaveData.control.DeleteAllSaveData (allNames);
+		SaveData.control.DeleteAllSaveData (allNames);
 	}
 	public void SelectImage() {
+		if (SaveData.control.Puzzle2DCubePositions != null) {
+			for (int i = 0; i < SaveData.control.Puzzle2DCubePositions.GetLength (0); i++) {
+				for (int j = 0; j < SaveData.control.Puzzle2DCubePositions.GetLength (1); j++) {
+					SaveData.control.Puzzle2DCubePositions [i, j] = null;
+				}
+			}
+		}
 		if (NativeGallery.IsMediaPickerBusy ())
 			return;
 		else {
@@ -105,10 +127,10 @@ public class MainSceenLogic : MonoBehaviour {
 						}
 						SaveData.control.cubeTex=texture;
 						mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture=texture;
-						//Destroy(texture);
+						Destroy(texture);
 					}
 				}, "Select a JPG image", "image/jpg", 1280 );
-
+			SaveData.control.Save (SaveData.control.username);
 			Debug.Log( "Permission result: " + p );
 		}
 	}

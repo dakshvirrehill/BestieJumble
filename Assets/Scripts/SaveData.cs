@@ -20,7 +20,7 @@ public class SaveData : MonoBehaviour {
 	}
 	public void Save(string name) {
 		username = name;
-		control.SaveToFile ();
+		SaveToFile ();
 	}
 	public void SaveToFile() {
 		BinaryFormatter bf = new BinaryFormatter ();
@@ -30,8 +30,10 @@ public class SaveData : MonoBehaviour {
 		} else {
 			file = File.Open (Application.persistentDataPath + "/" + name + ".dat", FileMode.Open);
 		}
-		SaveDataHolder data = new SaveDataHolder (username,cubeTex,Puzzle2DCubePositions);
+		Texture2D tex = (Texture2D)cubeTex;
+		SaveDataHolder data = new SaveDataHolder (username,tex.EncodeToJPG(),Puzzle2DCubePositions,tex.width,tex.height);
 		bf.Serialize (file, data);
+		Destroy (tex);
 		file.Close ();
 	}
 	public void Load(string name) {
@@ -42,22 +44,33 @@ public class SaveData : MonoBehaviour {
 			SaveDataHolder data = (SaveDataHolder)bf.Deserialize (file);
 			file.Close ();
 			username = data.username;
-			cubeTex = data.cubeTex;
+			Texture2D tex = new Texture2D (data.width, data.height);
+			tex.LoadRawTextureData(data.cubeTex);
+			cubeTex = tex;
+			Destroy (tex);
 			Puzzle2DCubePositions = data.Puzzle2DCubePositions;
 		}
 	}
 	public void DeleteAllSaveData(string[] names) {
-		
+		foreach(string name in names) {
+			if (File.Exists (Application.persistentDataPath + "/" + name + ".dat")) {
+				File.Delete (Application.persistentDataPath + "/" + name + ".dat");
+			}
+		}
 	}
 }
 [Serializable]
 class SaveDataHolder {
 	public string username;
-	public Texture cubeTex;
+	public Byte[] cubeTex;
 	public Vector2?[,] Puzzle2DCubePositions;
-	public SaveDataHolder(string user,Texture ct, Vector2?[,] Puzzle2DCubePositions) {
+	public int width;
+	public int height;
+	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions, int w,int h) {
 		this.username = user;
 		this.cubeTex = ct;
 		this.Puzzle2DCubePositions = Puzzle2DCubePositions;
+		width = w;
+		height = h;
 	}
 }
