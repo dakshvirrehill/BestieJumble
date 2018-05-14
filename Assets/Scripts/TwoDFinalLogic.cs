@@ -36,13 +36,14 @@ public class TwoDFinalLogic : MonoBehaviour {
 		tex1.SetPixels (cols);
 		tex1.Apply ();
 		//string path = Application.persistentDataPath + "/" + SaveData.control.username + ".png";
-		string path = Application.dataPath+"/"+SaveData.control.username+".png";
+		string path = Application.dataPath;
 		if (Application.platform == RuntimePlatform.Android) {
-			AndroidJavaClass environment = new AndroidJavaClass ("android.os.Environment");
-			AndroidJavaObject filepath = environment.CallStatic<AndroidJavaObject> ("getExternalStoragePublicDirectory", environment.GetStatic<string> ("DIRECTORY_PICTURES"));
-			filepath.Call<bool> ("mkdirs");
-			path = filepath.Call<string> ("getAbsolutePath") + "/" + SaveData.control.username + ".png";
+			using (AndroidJavaClass androidJavaClass = new AndroidJavaClass("android.os.Environment")) {
+				path = androidJavaClass.CallStatic<AndroidJavaObject>("getExternalStoragePublicDirectory",androidJavaClass.GetStatic<string>("Environment.DIRECTORY_PICTURES"))
+					.Call<string>("getAbsolutePath");
+			}
 		}
+		path = path + "/" + SaveData.control.username + ".png";
 		System.IO.File.WriteAllBytes (path, tex1.EncodeToPNG());
 		Destroy (tex1);
 	}
