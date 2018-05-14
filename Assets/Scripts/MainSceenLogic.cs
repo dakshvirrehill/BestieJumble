@@ -20,9 +20,11 @@ public class MainSceenLogic : MonoBehaviour {
 		if (SaveData.control.cubeTex != null) {
 			mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 		} 
-		if(SaveData.control.username.Equals("")) {
-			openpuzzlebuttons[0].SetActive (false);
-			openpuzzlebuttons[1].SetActive (false);
+		if (SaveData.control.username.Equals ("")) {
+			openpuzzlebuttons [0].SetActive (false);
+			openpuzzlebuttons [1].SetActive (false);
+		} else {
+			username.GetComponent<TextMeshProUGUI> ().text = "Player: "+SaveData.control.username;
 		}
 	}
 	
@@ -85,5 +87,29 @@ public class MainSceenLogic : MonoBehaviour {
 		PlayerPrefs.DeleteKey ("BestieJumbleFriendNames");
 		Destroy(GameObject.Find ("LoadGameUI"));
 		//SaveData.control.DeleteAllSaveData (allNames);
+	}
+	public void SelectImage() {
+		if (NativeGallery.IsMediaPickerBusy ())
+			return;
+		else {
+			NativeGallery.Permission p=NativeGallery.GetImageFromGallery( ( path ) =>
+				{
+					Debug.Log( "Image path: " + path );
+					if( path != null )
+					{
+						Texture2D texture = NativeGallery.LoadImageAtPath( path, 1280 );
+						if( texture == null )
+						{
+							Debug.Log( "Couldn't load texture from " + path );
+							return;
+						}
+						SaveData.control.cubeTex=texture;
+						mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture=texture;
+						//Destroy(texture);
+					}
+				}, "Select a JPG image", "image/jpg", 1280 );
+
+			Debug.Log( "Permission result: " + p );
+		}
 	}
 }
