@@ -51,7 +51,11 @@ public class MainSceenLogic : MonoBehaviour {
 				LoadTextClicked (name);
 				inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 			} else {
-				string fallNames = allNames + "," + name;
+				string fallNames = "";
+				foreach (string names in allNames) {
+					fallNames = fallNames+names + ",";
+				}
+				fallNames = fallNames+name;
 				PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
 				inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 				SaveData.control.username = name;

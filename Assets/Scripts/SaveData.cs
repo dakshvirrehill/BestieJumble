@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using System.IO;
 using System;
 public class SaveData : MonoBehaviour {
@@ -11,6 +12,7 @@ public class SaveData : MonoBehaviour {
 	public Vector2?[,] Puzzle2DCubePositions;
 	// Use this for initialization
 	void Awake() {
+		//Debug.Log (Application.persistentDataPath);
 		if (control == null) {
 			DontDestroyOnLoad (gameObject);
 			control = this;
@@ -18,37 +20,51 @@ public class SaveData : MonoBehaviour {
 			Destroy (gameObject);
 		}
 	}
-	public void Save(string name) {
-		username = name;
+	public void Save(string named) {
+		username = named;
 		SaveToFile ();
 	}
 	public void SaveToFile() {
 		BinaryFormatter bf = new BinaryFormatter ();
+		SurrogateSelector surrogateSelector = new SurrogateSelector();
+		surrogateSelector.AddSurrogate(typeof(Vector2),new StreamingContext(StreamingContextStates.All),new Vector2SurrogateSelector());
+		bf.SurrogateSelector = surrogateSelector;
 		FileStream file;
-		if (!File.Exists (Application.persistentDataPath + "/" + name + ".dat")) {
-			file = File.Create (Application.persistentDataPath + "/" + name + ".dat");
+		if (!File.Exists (Application.persistentDataPath + "/" + username + ".dat")) {
+			file = File.Create (Application.persistentDataPath + "/" + username + ".dat");
 		} else {
-			file = File.Open (Application.persistentDataPath + "/" + name + ".dat", FileMode.Open);
+			file = File.Open (Application.persistentDataPath + "/" + username + ".dat", FileMode.Open);
 		}
-		Texture2D tex = (Texture2D)cubeTex;
-		SaveDataHolder data = new SaveDataHolder (username,tex.EncodeToJPG(),Puzzle2DCubePositions,tex.width,tex.height);
+		Texture2D tex1 = (Texture2D)cubeTex;
+		Texture2D tex = new Texture2D (tex1.width, tex1.height, TextureFormat.RGB24, false);
+		tex.SetPixels (0, 0, tex1.width, tex1.height, tex1.GetPixels ());
+		tex.Apply ();
+		SaveDataHolder data = new SaveDataHolder (username,tex.EncodeToJPG(),Puzzle2DCubePositions);
 		bf.Serialize (file, data);
-		Destroy (tex);
+		//Destroy (tex);
 		file.Close ();
 	}
-	public void Load(string name) {
+	public void Load(string named) {
 		BinaryFormatter bf = new BinaryFormatter ();
-		if(File.Exists (Application.persistentDataPath + "/" + name + ".dat")) {
+		SurrogateSelector surrogateSelector = new SurrogateSelector();
+		surrogateSelector.AddSurrogate(typeof(Vector2),new StreamingContext(StreamingContextStates.All),new Vector2SurrogateSelector());
+		bf.SurrogateSelector = surrogateSelector;
+		if(File.Exists (Application.persistentDataPath + "/" + named + ".dat")) {
 			FileStream file;
-			file = File.Open (Application.persistentDataPath + "/" + name + ".dat",FileMode.Open);
+			file = File.Open (Application.persistentDataPath + "/" + named + ".dat",FileMode.Open);
 			SaveDataHolder data = (SaveDataHolder)bf.Deserialize (file);
 			file.Close ();
 			username = data.username;
-			Texture2D tex = new Texture2D (data.width, data.height);
-			tex.LoadRawTextureData(data.cubeTex);
+			Texture2D tex = new Texture2D (0, 0);
+			tex.LoadImage(data.cubeTex);
 			cubeTex = tex;
-			Destroy (tex);
-			Puzzle2DCubePositions = data.Puzzle2DCubePositions;
+			//Destroy (tex);
+			Puzzle2DCubePositions=new Vector2?[data.Puzzle2DCubePositions.GetLength(0),data.Puzzle2DCubePositions.GetLength(1)];
+			for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
+				for (int j = 0; j < Puzzle2DCubePositions.GetLength (1); j++) {
+					Puzzle2DCubePositions [i, j] = (Vector2?)data.Puzzle2DCubePositions [i, j];
+				}
+			}
 		}
 	}
 	public void DeleteAllSaveData(string[] names) {
@@ -63,14 +79,15 @@ public class SaveData : MonoBehaviour {
 class SaveDataHolder {
 	public string username;
 	public Byte[] cubeTex;
-	public Vector2?[,] Puzzle2DCubePositions;
-	public int width;
-	public int height;
-	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions, int w,int h) {
+	public Vector2[,] Puzzle2DCubePositions;
+	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions) {
 		this.username = user;
 		this.cubeTex = ct;
-		this.Puzzle2DCubePositions = Puzzle2DCubePositions;
-		width = w;
-		height = h;
+		this.Puzzle2DCubePositions = new Vector2[Puzzle2DCubePositions.GetLength (0), Puzzle2DCubePositions.GetLength (1)];
+		for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
+			for (int j = 0; j < Puzzle2DCubePositions.GetLength (1); j++) {
+				this.Puzzle2DCubePositions[i,j] = Puzzle2DCubePositions[i,j].Value;
+			}
+		}
 	}
 }
