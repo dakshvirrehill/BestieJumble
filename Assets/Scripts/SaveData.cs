@@ -9,6 +9,7 @@ public class SaveData : MonoBehaviour {
 	public static SaveData control;
 	public string username;
 	public Texture cubeTex;
+	private Texture defaultTex;
 	public Vector2?[,] Puzzle2DCubePositions;
 	// Use this for initialization
 	void Awake() {
@@ -16,6 +17,9 @@ public class SaveData : MonoBehaviour {
 		if (control == null) {
 			DontDestroyOnLoad (gameObject);
 			control = this;
+			control.username = "";
+			control.defaultTex = control.cubeTex;
+			control.Puzzle2DCubePositions = null;
 		} else if (control != this) {
 			Destroy (gameObject);
 		}
@@ -59,10 +63,12 @@ public class SaveData : MonoBehaviour {
 			tex.LoadImage(data.cubeTex);
 			cubeTex = tex;
 			//Destroy (tex);
-			Puzzle2DCubePositions=new Vector2?[data.Puzzle2DCubePositions.GetLength(0),data.Puzzle2DCubePositions.GetLength(1)];
-			for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
-				for (int j = 0; j < Puzzle2DCubePositions.GetLength (1); j++) {
-					Puzzle2DCubePositions [i, j] = (Vector2?)data.Puzzle2DCubePositions [i, j];
+			if (data.Puzzle2DCubePositions.GetLength (0) == 6) {
+				Puzzle2DCubePositions = new Vector2?[data.Puzzle2DCubePositions.GetLength (0), data.Puzzle2DCubePositions.GetLength (1)];
+				for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
+					for (int j = 0; j < Puzzle2DCubePositions.GetLength (1); j++) {
+						Puzzle2DCubePositions [i, j] = (Vector2?)data.Puzzle2DCubePositions [i, j];
+					}
 				}
 			}
 		}
@@ -73,6 +79,11 @@ public class SaveData : MonoBehaviour {
 				File.Delete (Application.persistentDataPath + "/" + name + ".dat");
 			}
 		}
+		DefaultEverything ();
+	}
+	public void DefaultEverything() {
+		SaveData.control.username = "";
+		SaveData.control.cubeTex = defaultTex;
 	}
 }
 [Serializable]
@@ -83,11 +94,16 @@ class SaveDataHolder {
 	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions) {
 		this.username = user;
 		this.cubeTex = ct;
-		this.Puzzle2DCubePositions = new Vector2[Puzzle2DCubePositions.GetLength (0), Puzzle2DCubePositions.GetLength (1)];
-		for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
-			for (int j = 0; j < Puzzle2DCubePositions.GetLength (1); j++) {
-				this.Puzzle2DCubePositions[i,j] = Puzzle2DCubePositions[i,j].Value;
+		if (Puzzle2DCubePositions != null) { 
+			this.Puzzle2DCubePositions = new Vector2[Puzzle2DCubePositions.GetLength (0), Puzzle2DCubePositions.GetLength (1)];
+			for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
+				for (int j = 0; j < Puzzle2DCubePositions.GetLength (1); j++) {
+					this.Puzzle2DCubePositions[i,j] = Puzzle2DCubePositions[i,j].Value;
+				}
 			}
+		} else {
+			this.Puzzle2DCubePositions = new Vector2[1, 1];
+			this.Puzzle2DCubePositions [0, 0] = new Vector2 (-1, -1);
 		}
 	}
 }

@@ -8,21 +8,22 @@ public class MainSceenLogic : MonoBehaviour {
 	public GameObject LoadGameNameButton;
 	public GameObject mainUI;
 	private GameObject[] openpuzzlebuttons;
-	private bool uponce;
 	private GameObject username;
 	// Use this for initialization
 	void Start () {
-		openpuzzlebuttons = new GameObject[2];
+		openpuzzlebuttons = new GameObject[3];
+		openpuzzlebuttons [2] = mainUI.transform.GetChild (0).GetChild (1).gameObject;
 		openpuzzlebuttons [0] = mainUI.transform.GetChild (0).GetChild (2).gameObject;
 		openpuzzlebuttons [1] = mainUI.transform.GetChild (0).GetChild (3).gameObject;
-		uponce = true;
 		username = mainUI.transform.GetChild (0).GetChild (0).gameObject;
+		ActiveNewGameButton ();
 		if (SaveData.control.cubeTex != null) {
 			mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 		} 
 		if (SaveData.control.username.Equals ("")) {
 			openpuzzlebuttons [0].SetActive (false);
 			openpuzzlebuttons [1].SetActive (false);
+			openpuzzlebuttons [2].SetActive (false);
 		} else {
 			username.GetComponent<TextMeshProUGUI> ().text = "Player: "+SaveData.control.username;
 		}
@@ -30,11 +31,29 @@ public class MainSceenLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(uponce&&!username.GetComponent<TextMeshProUGUI> ().text.Equals("")) {
-			uponce = false;
-			openpuzzlebuttons[0].SetActive (true);
-			openpuzzlebuttons[1].SetActive (true);
+		if (!username.GetComponent<TextMeshProUGUI> ().text.Equals ("")) {
+			openpuzzlebuttons [0].SetActive (true);
+			openpuzzlebuttons [1].SetActive (true);
+			openpuzzlebuttons [2].SetActive (true);
+		} else {
+			openpuzzlebuttons [0].SetActive (false);
+			openpuzzlebuttons [1].SetActive (false);
+			openpuzzlebuttons [2].SetActive (false);
 		}
+	}
+	public void NewGame() {
+		mainUI.transform.GetChild (0).GetChild (4).gameObject.SetActive (true);
+		mainUI.transform.GetChild (0).GetChild (5).gameObject.SetActive (true);
+		mainUI.transform.GetChild (0).GetChild (10).gameObject.SetActive (false);
+		mainUI.transform.GetChild (0).GetChild (1).gameObject.SetActive (false);
+		SaveData.control.DefaultEverything ();
+		DefaultEverything ();
+	}
+	public void ActiveNewGameButton() {
+		mainUI.transform.GetChild (0).GetChild (4).gameObject.SetActive (false);
+		mainUI.transform.GetChild (0).GetChild (5).gameObject.SetActive (false);
+		mainUI.transform.GetChild (0).GetChild (10).gameObject.SetActive (true);
+		mainUI.transform.GetChild (0).GetChild (1).gameObject.SetActive (true);
 	}
 	public void SetNamesForLoad(GameObject inpfield) {
 		string name = inpfield.GetComponent<TMP_InputField> ().text;
@@ -60,11 +79,15 @@ public class MainSceenLogic : MonoBehaviour {
 				inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 				SaveData.control.username = name;
 				username.GetComponent<TextMeshProUGUI> ().text = "Player: " + name;
+				SaveData.control.Save (name);
+				ActiveNewGameButton ();
 			}
 		}
 	}
 	public void QuitGame() {
-		SaveData.control.Save (SaveData.control.username);
+		if (!SaveData.control.username.Equals ("")) {
+			SaveData.control.Save (SaveData.control.username);
+		}
 		#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 		#else
@@ -77,16 +100,17 @@ public class MainSceenLogic : MonoBehaviour {
 			GameObject LoadGameUI = Instantiate (LoadGamePrefab, mainUI.transform, false);
 			LoadGameUI.name = "LoadGameUI";
 			LoadGameUI.GetComponent<ScrollRect>().viewport.GetChild(0).gameObject.GetComponent<Button> ().onClick.AddListener (() => DeleteAllPlayers ());
+			LoadGameUI.GetComponent<ScrollRect>().viewport.GetChild(1).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToScreen ());
 			GameObject content = LoadGameUI.GetComponent<ScrollRect> ().content.gameObject;
 			string[] names = allNames.Split (',');
-			float height = 60f + 60f * (names.Length - 1);
-			content.GetComponent<RectTransform> ().sizeDelta = new Vector2 (770f, height);
-			Vector3 firstpos = new Vector3 (-273f, (height / 2) -25f, 0f);
+			float height = 90f + 90f * (names.Length - 1);
+			content.GetComponent<RectTransform> ().sizeDelta = new Vector2 (1250f, height);
+			Vector3 firstpos = new Vector3 (-241f, (height / 2) -40f, 0f);
 			foreach (string name in names) {
 				GameObject lgnb = Instantiate (LoadGameNameButton, content.transform,false);
-				lgnb.GetComponent<RectTransform> ().sizeDelta = new Vector2 (200f, 50f);
+				lgnb.GetComponent<RectTransform> ().sizeDelta = new Vector2 (720f, 80f);
 				lgnb.GetComponent<RectTransform> ().localPosition = firstpos;
-				firstpos = firstpos + new Vector3 (0f, -60f, 0f);
+				firstpos = firstpos + new Vector3 (0f, -90f, 0f);
 				lgnb.GetComponent<TextMeshProUGUI> ().SetText (name);
 				lgnb.GetComponent<Button> ().onClick.AddListener (() => LoadTextClicked (name));
 			}
@@ -100,42 +124,56 @@ public class MainSceenLogic : MonoBehaviour {
 		}
 		username.GetComponent<TextMeshProUGUI> ().text = "Player: "+SaveData.control.username;
 		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+		ActiveNewGameButton ();
 	}
 	public void DeleteAllPlayers() {
 		string[] allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames").Split(',');
 		PlayerPrefs.DeleteKey ("BestieJumbleFriendNames");
 		Destroy(GameObject.Find ("LoadGameUI"));
 		SaveData.control.DeleteAllSaveData (allNames);
+		DefaultEverything ();
+	}
+	private void DefaultEverything() {
+		username.GetComponent<TextMeshProUGUI> ().text = "";
+		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+	}
+	public void BackToScreen() {
+		Destroy(GameObject.Find("LoadGameUI"));
 	}
 	public void SelectImage() {
 		if (SaveData.control.Puzzle2DCubePositions != null) {
-			for (int i = 0; i < SaveData.control.Puzzle2DCubePositions.GetLength (0); i++) {
+			SaveData.control.Puzzle2DCubePositions = null;
+			/*for (int i = 0; i < SaveData.control.Puzzle2DCubePositions.GetLength (0); i++) {
 				for (int j = 0; j < SaveData.control.Puzzle2DCubePositions.GetLength (1); j++) {
 					SaveData.control.Puzzle2DCubePositions [i, j] = null;
 				}
-			}
+			}*/
 		}
-		if (NativeGallery.IsMediaPickerBusy ())
-			return;
-		else {
-			NativeGallery.Permission p=NativeGallery.GetImageFromGallery( ( path ) =>
-				{
-					Debug.Log( "Image path: " + path );
-					if( path != null )
-					{
-						Texture2D texture = NativeGallery.LoadImageAtPath( path, 1280 );
-						if( texture == null )
-						{
-							Debug.Log( "Couldn't load texture from " + path );
+		if (Application.platform == RuntimePlatform.Android) {
+			if (NativeGallery.IsMediaPickerBusy ())
+				return;
+			else {
+				NativeGallery.Permission p = NativeGallery.GetImageFromGallery (( path) => {
+					Debug.Log ("Image path: " + path);
+					if (path != null) {
+						Texture2D texture = NativeGallery.LoadImageAtPath (path, 1280, false, true, false);
+						if (texture == null) {
+							Debug.Log ("Couldn't load texture from " + path);
 							return;
 						}
-						SaveData.control.cubeTex=texture;
-						mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture=texture;
-						Destroy(texture);
+						SaveData.control.cubeTex = texture;
+						mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = texture;
+						//Destroy(texture);
 					}
-				}, "Select a JPG image", "image/jpg", 1280 );
+				}, "Select a JPG image", "image/jpg", 1280);
+				SaveData.control.Save (SaveData.control.username);
+				Debug.Log ("Permission result: " + p);
+			}
+		} else {
+			WWW w = new WWW ("file:///F://workspaceVR//Little Rebel//Assets//Photos//IMG-20160816-WA0008.jpg");
+			SaveData.control.cubeTex = w.texture;
+			mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = w.texture;
 			SaveData.control.Save (SaveData.control.username);
-			Debug.Log( "Permission result: " + p );
 		}
 	}
 }

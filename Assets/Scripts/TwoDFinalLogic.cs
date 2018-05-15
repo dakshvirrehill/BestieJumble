@@ -15,7 +15,6 @@ public class TwoDFinalLogic : MonoBehaviour {
 		winningPanel.transform.GetChild (2).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 		winningPanel.transform.GetChild (3).gameObject.GetComponent<TextMeshProUGUI> ().text = SaveData.control.username;
 		winningPanel.transform.GetChild (5).gameObject.GetComponent<TMP_InputField> ().onSelect.AddListener ((string arg0) => DeactivateButtons (arg0));
-		winningPanel.transform.GetChild (5).gameObject.GetComponent<TMP_InputField> ().onDeselect.AddListener ((string arg0) => ActivateButtons (arg0));
 		winningPanel.transform.GetChild (5).gameObject.GetComponent<TMP_InputField> ().onEndEdit.AddListener ((string arg0) => ActivateButtons (arg0));
 		BackButton.GetComponent<Button> ().onClick.AddListener (() => BackToMain ());
 		PrintButton.GetComponent<Button> ().onClick.AddListener (() => Printed ());

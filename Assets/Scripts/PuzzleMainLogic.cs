@@ -202,6 +202,9 @@ public class PuzzleMainLogic : MonoBehaviour {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				PuzzleCubePosition[i,j]=PuzzleCubes [i, j].GetComponent<RectTransform> ().localPosition;
+				if (i == n - 1 && j == m - 1) {
+					StartCoroutine(checkAll ());
+				}
 			}
 		}
 	}
