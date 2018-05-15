@@ -17,7 +17,7 @@ public class SaveData : MonoBehaviour {
 		if (control == null) {
 			DontDestroyOnLoad (gameObject);
 			control = this;
-			control.username = "";
+			//control.username = "";
 			control.defaultTex = control.cubeTex;
 			control.Puzzle2DCubePositions = null;
 		} else if (control != this) {
