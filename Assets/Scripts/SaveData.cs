@@ -11,6 +11,7 @@ public class SaveData : MonoBehaviour {
 	public Texture cubeTex;
 	private Texture defaultTex;
 	public Vector2?[,] Puzzle2DCubePositions;
+	public GameObject PreLoader;
 	// Use this for initialization
 	void Awake() {
 		//Debug.Log (Application.persistentDataPath);
@@ -84,6 +85,7 @@ public class SaveData : MonoBehaviour {
 	public void DefaultEverything() {
 		SaveData.control.username = "";
 		SaveData.control.cubeTex = defaultTex;
+		SaveData.control.Puzzle2DCubePositions = null;
 	}
 }
 [Serializable]

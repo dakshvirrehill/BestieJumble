@@ -42,6 +42,8 @@ public class TwoDFinalLogic : MonoBehaviour {
 		Destroy (tex1);
 	}
 	public void BackToMain() {
+		GameObject.Find ("WinningCanvas").SetActive (false);
+		Object.Instantiate (SaveData.control.PreLoader);
 		SceneManager.LoadSceneAsync ("MainScene");
 	}
 	public void ActivateButtons(string defaulte) {
