@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MainSceenLogic : MonoBehaviour {
 	public GameObject LoadGamePrefab;
 	public GameObject LoadGameNameButton;
+	public GameObject SelectImagePrompt;
 	public GameObject mainUI;
 	private GameObject[] openpuzzlebuttons;
 	private GameObject username;
@@ -76,7 +77,6 @@ public class MainSceenLogic : MonoBehaviour {
 				}
 				fallNames = fallNames+name;
 				PlayerPrefs.SetString ("BestieJumbleFriendNames", fallNames);
-				inpfield.GetComponent<TMP_InputField> ().DeactivateInputField ();
 				SaveData.control.username = name;
 				username.GetComponent<TextMeshProUGUI> ().text = "Player: " + name;
 				SaveData.control.Save (name);
@@ -142,13 +142,22 @@ public class MainSceenLogic : MonoBehaviour {
 	}
 	public void SelectImage() {
 		if (SaveData.control.Puzzle2DCubePositions != null) {
-			SaveData.control.Puzzle2DCubePositions = null;
-			/*for (int i = 0; i < SaveData.control.Puzzle2DCubePositions.GetLength (0); i++) {
-				for (int j = 0; j < SaveData.control.Puzzle2DCubePositions.GetLength (1); j++) {
-					SaveData.control.Puzzle2DCubePositions [i, j] = null;
-				}
-			}*/
+			GameObject SelectImageUI = Object.Instantiate (SelectImagePrompt, mainUI.transform, false);
+			SelectImageUI.transform.GetChild (0).GetChild (1).gameObject.GetComponent<Button> ().onClick.AddListener (() => ChangeImage (true));
+			SelectImageUI.transform.GetChild (0).GetChild (2).gameObject.GetComponent<Button> ().onClick.AddListener (() => ChangeImage (false));
+			SelectImageUI.name = "SelectImageUI";
+		} else {
+			ImageSelector ();
 		}
+	}
+	public void ChangeImage(bool choice) {
+		if (choice) {
+			SaveData.control.Puzzle2DCubePositions = null;
+			ImageSelector ();
+		}
+		Destroy (GameObject.Find ("SelectImageUI"));
+	}
+	void ImageSelector() {
 		if (Application.platform == RuntimePlatform.Android) {
 			if (NativeGallery.IsMediaPickerBusy ())
 				return;

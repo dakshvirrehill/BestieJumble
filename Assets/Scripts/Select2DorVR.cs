@@ -26,6 +26,8 @@ public class Select2DorVR : MonoBehaviour {
 		}
 	}
 	public void changeSelected(string selection) {
+		GameObject.Find ("Home Screen").SetActive (false);
+		Object.Instantiate(SaveData.control.PreLoader);
 		if (selection.Equals ("2D")) {
 			SceneManager.LoadSceneAsync ("2DPuzzleScene");
 		} else {

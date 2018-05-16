@@ -75,6 +75,8 @@ public class PuzzleMainLogic : MonoBehaviour {
 	void Update () {
 		if (won) {
 			Save ();
+			GameObject.Find ("2DPuzzleCanvas").SetActive (false);
+			UnityEngine.Object.Instantiate (SaveData.control.PreLoader);
 			SceneManager.LoadSceneAsync ("FinalScene");
 		}
 	}
@@ -162,6 +164,8 @@ public class PuzzleMainLogic : MonoBehaviour {
 	}
 	public void BackToMainMenu() {
 		Save ();
+		GameObject.Find ("2DPuzzleCanvas").SetActive (false);
+		UnityEngine.Object.Instantiate (SaveData.control.PreLoader);
 		SceneManager.LoadSceneAsync ("MainScene");
 	}
 	IEnumerator checkAll() {
