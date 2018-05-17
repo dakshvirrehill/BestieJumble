@@ -14,6 +14,9 @@ ModelImporter:
     100012: Leftside_Horizontal_001
     100014: PuzleCube
     100016: Upside_Vertical
+    100018: None_Horizontal
+    100020: None_Vertical
+    100022: Rightside_Horizontal
     400000: Both_Side_Horizontal
     400002: Both_Side_Vertical
     400004: //RootNode
@@ -23,6 +26,9 @@ ModelImporter:
     400012: Leftside_Horizontal_001
     400014: PuzleCube
     400016: Upside_Vertical
+    400018: None_Horizontal
+    400020: None_Vertical
+    400022: Rightside_Horizontal
     2100000: Front
     2100002: Left
     2100004: Back
@@ -39,6 +45,9 @@ ModelImporter:
     2300010: Leftside_Horizontal_001
     2300012: PuzleCube
     2300014: Upside_Vertical
+    2300016: None_Horizontal
+    2300018: None_Vertical
+    2300020: Rightside_Horizontal
     3300000: Both_Side_Horizontal
     3300002: Both_Side_Vertical
     3300004: cylinder
@@ -47,6 +56,9 @@ ModelImporter:
     3300010: Leftside_Horizontal_001
     3300012: PuzleCube
     3300014: Upside_Vertical
+    3300016: None_Horizontal
+    3300018: None_Vertical
+    3300020: Rightside_Horizontal
     4300000: PuzleCube
     4300002: Leftside_Horizontal_001
     4300004: Leftside_Horizontal
@@ -55,9 +67,47 @@ ModelImporter:
     4300010: cylinder
     4300012: Upside_Vertical
     4300014: Both_Side_Vertical
+    4300016: None_Horizontal
+    4300018: None_Vertical
+    4300020: Rightside_Horizontal
     7400000: Default Take
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Back
+    second: {fileID: 2100000, guid: 53ddc358a1bd283418997693b2507d2f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Botom
+    second: {fileID: 2100000, guid: 53ddc358a1bd283418997693b2507d2f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Boundary
+    second: {fileID: 2100000, guid: 333af8d9f99886b43adc897cf32efaba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Front
+    second: {fileID: 2100000, guid: 53ddc358a1bd283418997693b2507d2f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Left
+    second: {fileID: 2100000, guid: 53ddc358a1bd283418997693b2507d2f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Right
+    second: {fileID: 2100000, guid: 53ddc358a1bd283418997693b2507d2f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Top
+    second: {fileID: 2100000, guid: 53ddc358a1bd283418997693b2507d2f, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
