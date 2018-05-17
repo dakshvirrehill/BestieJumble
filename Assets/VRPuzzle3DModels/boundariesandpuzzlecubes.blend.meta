@@ -1,0 +1,139 @@
+fileFormatVersion: 2
+guid: 4285603aa2edfa347ad7a760c6b9b491
+timeCreated: 1526537217
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Both_Side_Horizontal
+    100002: Both_Side_Vertical
+    100004: //RootNode
+    100006: cylinder
+    100008: Downside_Vertical
+    100010: Leftside_Horizontal
+    100012: Leftside_Horizontal_001
+    100014: PuzleCube
+    100016: Upside_Vertical
+    400000: Both_Side_Horizontal
+    400002: Both_Side_Vertical
+    400004: //RootNode
+    400006: cylinder
+    400008: Downside_Vertical
+    400010: Leftside_Horizontal
+    400012: Leftside_Horizontal_001
+    400014: PuzleCube
+    400016: Upside_Vertical
+    2100000: Front
+    2100002: Left
+    2100004: Back
+    2100006: Right
+    2100008: Botom
+    2100010: Top
+    2100012: Boundary
+    2100014: unnamed
+    2300000: Both_Side_Horizontal
+    2300002: Both_Side_Vertical
+    2300004: cylinder
+    2300006: Downside_Vertical
+    2300008: Leftside_Horizontal
+    2300010: Leftside_Horizontal_001
+    2300012: PuzleCube
+    2300014: Upside_Vertical
+    3300000: Both_Side_Horizontal
+    3300002: Both_Side_Vertical
+    3300004: cylinder
+    3300006: Downside_Vertical
+    3300008: Leftside_Horizontal
+    3300010: Leftside_Horizontal_001
+    3300012: PuzleCube
+    3300014: Upside_Vertical
+    4300000: PuzleCube
+    4300002: Leftside_Horizontal_001
+    4300004: Leftside_Horizontal
+    4300006: Downside_Vertical
+    4300008: Both_Side_Horizontal
+    4300010: cylinder
+    4300012: Upside_Vertical
+    4300014: Both_Side_Vertical
+    7400000: Default Take
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
