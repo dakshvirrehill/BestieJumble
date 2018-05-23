@@ -11,6 +11,7 @@ public class SaveData : MonoBehaviour {
 	public Texture cubeTex;
 	private Texture defaultTex;
 	public Vector2?[,] Puzzle2DCubePositions;
+	public Vector2?[,] PuzzleVRCubePositions;
 	public GameObject PreLoader;
 	// Use this for initialization
 	void Awake() {
@@ -44,7 +45,7 @@ public class SaveData : MonoBehaviour {
 		Texture2D tex = new Texture2D (tex1.width, tex1.height, TextureFormat.RGB24, false);
 		tex.SetPixels (0, 0, tex1.width, tex1.height, tex1.GetPixels ());
 		tex.Apply ();
-		SaveDataHolder data = new SaveDataHolder (username,tex.EncodeToJPG(),Puzzle2DCubePositions);
+		SaveDataHolder data = new SaveDataHolder (username,tex.EncodeToJPG(),Puzzle2DCubePositions,PuzzleVRCubePositions);
 		bf.Serialize (file, data);
 		//Destroy (tex);
 		file.Close ();
@@ -72,6 +73,14 @@ public class SaveData : MonoBehaviour {
 					}
 				}
 			}
+			if (data.PuzzleVRCubePositions.GetLength (0) >= 6) {
+				PuzzleVRCubePositions = new Vector2?[data.PuzzleVRCubePositions.GetLength (0), data.PuzzleVRCubePositions.GetLength (1)];
+				for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
+					for (int j = 0; j < PuzzleVRCubePositions.GetLength (1); j++) {
+						PuzzleVRCubePositions [i, j] = (Vector2?)data.PuzzleVRCubePositions [i, j];
+					}
+				}
+			}
 		}
 	}
 	public void DeleteAllSaveData(string[] names) {
@@ -93,7 +102,8 @@ class SaveDataHolder {
 	public string username;
 	public Byte[] cubeTex;
 	public Vector2[,] Puzzle2DCubePositions;
-	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions) {
+	public Vector2[,] PuzzleVRCubePositions;
+	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions, Vector2?[,] PuzzleVRCubePositions) {
 		this.username = user;
 		this.cubeTex = ct;
 		if (Puzzle2DCubePositions != null) { 
@@ -107,5 +117,15 @@ class SaveDataHolder {
 			this.Puzzle2DCubePositions = new Vector2[1, 1];
 			this.Puzzle2DCubePositions [0, 0] = new Vector2 (-1, -1);
 		}
-	}
+		if (PuzzleVRCubePositions != null) {
+			this.PuzzleVRCubePositions = new Vector2[PuzzleVRCubePositions.GetLength (0), PuzzleVRCubePositions.GetLength (1)];
+			for (int i = 0; i < PuzzleVRCubePositions.GetLength (0); i++) {
+				for (int j = 0; j < PuzzleVRCubePositions.GetLength (1); j++) {
+					this.PuzzleVRCubePositions[i,j] = PuzzleVRCubePositions[i,j].Value;
+				}
+			}
+		} else {
+			this.PuzzleVRCubePositions = new Vector2[1, 1];
+			this.PuzzleVRCubePositions [0, 0] = new Vector2 (-1, -1);
+		}	}
 }
