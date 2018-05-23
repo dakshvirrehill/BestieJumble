@@ -165,7 +165,7 @@ public class MainSceenLogic : MonoBehaviour {
 				NativeGallery.Permission p = NativeGallery.GetImageFromGallery (( path) => {
 					Debug.Log ("Image path: " + path);
 					if (path != null) {
-						Texture2D texture = NativeGallery.LoadImageAtPath (path, 1280, false, true, false);
+						Texture2D texture = NativeGallery.LoadImageAtPath (path, -1 , false, true, false);
 						if (texture == null) {
 							Debug.Log ("Couldn't load texture from " + path);
 							return;
