@@ -22,7 +22,6 @@ public class VRPuzzleLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		SetNGLArray ();
-		selected = new GameObject[n];
 		selectedsize = 0;
 		parent.SetActive (true);
 		PuzzleCube = parent.transform.GetChild (2).gameObject;
@@ -135,6 +134,20 @@ public class VRPuzzleLogic : MonoBehaviour {
 		}
 		yield return new WaitForSeconds (1f);
 	}
+	void CreateSelector(int i,int j) {
+		selector.SetActive (true);
+		GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
+		Sel.name = "Selector " + i + " " + (j + 1);
+		Sel.GetComponent<VRGridSelector> ().pos = new Vector2 (i, j);
+		selector.SetActive (false);
+		Sel.transform.localPosition = PuzzleCubePosition [i, j];
+		EventTrigger.Entry entree = new EventTrigger.Entry ();
+		entree.eventID = EventTriggerType.PointerClick;
+		entree.callback.AddListener ((data) => {
+			ActivateSelectorUI ((PointerEventData)data, (GameObject)Sel);
+		});
+		Sel.GetComponent<EventTrigger> ().triggers.Add (entree);
+	}
 	IEnumerator JumblePuzzle() {
 		System.Random r = new System.Random ();
 		for (int i = 0; i < n; i++) {
@@ -153,18 +166,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);
 				iTween.ScaleTo (PuzzleCubes [i, j], new Vector3 (0.5f, 0.5f, 0.5f), 1f);
 				iTween.MoveTo (PuzzleCubes [i, j], iTween.Hash("position",NonGridLocations [ngv].transform.position,"time", 5f));
-				selector.SetActive (true);
-				GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
-				Sel.name = "Selector " + i + " " + (j + 1);
-				Sel.GetComponent<VRGridSelector> ().pos = new Vector2 (i, j);
-				selector.SetActive (false);
-				Sel.transform.localPosition = PuzzleCubePosition [i, j];
-				EventTrigger.Entry entree = new EventTrigger.Entry ();
-				entree.eventID = EventTriggerType.PointerClick;
-				entree.callback.AddListener ((data) => {
-					ActivateSelectorUI ((PointerEventData)data, (GameObject)Sel);
-				});
-				Sel.GetComponent<EventTrigger> ().triggers.Add (entree);
+				CreateSelector (i, j);
 			}
 		}
 		yield return new WaitForSeconds (1f);
@@ -196,15 +198,22 @@ public class VRPuzzleLogic : MonoBehaviour {
 			selected [i] = selected [i + 1];
 			selected[i].GetComponent<PuzzleCube2D> ().currentPos = new Vector2(-1,-1);
 		}
+		selectedsize--;
 		shifter.SetActive (true);
 		Destroy(GameObject.Find ("SelectorUICanvas"));
 		iTween.ScaleTo (shifter, new Vector3 (1, 1, 1), 2f);
 		iTween.MoveTo (shifter, iTween.Hash("position",PuzzleCubePosition [(int)shifter.GetComponent<PuzzleCube2D> ().currentPos.x, (int)shifter.GetComponent<PuzzleCube2D> ().currentPos.y], "time",3f,"islocal",true));
+		shifter.GetComponent<PuzzleCube2D> ().UpdateIsCorrect ();
+		StartCoroutine (checkAll ());
 	}
 	public void MoveCubeToSelectorUI(PointerEventData eventData, GameObject PC) {
 		if (selectedsize == n) {
 			
 		} else {
+			if (!(PC.GetComponent<PuzzleCube2D> ().currentPos == new Vector2 (-1, -1))) {
+				CreateSelector ((int)PC.GetComponent<PuzzleCube2D> ().currentPos.x, (int)PC.GetComponent<PuzzleCube2D> ().currentPos.y);
+				PC.GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (-1, -1);
+			}
 			selected [selectedsize] = PC;
 			selectedsize++;
 			PC.SetActive (false);
@@ -212,6 +221,19 @@ public class VRPuzzleLogic : MonoBehaviour {
 	}
 	void DestroyObject(GameObject sel) {
 		Destroy (sel);
+	}
+	IEnumerator checkAll() {
+		bool complete = true;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				complete = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().isCorrect;
+				if (!complete)
+					break;
+			}
+			if (!complete)
+				break;
+		}
+		yield return new WaitForSeconds(0f);
 	}
 	// Update is called once per frame
 	void Update () {
