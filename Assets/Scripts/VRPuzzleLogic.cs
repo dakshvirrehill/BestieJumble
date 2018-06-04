@@ -7,6 +7,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject parent;
 	public Shader shader;
 	public GameObject NGLParent;
+	public GameObject SelectorUICanvasPrefab;
+	public GameObject SelectorUIPos;
 	private GameObject PuzzlePanel;
 	private GameObject PuzzleCube;
 	private GameObject[,] PuzzleCubes;
@@ -16,10 +18,12 @@ public class VRPuzzleLogic : MonoBehaviour {
 	private Vector3 firstCubeLocation;
 	private int n;
 	private GameObject[] selected;
+	private int selectedsize;
 	// Use this for initialization
 	void Start () {
 		SetNGLArray ();
 		selected = new GameObject[n];
+		selectedsize = 0;
 		parent.SetActive (true);
 		PuzzleCube = parent.transform.GetChild (2).gameObject;
 		selector = parent.transform.GetChild (3).gameObject;
@@ -147,6 +151,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			    	MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)PuzzleCubes [i, j]);
 				});
 				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);
+				iTween.ScaleTo (PuzzleCubes [i, j], new Vector3 (0.5f, 0.5f, 0.5f), 1f);
 				iTween.MoveTo (PuzzleCubes [i, j], iTween.Hash("position",NonGridLocations [ngv].transform.position,"time", 5f));
 				selector.SetActive (true);
 				GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
@@ -165,10 +170,48 @@ public class VRPuzzleLogic : MonoBehaviour {
 		yield return new WaitForSeconds (1f);
 	}
 	public void ActivateSelectorUI(PointerEventData eventData, GameObject Sel) {
-		
+		if (selectedsize==0) {
+			
+		} else {
+			Vector2 GridValue = Sel.GetComponent<VRGridSelector> ().pos;
+			iTween.MoveTo (Sel, iTween.Hash ("position", SelectorUIPos.transform.position, "time", 2f, "oncomplete", "DestroyObject", "oncompletetarget", gameObject, "oncompleteparams", Sel));
+			GameObject.Find ("EndBorder").SetActive (false);
+			GameObject selectorUIPanel = Object.Instantiate (SelectorUICanvasPrefab, SelectorUIPos.transform, false);
+			selectorUIPanel = selectorUIPanel.transform.GetChild (0).gameObject;
+			for (int i = 0; i < selectedsize; i++) {
+				selected [i].GetComponent<PuzzleCube2D> ().currentPos = GridValue;
+				GameObject rm = selectorUIPanel.transform.GetChild (i).gameObject;
+				rm.GetComponent<RawImage> ().color = Color.white;
+				rm.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+				rm.GetComponent<RawImage> ().uvRect = new Rect (selected [i].GetComponent<Renderer> ().material.mainTextureOffset, selected [i].GetComponent<Renderer> ().material.mainTextureScale);
+				rm.GetComponent<Button> ().onClick.AddListener (() => MoveCubeToGrid (i));
+				selected [i].transform.position = rm.transform.position;
+			}
+		} 
+	}
+	public void MoveCubeToGrid(int pos) {
+		GameObject.Find ("EndBorder").SetActive (true);
+		GameObject shifter = selected [pos];
+		for (int i = pos; i < selectedsize; i++) {
+			selected [i] = selected [i + 1];
+			selected[i].GetComponent<PuzzleCube2D> ().currentPos = new Vector2(-1,-1);
+		}
+		shifter.SetActive (true);
+		Destroy(GameObject.Find ("SelectorUICanvas"));
+		iTween.ScaleTo (shifter, new Vector3 (1, 1, 1), 2f);
+		iTween.MoveTo (shifter, iTween.Hash("position",PuzzleCubePosition [(int)shifter.GetComponent<PuzzleCube2D> ().currentPos.x, (int)shifter.GetComponent<PuzzleCube2D> ().currentPos.y], "time",3f,"islocal",true));
 	}
 	public void MoveCubeToSelectorUI(PointerEventData eventData, GameObject PC) {
-		
+		if (selectedsize == n) {
+			
+		} else {
+			selected [selectedsize] = PC;
+			selectedsize++;
+			PC.SetActive (false);
+		}
+	}
+	void DestroyObject(GameObject sel) {
+		Destroy (sel);
 	}
 	// Update is called once per frame
 	void Update () {
