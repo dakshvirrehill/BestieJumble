@@ -70,7 +70,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				if (!(i == 0 && j == 0)) {
-					PuzzleCubes [i, j] = Object.Instantiate (PuzzleCube, PuzzlePanel.transform, false);	
+					PuzzleCubes [i, j] = Object.Instantiate (PuzzleCube, PuzzlePanel.transform, false);
+					PuzzleCubes [i, j].tag = "PuzzleCube";
 					firstCubeLocation = firstCubeLocation + new Vector3 (4.2f, 0, 0);
 					PuzzleCubes [i, j].transform.localPosition = firstCubeLocation;
 					PuzzleCubePosition [i, j] = firstCubeLocation;
@@ -164,7 +165,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			    	MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)PuzzleCubes [i, j]);
 				});
 				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);
-				iTween.ScaleTo (PuzzleCubes [i, j], new Vector3 (0.5f, 0.5f, 0.5f), 1f);
+				iTween.ScaleTo (PuzzleCubes [i, j], new Vector3 (0.2f, 0.2f, 0.2f), 1f);
 				iTween.MoveTo (PuzzleCubes [i, j], iTween.Hash("position",NonGridLocations [ngv].transform.position,"time", 5f));
 				CreateSelector (i, j);
 			}
