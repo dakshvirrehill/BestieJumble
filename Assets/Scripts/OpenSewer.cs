@@ -24,6 +24,8 @@ public class OpenSewer : MonoBehaviour {
 		}
 		if (found) {
 			iTween.MoveTo (gameObject, iTween.Hash ("position", new Vector3 (-12.62f, 0f, 6.93f), "time", 3f, "islocal", true, "oncompletetarget", gameObject, "oncomplete", "BringCubeUp", "oncompleteparams", hitColliders [i].gameObject));
+		} else {
+			
 		}
 	}
 	public void BringCubeUp(GameObject PuzzleCube) {
