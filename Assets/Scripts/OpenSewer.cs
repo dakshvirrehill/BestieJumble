@@ -16,7 +16,8 @@ public class OpenSewer : MonoBehaviour {
 	public void OpenTheSewer() {
 		Collider[] hitColliders = Physics.OverlapSphere (gameObject.transform.position, 0.65f);
 		bool found = false;
-		for (int i = 0; i < hitColliders.Length; i++) {
+		int i = 0;
+		for (i = 0; i < hitColliders.Length; i++) {
 			if (hitColliders [i].gameObject.tag == "PuzzleCube") {
 				found = true;
 				break;
