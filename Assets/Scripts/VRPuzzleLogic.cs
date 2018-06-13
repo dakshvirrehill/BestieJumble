@@ -33,7 +33,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		if (SaveData.control.cubeTex.width > 1024 || SaveData.control.cubeTex.height > 1024) {
 			n = 9;
 			selected = new GameObject[n];
-			firstCubeLocation = new Vector3 (-16.8f, 26.2f, 36.3f);
+			firstCubeLocation = new Vector3 (-9.61f, 26.2f, 36.3f);
 			PuzzlePanel = parent.transform.GetChild (1).gameObject;
 			Destroy (parent.transform.GetChild (0).gameObject);
 			z = 37f;
@@ -41,7 +41,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		} else {
 			n = 6;
 			selected = new GameObject[n];
-			firstCubeLocation = new Vector3 (-10.7f, 18.7f, 30.3f);
+			firstCubeLocation = new Vector3 (-3.51f, 18.7f, 30.3f);
 			PuzzlePanel = parent.transform.GetChild (0).gameObject;
 			Destroy (parent.transform.GetChild (1).gameObject);
 		}
