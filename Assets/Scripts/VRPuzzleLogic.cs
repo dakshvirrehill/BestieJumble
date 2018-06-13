@@ -9,6 +9,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject NGLParent;
 	public GameObject SelectorUICanvasPrefab;
 	public GameObject SelectorUIPos;
+	public GameObject PoofPrefab;
 	private GameObject PuzzlePanel;
 	private GameObject PuzzleCube;
 	private GameObject[,] PuzzleCubes;
@@ -46,7 +47,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		}
 		parent.transform.DetachChildren ();
 		Destroy (parent);
-		PuzzlePanel.transform.position=new Vector3(0,y,z);
+		PuzzlePanel.transform.position=new Vector3(7.19f,y,z);
 		PuzzlePanel.transform.rotation = Quaternion.Euler (0, 0, 0);
 		PuzzleCube.transform.position = firstCubeLocation;
 		PuzzleCube.transform.rotation = Quaternion.Euler (0, 0, 0);
@@ -214,6 +215,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 			if (!(PC.GetComponent<PuzzleCube2D> ().currentPos == new Vector2 (-1, -1))) {
 				CreateSelector ((int)PC.GetComponent<PuzzleCube2D> ().currentPos.x, (int)PC.GetComponent<PuzzleCube2D> ().currentPos.y);
 				PC.GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (-1, -1);
+			} else {
+				Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
 			}
 			selected [selectedsize] = PC;
 			selectedsize++;
