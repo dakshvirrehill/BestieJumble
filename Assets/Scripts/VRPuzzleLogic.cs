@@ -28,20 +28,20 @@ public class VRPuzzleLogic : MonoBehaviour {
 		PuzzleCube = parent.transform.GetChild (2).gameObject;
 		selector = parent.transform.GetChild (3).gameObject;
 		selector.SetActive (false);
-		float z = 31f;
-		float y = 8f;
+		float z = 26.45f;
+		float y = 19.6f;
 		if (SaveData.control.cubeTex.width > 1024 || SaveData.control.cubeTex.height > 1024) {
 			n = 9;
 			selected = new GameObject[n];
-			firstCubeLocation = new Vector3 (-9.61f, 26.2f, 36.3f);
+			firstCubeLocation = new Vector3 (-9.61f, 37.6f, 30.3f);
 			PuzzlePanel = parent.transform.GetChild (1).gameObject;
 			Destroy (parent.transform.GetChild (0).gameObject);
-			z = 37f;
-			y = 3f;
+			z = 31f;
+			y = 14.4f;
 		} else {
 			n = 6;
 			selected = new GameObject[n];
-			firstCubeLocation = new Vector3 (-3.51f, 18.7f, 30.3f);
+			firstCubeLocation = new Vector3 (-3.51f, 30.3f, 25.75f);
 			PuzzlePanel = parent.transform.GetChild (0).gameObject;
 			Destroy (parent.transform.GetChild (1).gameObject);
 		}
