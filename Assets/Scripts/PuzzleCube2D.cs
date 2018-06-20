@@ -7,6 +7,7 @@ public class PuzzleCube2D : MonoBehaviour {
 	public Vector2 actualPos;
 	public int ngv;
 	public bool isCorrect;
+	public int selectedPos;
 	// Use this for initialization
 	void Start () {
 	}
