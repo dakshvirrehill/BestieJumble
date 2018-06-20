@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Waypoint : MonoBehaviour
 {	public GameObject player;
+	private GameObject eventSystem;
 	private enum State
 	{
 		Idle,
@@ -60,6 +61,7 @@ public class Waypoint : MonoBehaviour
 		_audio_source				= gameObject.GetComponent<AudioSource>();	
 		_audio_source.clip		 	= clip_click;
 		_audio_source.playOnAwake 	= false;
+		eventSystem = GameObject.Find ("GvrEventSystem");
 	}
 
 
@@ -127,13 +129,14 @@ public class Waypoint : MonoBehaviour
 	public void Click()
 	{
 		_state = _state == State.Focused ? State.Clicked : _state;
-		
 		_audio_source.Play();
-		iTween.MoveTo (player, gameObject.transform.position, 3f);
+		eventSystem.SetActive (false);
+		iTween.MoveTo (player, iTween.Hash("position",gameObject.transform.position,"time", 3f,"oncomplete","EnableEventSystem","oncompletetarget",gameObject));
 		//player.transform.position 	= gameObject.transform.position;
 	}
-
-
+	void EnableEventSystem() {
+		eventSystem.SetActive (true);
+	}
 	private void Idle()
 	{
 		float scale				= Mathf.Lerp(scale_idle_min, scale_idle_max, _animated_lerp);
