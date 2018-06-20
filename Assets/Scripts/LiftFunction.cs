@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LiftFunction : MonoBehaviour {
 	public GameObject player;
-	private GameObject parentMover;
 	private GameObject eventSystem;
 	// Use this for initialization
 	void Start () {
@@ -16,10 +15,7 @@ public class LiftFunction : MonoBehaviour {
 		
 	}
 	public void MoveLift() {
-		parentMover = new GameObject ();
-		parentMover.transform.position = transform.position;
-		player.transform.SetParent (parentMover.transform);
-		gameObject.transform.SetParent (parentMover.transform);
+		player.transform.SetParent (gameObject.transform);
 		if (transform.position.y >= 17.9f && transform.position.y <= 18.1f) {
 			StartCoroutine(GoingDown ());
 		} else {
@@ -59,16 +55,15 @@ public class LiftFunction : MonoBehaviour {
 		yield return new WaitForSeconds (5f);
 	}
 	IEnumerator GoUp() {
-		iTween.MoveTo (parentMover, new Vector3 (parentMover.transform.position.x, 18f, parentMover.transform.position.z), 5f);
+		iTween.MoveTo (gameObject, new Vector3 (gameObject.transform.position.x, 18f, gameObject.transform.position.z), 5f);
 		yield return new WaitForSeconds (5f);
 	}
 	IEnumerator GoDown() {
-		iTween.MoveTo (parentMover, new Vector3 (parentMover.transform.position.x, 6.32f, parentMover.transform.position.z), 5f);
+		iTween.MoveTo (gameObject, new Vector3 (gameObject.transform.position.x, 6.32f, gameObject.transform.position.z), 5f);
 		yield return new WaitForSeconds (5f);
 	}
 	IEnumerator DestroyParent() {
-		parentMover.transform.DetachChildren ();
-		Destroy (parentMover);
+		player.transform.parent=null;
 		eventSystem.SetActive (true);
 		yield return new WaitForSeconds (0f);
 	}
