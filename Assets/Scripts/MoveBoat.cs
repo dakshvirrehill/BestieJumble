@@ -19,20 +19,16 @@ public class MoveBoat : MonoBehaviour {
 		iTween.MoveTo (player, iTween.Hash ("position", gameObject.transform.position + new Vector3 (0f, 1f, 0f), "time", 3f, "oncomplete", "MoveForReal","oncompletetarget",gameObject,"oncompleteparams",player));
 	}
 	void MoveForReal(GameObject player) {
-		GameObject parentMover = new GameObject ();
-		parentMover.transform.position = gameObject.transform.position;
-		player.transform.SetParent (parentMover.transform);
-		gameObject.transform.SetParent (parentMover.transform);
+		player.transform.SetParent (gameObject.transform);
 		Vector3 toMove;
 		if (gameObject.transform.position == boatPos) {
 			toMove = islandPos;
 		} else {
 			toMove = boatPos;
 		}
-		iTween.MoveTo (parentMover, iTween.Hash ("position", toMove, "time", 15f, "oncomplete", "RemoveChildren", "oncompletetarget", gameObject, "oncompleteparams", parentMover,"orienttopath",true));
+		iTween.MoveTo (gameObject, iTween.Hash ("position", toMove, "time", 15f, "oncomplete", "RemoveChildren", "oncompletetarget", gameObject,"oncompleteparams",player,"orienttopath",true));
 	}
-	void RemoveChildren(GameObject parentMover) {
-		parentMover.transform.DetachChildren ();
-		Destroy (parentMover);
+	void RemoveChildren(GameObject player) {
+		player.transform.parent=null;
 	}
 }
