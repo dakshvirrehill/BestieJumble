@@ -10,6 +10,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject SelectorUICanvasPrefab;
 	public GameObject SelectorUIPos;
 	public GameObject PoofPrefab;
+	public GameObject InformationCanvasPrefab;
 	private GameObject PuzzlePanel;
 	private GameObject PuzzleCube;
 	private GameObject[,] PuzzleCubes;
@@ -20,8 +21,10 @@ public class VRPuzzleLogic : MonoBehaviour {
 	private int n;
 	private GameObject[] selected;
 	private int selectedsize;
+	private GameObject eventSystem;
 	// Use this for initialization
 	void Start () {
+		eventSystem = GameObject.Find ("GvrEventSystem");
 		SetNGLArray ();
 		selectedsize = 0;
 		parent.SetActive (true);
@@ -125,17 +128,29 @@ public class VRPuzzleLogic : MonoBehaviour {
 		StartCoroutine (JumblerStarter ());
 	}
 	IEnumerator JumblerStarter() {
-		yield return StartCoroutine(MoveToCenter());
+		//yield return StartCoroutine(MoveToCenter());
+		eventSystem.SetActive(false);
+		yield return new WaitForSeconds(2f);
+		GameObject infycanva = Object.Instantiate (InformationCanvasPrefab, new Vector3 (17.19f, 20f, 23.81f), Quaternion.Euler (0f, 0f, 0f));
 		yield return StartCoroutine (JumblePuzzle ());
+		Destroy (infycanva);
+		eventSystem.SetActive (true);
+		//yield return StartCoroutine (MoveCubesToLocations ());
 	}
-	IEnumerator MoveToCenter() {
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				iTween.MoveTo (PuzzleCubes [i, j], iTween.Hash ("x", PuzzlePanel.transform.position.x, "y", PuzzlePanel.transform.position.y, "z", PuzzlePanel.transform.position.z - 3, "time", 3f));
-			}
-		}
+	/*IEnumerator MoveToCenter() {
+		CenterMovementOneByOne (new Vector2 (0, 0));
 		yield return new WaitForSeconds (1f);
 	}
+	void CenterMovementOneByOne(Vector2 ij) {
+		if (ij.x == n)
+			return;
+		else if (ij.y == n)
+			CenterMovementOneByOne (new Vector2(ij.x + 1, 0));
+		else {
+			float waittime = 1 / (float)(n * n);
+			iTween.MoveTo (PuzzleCubes [(int)ij.x, (int)ij.y], iTween.Hash ("position", PuzzlePanel.transform.position + new Vector3 (0f, 0f, -3f), "time", waittime,"oncomplete","CenterMovementOneByOne","oncompletetarget",gameObject,"oncompleteparams",new Vector2(ij.x,ij.y+1)));
+		}
+	}*/
 	void CreateSelector(int i,int j) {
 		selector.SetActive (true);
 		GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
@@ -166,13 +181,28 @@ public class VRPuzzleLogic : MonoBehaviour {
 			    	MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)PuzzleCubes [i, j]);
 				});
 				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);
-				iTween.ScaleTo (PuzzleCubes [i, j], new Vector3 (0.2f, 0.2f, 0.2f), 1f);
-				iTween.MoveTo (PuzzleCubes [i, j], iTween.Hash("position",NonGridLocations [ngv].transform.position,"time", 5f));
+				iTween.ScaleTo (PuzzleCubes [i, j], new Vector3 (0.2f, 0.2f, 0.2f), 0f);
+				PuzzleCubes [i, j].transform.position = NonGridLocations [ngv].transform.position;
+				//iTween.MoveTo (PuzzleCubes [i, j], iTween.Hash("position",NonGridLocations [ngv].transform.position,"time", 5f));
 				CreateSelector (i, j);
 			}
 		}
+		yield return new WaitForSeconds (5f);
+	}
+	/*IEnumerator MoveCubesToLocations() {
+		CubeMovementOneByOne (new Vector2 (0, 0));
 		yield return new WaitForSeconds (1f);
 	}
+	void CubeMovementOneByOne(Vector2 ij) {
+		if (ij.x == n)
+			return;
+		else if (ij.y == n)
+			CubeMovementOneByOne (new Vector2(ij.x + 1, 0));
+		else {
+			float waittime = 1 / (float)(n*n);
+			iTween.MoveTo (PuzzleCubes [(int)ij.x, (int)ij.y], iTween.Hash ("position", NonGridLocations [PuzzleCubes [(int)ij.x, (int)ij.y].GetComponent<PuzzleCube2D> ().ngv].transform.position, "time", waittime,"oncomplete","CubeMovementOneByOne","oncompletetarget",gameObject,"oncompleteparams",new Vector2(ij.x,ij.y+1)));
+		}
+	}*/
 	public void ActivateSelectorUI(PointerEventData eventData, GameObject Sel) {
 		if (selectedsize==0) {
 			
