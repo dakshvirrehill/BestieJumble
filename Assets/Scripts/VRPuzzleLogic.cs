@@ -129,7 +129,6 @@ public class VRPuzzleLogic : MonoBehaviour {
 		StartCoroutine (JumblerStarter ());
 	}
 	IEnumerator JumblerStarter() {
-		//yield return StartCoroutine(MoveToCenter());
 		eventSystem.SetActive(false);
 		yield return new WaitForSeconds(2f);
 		GameObject infycanva = Object.Instantiate (InformationCanvasPrefab, new Vector3 (17.19f, 20f, 23.81f), Quaternion.Euler (0f, 0f, 0f));
@@ -137,22 +136,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 		yield return StartCoroutine (JumblePuzzle ());
 		Destroy (infycanva);
 		eventSystem.SetActive (true);
-		//yield return StartCoroutine (MoveCubesToLocations ());
 	}
-	/*IEnumerator MoveToCenter() {
-		CenterMovementOneByOne (new Vector2 (0, 0));
-		yield return new WaitForSeconds (1f);
-	}
-	void CenterMovementOneByOne(Vector2 ij) {
-		if (ij.x == n)
-			return;
-		else if (ij.y == n)
-			CenterMovementOneByOne (new Vector2(ij.x + 1, 0));
-		else {
-			float waittime = 1 / (float)(n * n);
-			iTween.MoveTo (PuzzleCubes [(int)ij.x, (int)ij.y], iTween.Hash ("position", PuzzlePanel.transform.position + new Vector3 (0f, 0f, -3f), "time", waittime,"oncomplete","CenterMovementOneByOne","oncompletetarget",gameObject,"oncompleteparams",new Vector2(ij.x,ij.y+1)));
-		}
-	}*/
+
 	void CreateSelector(int i,int j) {
 		selector.SetActive (true);
 		GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
@@ -177,15 +162,15 @@ public class VRPuzzleLogic : MonoBehaviour {
 				}
 				NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed = true;
 				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = ngv;
+				GameObject pc = PuzzleCubes [i, j];
 				EventTrigger.Entry entry = new EventTrigger.Entry ();
 				entry.eventID = EventTriggerType.PointerClick;
 				entry.callback.AddListener ((data) => {
-			    	MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)PuzzleCubes [i, j]);
+			    	MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)pc);
 				});
 				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);
 				PuzzleCubes [i, j].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
 				PuzzleCubes [i, j].transform.position = NonGridLocations [ngv].transform.position;
-				//iTween.MoveTo (PuzzleCubes [i, j], iTween.Hash("position",NonGridLocations [ngv].transform.position,"time", 5f));
 				CreateSelector (i, j);
 			}
 		}
@@ -195,28 +180,16 @@ public class VRPuzzleLogic : MonoBehaviour {
 		if (selectedsize==0) {
 			
 		} else {
-			Vector2 GridValue = Sel.GetComponent<VRGridSelector> ().pos;
-			iTween.MoveTo (Sel, iTween.Hash ("position", SelectorUIPos.transform.position, "time", 2f, "oncomplete", "DestroyObject", "oncompletetarget", gameObject, "oncompleteparams", Sel));
-			GameObject.Find ("EndBorder").SetActive (false);
-			GameObject selectorUIPanel = Object.Instantiate (SelectorUICanvasPrefab, SelectorUIPos.transform, false);
-			selectorUIPanel = selectorUIPanel.transform.GetChild (0).gameObject;
-			for (int i = 0; i < selectedsize; i++) {
-				selected [i].GetComponent<PuzzleCube2D> ().currentPos = GridValue;
-				GameObject rm = selectorUIPanel.transform.GetChild (i).gameObject;
-				rm.GetComponent<RawImage> ().color = Color.white;
-				rm.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
-				rm.GetComponent<RawImage> ().uvRect = new Rect (selected [i].GetComponent<Renderer> ().material.mainTextureOffset, selected [i].GetComponent<Renderer> ().material.mainTextureScale);
-				rm.GetComponent<Button> ().onClick.AddListener (() => MoveCubeToGrid (i));
-				selected [i].transform.position = rm.transform.position;
-			}
+			eventSystem.SetActive (false);
+			iTween.MoveTo (Sel, iTween.Hash ("position", SelectorUIPos.transform.position, "time", 2f, "oncomplete", "RestOfCode", "oncompletetarget", gameObject, "oncompleteparams", Sel));
 		} 
 	}
 	public void MoveCubeToGrid(int pos) {
-		GameObject.Find ("EndBorder").SetActive (true);
 		GameObject shifter = selected [pos];
 		for (int i = pos; i < selectedsize; i++) {
 			selected [i] = selected [i + 1];
-			selected[i].GetComponent<PuzzleCube2D> ().currentPos = new Vector2(-1,-1);
+			if(selected[i]!=null)
+				selected [i].GetComponent<PuzzleCube2D> ().currentPos = new Vector2(-1,-1);
 		}
 		selectedsize--;
 		shifter.SetActive (true);
@@ -233,6 +206,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			if (!(PC.GetComponent<PuzzleCube2D> ().currentPos == new Vector2 (-1, -1))) {
 				CreateSelector ((int)PC.GetComponent<PuzzleCube2D> ().currentPos.x, (int)PC.GetComponent<PuzzleCube2D> ().currentPos.y);
 				PC.GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (-1, -1);
+				PC.GetComponent<PuzzleCube2D> ().isCorrect = false;
 			} else {
 				Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
 			}
@@ -241,8 +215,31 @@ public class VRPuzzleLogic : MonoBehaviour {
 			PC.SetActive (false);
 		}
 	}
-	void DestroyObject(GameObject sel) {
+	void RestOfCode(GameObject sel) {
+		Vector2 GridValue = sel.GetComponent<VRGridSelector> ().pos;
 		Destroy (sel);
+		GameObject selectorUIPanel = Object.Instantiate (SelectorUICanvasPrefab, SelectorUIPos.transform, false);
+		selectorUIPanel.name = "SelectorUICanvas";
+		selectorUIPanel = selectorUIPanel.transform.GetChild (0).gameObject;
+		int i;
+		for (i = 0; i < selectedsize; i++) {
+			selected [i].GetComponent<PuzzleCube2D> ().currentPos = GridValue;
+			GameObject rm = selectorUIPanel.transform.GetChild (i).gameObject;
+			rm.GetComponent<RawImage> ().color = Color.white;
+			rm.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+			rm.GetComponent<RawImage> ().uvRect = new Rect (selected [i].GetComponent<Renderer> ().material.mainTextureOffset, selected [i].GetComponent<Renderer> ().material.mainTextureScale);
+			rm.GetComponent<Button> ().interactable = true;
+			selected [i].GetComponent<PuzzleCube2D> ().selectedPos = i;
+			GameObject rk = selected [i];
+			rm.GetComponent<Button> ().onClick.AddListener (() => MoveCubeToGrid (rk.GetComponent<PuzzleCube2D>().selectedPos));
+			selected [i].transform.position = rm.transform.position;
+		}
+		while (i != n) {
+			GameObject rm = selectorUIPanel.transform.GetChild (i).gameObject;
+			rm.GetComponent<Button> ().interactable = false;
+			i++;
+		}
+		eventSystem.SetActive (true);
 	}
 	IEnumerator checkAll() {
 		bool complete = true;
