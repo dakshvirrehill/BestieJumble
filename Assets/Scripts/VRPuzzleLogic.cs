@@ -180,16 +180,20 @@ public class VRPuzzleLogic : MonoBehaviour {
 		if (selectedsize==0) {
 			
 		} else {
+			if (GameObject.Find ("SelectorUICanvas") != null) {
+				Destroy(GameObject.Find("SelectorUICanvas"));
+				CreateSelector ((int)selected [0].GetComponent<PuzzleCube2D> ().currentPos.x, (int)selected [0].GetComponent<PuzzleCube2D> ().currentPos.y);
+			}
 			eventSystem.SetActive (false);
 			iTween.MoveTo (Sel, iTween.Hash ("position", SelectorUIPos.transform.position, "time", 2f, "oncomplete", "RestOfCode", "oncompletetarget", gameObject, "oncompleteparams", Sel));
 		} 
 	}
 	public void MoveCubeToGrid(int pos) {
 		GameObject shifter = selected [pos];
-		for (int i = pos; i < selectedsize; i++) {
+		selected [pos] = null;
+		for (int i = pos; i < (selectedsize-1); i++) {
 			selected [i] = selected [i + 1];
-			if(selected[i]!=null)
-				selected [i].GetComponent<PuzzleCube2D> ().currentPos = new Vector2(-1,-1);
+			selected [i].GetComponent<PuzzleCube2D> ().currentPos = new Vector2(-1,-1);
 		}
 		selectedsize--;
 		shifter.SetActive (true);
