@@ -27,8 +27,8 @@ public class LiftFunction : MonoBehaviour {
 		yield return StartCoroutine (GoDown ());
 		yield return StartCoroutine (OpenGate ());
 		yield return StartCoroutine (MovePlayer ());
-		yield return StartCoroutine (CloseGate ());
 		yield return StartCoroutine (DestroyParent ());
+		yield return StartCoroutine (CloseGate ());
 	}
 	IEnumerator GoingUp() {
 		eventSystem.SetActive (false);
