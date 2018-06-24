@@ -9,8 +9,6 @@ public class PanelGatesOC : MonoBehaviour {
 	private GameObject eventSystem;
 	// Use this for initialization
 	void Start () {
-		player = GameObject.Find ("GvrEditorEmulator");
-		eventSystem = GameObject.Find ("GvrEventSystem");
 	}
 	
 	// Update is called once per frame
@@ -18,14 +16,20 @@ public class PanelGatesOC : MonoBehaviour {
 		
 	}
 	public void MoveIn() {
-		eventSystem.SetActive (false);
 		StartCoroutine (Sequence ());
 	}
 	IEnumerator Sequence() {
+		yield return StartCoroutine (SetAndDeactivateEventSystem ());
 		yield return StartCoroutine (OpenGate ());
 		yield return StartCoroutine (MovePlayer ());
 		yield return StartCoroutine (CloseGate ());
 		yield return StartCoroutine (ActivateEventSystem ());
+	}
+	IEnumerator SetAndDeactivateEventSystem() {
+		player = GameObject.Find ("GvrEditorEmulator");
+		eventSystem = GameObject.Find ("GvrEventSystem");
+		eventSystem.SetActive (false);
+		yield return new WaitForSeconds (0f);
 	}
 	IEnumerator OpenGate() {
 		if (gates.Length == 1 || gates.Length == 3) {
