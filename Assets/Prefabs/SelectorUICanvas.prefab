@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 224311621072490214}
   - component: {fileID: 223722835735525622}
   - component: {fileID: 114833680059175764}
-  - component: {fileID: 114276317802719454}
+  - component: {fileID: 114779739438474848}
   m_Layer: 0
   m_Name: SelectorUICanvas
   m_TagString: Untagged
@@ -275,22 +275,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114276317802719454
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1266438752843716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &114299665718689388
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -746,6 +730,22 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &114779739438474848
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1266438752843716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 739800cd36aba44e9b04ce977e5784bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreReversedGraphics: 1
+  blockingObjects: 2
+  blockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &114833680059175764
 MonoBehaviour:
   m_ObjectHideFlags: 1
