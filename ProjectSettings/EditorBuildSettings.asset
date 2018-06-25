@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/2DPuzzleScene.unity
     guid: cf266a43e657cb249bc94d85662410d3
   - enabled: 1
+    path: Assets/Scenes/VRLoadingScene.unity
+    guid: 481bc3a4cdf154344960f4db8590aa52
+  - enabled: 1
     path: Assets/Scenes/3DPuzzleScene.unity
     guid: d80f6929334eb724f9319ecfb20f041c
   - enabled: 1

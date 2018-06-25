@@ -22,7 +22,7 @@ public class Select2DorVR : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (XRSettings.loadedDeviceName.Equals("cardboard")) {
-			SceneManager.LoadSceneAsync ("3DPuzzleScene");
+			SceneManager.LoadSceneAsync ("VRLoadingScene");
 		}
 	}
 	public void changeSelected(string selection) {
