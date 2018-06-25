@@ -23,6 +23,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	private GameObject[] selected;
 	private int selectedsize;
 	private GameObject eventSystem;
+	private GameObject infycanva;
 	// Use this for initialization
 	void Start () {
 		eventSystem = GameObject.Find ("GvrEventSystem");
@@ -63,6 +64,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		NonGridLocations = new GameObject[81];
 		for (int i = 0; i < 81; i++) {
 			NonGridLocations [i] = NGLParent.transform.GetChild (i).gameObject;
+			NonGridLocations [i].GetComponent<NonGridIsUsed> ().actInd = i;
 		}
 	}
 	void MakePuzzle() {
@@ -126,18 +128,12 @@ public class VRPuzzleLogic : MonoBehaviour {
 			PuzzleCubes [i, 0].name = " " + i + " " + 0;
 		}
 		ShiftingRow = null;
-		StartCoroutine (JumblerStarter ());
+		//infycanva = Object.Instantiate (InformationCanvasPrefab, new Vector3 (17.19f, 20f, 23.81f), Quaternion.Euler (0f, 0f, 0f));
+		//infycanva.transform.GetChild (0).GetChild (3).gameObject.GetComponent<TextMeshProUGUI> ().text = "1. The Puzzle Cubes are being hidden in the world behind you. \n2. You need to find them and place them in the grid. \n3. "+n+" cubes can be collected at once and you can change their positions even after placing them on the grid. \n4. You win after all cubes are at the correct position.";
+		//StartCoroutine (JumblePuzzle ());
+		//Destroy (infycanva);
+		JumblePuzzle();
 	}
-	IEnumerator JumblerStarter() {
-		eventSystem.SetActive(false);
-		yield return new WaitForSeconds(2f);
-		GameObject infycanva = Object.Instantiate (InformationCanvasPrefab, new Vector3 (17.19f, 20f, 23.81f), Quaternion.Euler (0f, 0f, 0f));
-		infycanva.transform.GetChild (0).GetChild (3).gameObject.GetComponent<TextMeshProUGUI> ().text = "1. The Puzzle Cubes are being hidden in the world behind you. \n2. You need to find them and place them in the grid. \n3. "+n+" cubes can be collected at once and you can change their positions even after placing them on the grid. \n4. You win after all cubes are at the correct position.";
-		yield return StartCoroutine (JumblePuzzle ());
-		Destroy (infycanva);
-		eventSystem.SetActive (true);
-	}
-
 	void CreateSelector(int i,int j) {
 		selector.SetActive (true);
 		GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
@@ -145,36 +141,39 @@ public class VRPuzzleLogic : MonoBehaviour {
 		Sel.GetComponent<VRGridSelector> ().pos = new Vector2 (i, j);
 		selector.SetActive (false);
 		Sel.transform.localPosition = PuzzleCubePosition [i, j];
-		EventTrigger.Entry entree = new EventTrigger.Entry ();
+		/*EventTrigger.Entry entree = new EventTrigger.Entry ();
 		entree.eventID = EventTriggerType.PointerClick;
 		entree.callback.AddListener ((data) => {
 			ActivateSelectorUI ((PointerEventData)data, (GameObject)Sel);
 		});
-		Sel.GetComponent<EventTrigger> ().triggers.Add (entree);
+		Sel.GetComponent<EventTrigger> ().triggers.Add (entree);*/
 	}
-	IEnumerator JumblePuzzle() {
+	void JumblePuzzle() {
 		System.Random r = new System.Random ();
+		for (int i = 80; i > 0; i--) {
+			int j = r.Next (0, i);
+			GameObject temp = NonGridLocations [i];
+			NonGridLocations [i] = NonGridLocations [j];
+			NonGridLocations [j] = temp;
+		}
+		int ngv=0;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				int ngv = r.Next (0, 81);
-				while (NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed) {
-					ngv=(ngv+1)%81;
-				}
 				NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed = true;
-				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = ngv;
-				GameObject pc = PuzzleCubes [i, j];
+				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = NonGridLocations[ngv].GetComponent<NonGridIsUsed>().actInd;
+				/*GameObject pc = PuzzleCubes [i, j];
 				EventTrigger.Entry entry = new EventTrigger.Entry ();
 				entry.eventID = EventTriggerType.PointerClick;
 				entry.callback.AddListener ((data) => {
 			    	MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)pc);
 				});
-				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);
+				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);*/
 				PuzzleCubes [i, j].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
 				PuzzleCubes [i, j].transform.position = NonGridLocations [ngv].transform.position;
 				CreateSelector (i, j);
+				ngv++;
 			}
 		}
-		yield return new WaitForSeconds (8f);
 	}
 	public void ActivateSelectorUI(PointerEventData eventData, GameObject Sel) {
 		if (selectedsize==0) {
