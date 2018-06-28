@@ -12,6 +12,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject SelectorUIPos;
 	public GameObject PoofPrefab;
 	public GameObject InformationCanvasPrefab;
+	public GameObject MainMenuUICanvasPrefab;
+	public GameObject MainMenuPos;
 	private GameObject PuzzlePanel;
 	private GameObject PuzzleCube;
 	private GameObject[,] PuzzleCubes;
@@ -256,6 +258,33 @@ public class VRPuzzleLogic : MonoBehaviour {
 				break;
 		}
 		yield return new WaitForSeconds(0f);
+	}
+	public void DisplayMainMenu(GameObject MenuButton) {
+		GameObject mainMenu = Object.Instantiate (MainMenuUICanvasPrefab, MainMenuPos.transform, false);
+		mainMenu.name = "MainMenuUI";
+		mainMenu.transform.GetChild (0).GetChild (0).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveGame());
+		mainMenu.transform.GetChild (0).GetChild (1).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu());
+		mainMenu.transform.GetChild (0).GetChild (2).gameObject.GetComponent<Button> ().onClick.AddListener (() => DelMenu (MenuButton));
+		mainMenu.transform.GetChild (0).GetChild (3).gameObject.GetComponent<Button> ().onClick.AddListener (() => ShowHideImage(true));
+		mainMenu.transform.GetChild (0).GetChild (4).gameObject.GetComponent<Button> ().onClick.AddListener (() => ShowHideImage(false));
+		mainMenu.transform.GetChild (0).GetChild (4).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
+		mainMenu.transform.GetChild (0).GetChild (4).gameObject.SetActive (false);
+		MenuButton.SetActive (false);
+	}
+	void DelMenu(GameObject MenuButton) {
+		MenuButton.SetActive (true);
+		Destroy (GameObject.Find ("MainMenuUI"));
+	}
+	void SaveGame () {
+		Debug.Log ("Saving..");
+	}
+	void BackToMainMenu() {
+		Debug.Log ("BackToMainMenu..");
+	}
+	void ShowHideImage(bool a) {
+		GameObject mainMenu = GameObject.Find ("MainMenuUI");
+		mainMenu.transform.GetChild (0).GetChild (4).gameObject.SetActive (a);
+		mainMenu.transform.GetChild (0).GetChild (3).gameObject.SetActive (!a);
 	}
 	// Update is called once per frame
 	void Update () {
