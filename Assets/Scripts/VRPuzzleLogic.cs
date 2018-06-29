@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.XR;
+using UnityEngine.SceneManagement;
 public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject parent;
 	public Shader shader;
@@ -14,6 +16,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject InformationCanvasPrefab;
 	public GameObject MainMenuUICanvasPrefab;
 	public GameObject MainMenuPos;
+	public GameObject MainMenuPrompt;
 	private GameObject PuzzlePanel;
 	private GameObject PuzzleCube;
 	private GameObject[,] PuzzleCubes;
@@ -279,12 +282,36 @@ public class VRPuzzleLogic : MonoBehaviour {
 		Debug.Log ("Saving..");
 	}
 	void BackToMainMenu() {
-		Debug.Log ("BackToMainMenu..");
+		SaveGame ();
+		Destroy (GameObject.Find ("MainMenuUI"));
+		Object.Instantiate (MainMenuPrompt, MainMenuPos.transform, false);
+		StartCoroutine (STD ());
 	}
 	void ShowHideImage(bool a) {
 		GameObject mainMenu = GameObject.Find ("MainMenuUI");
 		mainMenu.transform.GetChild (0).GetChild (4).gameObject.SetActive (a);
 		mainMenu.transform.GetChild (0).GetChild (3).gameObject.SetActive (!a);
+	}
+	IEnumerator STD() {
+		yield return StartCoroutine (SwitchToTwoD ());
+		yield return StartCoroutine (SwitchScene ());
+	}
+	IEnumerator SwitchScene() {
+		SceneManager.LoadSceneAsync ("MainScene");
+	}
+	IEnumerator SwitchToTwoD() {
+		XRSettings.LoadDeviceByName ("");
+		yield return null;
+		ResetCameras ();
+	}
+	void ResetCameras() {
+		for (int i = 0; i < Camera.allCameras.Length; i++) {
+			Camera cam = Camera.allCameras[i];
+			if (cam.enabled && cam.stereoTargetEye != StereoTargetEyeMask.None) {
+				cam.transform.localPosition = Vector3.zero;
+				cam.transform.localRotation = Quaternion.identity;
+			}
+		}
 	}
 	// Update is called once per frame
 	void Update () {
