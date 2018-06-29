@@ -133,10 +133,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			PuzzleCubes [i, 0].name = " " + i + " " + 0;
 		}
 		ShiftingRow = null;
-		//infycanva = Object.Instantiate (InformationCanvasPrefab, new Vector3 (17.19f, 20f, 23.81f), Quaternion.Euler (0f, 0f, 0f));
-		//infycanva.transform.GetChild (0).GetChild (3).gameObject.GetComponent<TextMeshProUGUI> ().text = "1. The Puzzle Cubes are being hidden in the world behind you. \n2. You need to find them and place them in the grid. \n3. "+n+" cubes can be collected at once and you can change their positions even after placing them on the grid. \n4. You win after all cubes are at the correct position.";
-		//StartCoroutine (JumblePuzzle ());
-		//Destroy (infycanva);
+
 		JumblePuzzle();
 	}
 	void CreateSelector(int i,int j) {
@@ -146,12 +143,6 @@ public class VRPuzzleLogic : MonoBehaviour {
 		Sel.GetComponent<VRGridSelector> ().pos = new Vector2 (i, j);
 		selector.SetActive (false);
 		Sel.transform.localPosition = PuzzleCubePosition [i, j];
-		/*EventTrigger.Entry entree = new EventTrigger.Entry ();
-		entree.eventID = EventTriggerType.PointerClick;
-		entree.callback.AddListener ((data) => {
-			ActivateSelectorUI ((PointerEventData)data, (GameObject)Sel);
-		});
-		Sel.GetComponent<EventTrigger> ().triggers.Add (entree);*/
 	}
 	void JumblePuzzle() {
 		System.Random r = new System.Random ();
@@ -166,13 +157,6 @@ public class VRPuzzleLogic : MonoBehaviour {
 			for (int j = 0; j < n; j++) {
 				NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed = true;
 				PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = NonGridLocations[ngv].GetComponent<NonGridIsUsed>().actInd;
-				/*GameObject pc = PuzzleCubes [i, j];
-				EventTrigger.Entry entry = new EventTrigger.Entry ();
-				entry.eventID = EventTriggerType.PointerClick;
-				entry.callback.AddListener ((data) => {
-			    	MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)pc);
-				});
-				PuzzleCubes [i, j].GetComponent<EventTrigger> ().triggers.Add (entry);*/
 				PuzzleCubes [i, j].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
 				PuzzleCubes [i, j].transform.position = NonGridLocations [ngv].transform.position;
 				CreateSelector (i, j);
@@ -298,6 +282,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	}
 	IEnumerator SwitchScene() {
 		SceneManager.LoadSceneAsync ("MainScene");
+		yield return new WaitForSeconds (0f);
 	}
 	IEnumerator SwitchToTwoD() {
 		XRSettings.LoadDeviceByName ("");
