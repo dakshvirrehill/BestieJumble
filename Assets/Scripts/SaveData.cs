@@ -14,12 +14,14 @@ public class SaveData : MonoBehaviour {
 	public Vector2?[,] PuzzleVRCubePositions;
 	public int?[] PuzzleVRNonGridPositions;
 	public GameObject PreLoader;
+	public bool VRWon;
 	// Use this for initialization
 	void Awake() {
 		if (control == null) {
 			DontDestroyOnLoad (gameObject);
 			control = this;
 			//control.username = "";
+			control.VRWon=false;
 			control.defaultTex = control.cubeTex;
 			control.Puzzle2DCubePositions = null;
 		} else if (control != this) {

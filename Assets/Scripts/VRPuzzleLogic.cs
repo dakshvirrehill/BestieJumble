@@ -133,8 +133,40 @@ public class VRPuzzleLogic : MonoBehaviour {
 			PuzzleCubes [i, 0].name = " " + i + " " + 0;
 		}
 		ShiftingRow = null;
-
-		JumblePuzzle();
+		if (SaveData.control.PuzzleVRCubePositions == null) {	
+			JumblePuzzle ();
+		} else {
+			SavedPuzzle ();
+		}
+	}
+	void SavedPuzzle () {
+		int k = 0;
+		System.Random r = new System.Random ();
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				Vector2 a = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = SaveData.control.PuzzleVRCubePositions [i, j].Value;
+				if (a == new Vector2 (-1, -1)) {
+					int ngv = SaveData.control.PuzzleVRNonGridPositions [k].Value;
+					if (ngv == -2) {
+						ngv = r.Next (0, 81);
+					}
+					while (NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed) {
+						ngv=(ngv+1)%81;
+					}
+					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = ngv;
+					PuzzleCubes [i, j].transform.position = NonGridLocations [ngv].transform.position;
+					CreateSelector (i, j);
+				} else {
+					PuzzleCubes [i, j].transform.localPosition = PuzzleCubePosition [(int)a.x, (int)a.y];
+					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = -2;
+					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().UpdateIsCorrect ();
+				}
+				k++;
+				if (k == n*n) {
+					StartCoroutine(checkAll ());
+				}
+			}
+		}
 	}
 	void CreateSelector(int i,int j) {
 		selector.SetActive (true);
@@ -244,6 +276,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			if (!complete)
 				break;
 		}
+		SaveData.control.VRWon = complete;
 		yield return new WaitForSeconds(0f);
 	}
 	public void DisplayMainMenu(GameObject MenuButton) {
@@ -280,6 +313,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 				} else {
 					SaveData.control.PuzzleVRNonGridPositions [k] = (int?)-1;
 				}
+				k++;
 			}
 		}
 		SaveData.control.Save (SaveData.control.username);
@@ -319,6 +353,9 @@ public class VRPuzzleLogic : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		
+		if (SaveData.control.VRWon) {
+			SaveGame ();
+			SceneManager.LoadSceneAsync ("VRLoadingScene");
+		}
 	}
 }
