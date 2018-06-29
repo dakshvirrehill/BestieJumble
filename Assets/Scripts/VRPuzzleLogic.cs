@@ -263,7 +263,26 @@ public class VRPuzzleLogic : MonoBehaviour {
 		Destroy (GameObject.Find ("MainMenuUI"));
 	}
 	void SaveGame () {
-		Debug.Log ("Saving..");
+		SaveData.control.PuzzleVRCubePositions = new Vector2?[PuzzleCubePosition.GetLength(0),PuzzleCubePosition.GetLength(1)];
+		SaveData.control.PuzzleVRNonGridPositions = new int?[n * n];
+		int k = 0;
+		if (selectedsize != 0 && GameObject.Find ("SelectorUICanvas") != null) {
+			for (int i = 0; i < selectedsize; i++) {
+				selected [i].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (-1, -1);
+			}
+			Destroy(GameObject.Find("SelectorUICanvas"));
+		}
+		for (int i = 0; i < PuzzleCubePosition.GetLength (0); i++) {
+			for (int j = 0; j < PuzzleCubePosition.GetLength (1); j++) {
+				SaveData.control.Puzzle2DCubePositions [i, j] = (Vector2?)PuzzleCubes [i, j].GetComponent<PuzzleCube2D>().currentPos;
+				if (PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos == new Vector2 (-1, -1)) {
+					SaveData.control.PuzzleVRNonGridPositions [k] = (int?)PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv;
+				} else {
+					SaveData.control.PuzzleVRNonGridPositions [k] = (int?)-1;
+				}
+			}
+		}
+		SaveData.control.Save (SaveData.control.username);
 	}
 	void BackToMainMenu() {
 		SaveGame ();
