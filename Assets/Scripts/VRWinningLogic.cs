@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.XR;
 using TMPro;
 public class VRWinningLogic : MonoBehaviour {
 	public GameObject Cowboy;
@@ -18,8 +19,20 @@ public class VRWinningLogic : MonoBehaviour {
 		Menu.SetActive (false);
 	}
 	public void ConvertTo2D() {
+		StartCoroutine (Convert2D ());
+	}
+	IEnumerator Convert2D() {
+		yield return StartCoroutine (Conversion ());
+		yield return StartCoroutine (RestOfCode ());
+	}
+	IEnumerator Conversion() {
+		XRSettings.LoadDeviceByName("");
+		yield return null;
+	}
+	IEnumerator RestOfCode() {
 		Destroy (GameObject.Find ("VRWinningScene"));
 		GameObject.Find ("FinalSceneInitializer").GetComponent<FinalSceneInitializer> ().SceneStarter ();
+		yield return new WaitForSeconds (0f);
 	}
 	public void QuitGame() {
 		SaveData.control.Save (SaveData.control.username);
@@ -35,10 +48,11 @@ public class VRWinningLogic : MonoBehaviour {
 			MovePlayer ();
 		}
 		if (Cowboy.GetComponent<Animator> ().GetAnimatorTransitionInfo (0).IsName ("WalkForwardAndTurn -> Speaking Idle")) {
+			Cowboy.GetComponent<Animator> ().SetBool ("idle", true);
 			Menu.SetActive (true);
 		}
 	}
 	void MovePlayer() {
-		
+		iTween.MoveTo (Player, iTween.Hash ("position",new Vector3(11.24f,1.5f,2.44f),"speed",1f,"easetype","Linear"));
 	}
 }
