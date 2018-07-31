@@ -53,6 +53,7 @@ public class SaveData : MonoBehaviour {
 		file.Close ();
 	}
 	public void Load(string named) {
+		Debug.Log ("in Load");
 		BinaryFormatter bf = new BinaryFormatter ();
 		SurrogateSelector surrogateSelector = new SurrogateSelector();
 		surrogateSelector.AddSurrogate(typeof(Vector2),new StreamingContext(StreamingContextStates.All),new Vector2SurrogateSelector());
@@ -66,7 +67,6 @@ public class SaveData : MonoBehaviour {
 			Texture2D tex = new Texture2D (0, 0);
 			tex.LoadImage(data.cubeTex);
 			cubeTex = tex;
-			//Destroy (tex);
 			if (data.Puzzle2DCubePositions.GetLength (0) == 6) {
 				Puzzle2DCubePositions = new Vector2?[data.Puzzle2DCubePositions.GetLength (0), data.Puzzle2DCubePositions.GetLength (1)];
 				for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
@@ -77,7 +77,7 @@ public class SaveData : MonoBehaviour {
 			}
 			if (data.PuzzleVRCubePositions.GetLength (0) >= 6) {
 				PuzzleVRCubePositions = new Vector2?[data.PuzzleVRCubePositions.GetLength (0), data.PuzzleVRCubePositions.GetLength (1)];
-				for (int i = 0; i < Puzzle2DCubePositions.GetLength (0); i++) {
+				for (int i = 0; i < PuzzleVRCubePositions.GetLength (0); i++) {
 					for (int j = 0; j < PuzzleVRCubePositions.GetLength (1); j++) {
 						PuzzleVRCubePositions [i, j] = (Vector2?)data.PuzzleVRCubePositions [i, j];
 					}
@@ -86,7 +86,7 @@ public class SaveData : MonoBehaviour {
 			if (data.PuzzleVRNonGridPositions.Length >= 36) {
 				PuzzleVRNonGridPositions = new int?[data.PuzzleVRNonGridPositions.Length];
 				for (int i = 0; i < PuzzleVRNonGridPositions.Length; i++) {
-						PuzzleVRNonGridPositions [i] = (int?)data.PuzzleVRNonGridPositions [i];
+					PuzzleVRNonGridPositions [i] = (int?)data.PuzzleVRNonGridPositions [i];
 				}
 			}
 		}

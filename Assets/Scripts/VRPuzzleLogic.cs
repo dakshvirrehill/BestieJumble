@@ -29,9 +29,11 @@ public class VRPuzzleLogic : MonoBehaviour {
 	private int selectedsize;
 	private GameObject eventSystem;
 	private GameObject infycanva;
+	private GameObject gvreditoremulator;
 	// Use this for initialization
 	void Start () {
 		eventSystem = GameObject.Find ("GvrEventSystem");
+		gvreditoremulator = GameObject.Find ("GvrEditorEmulator");
 		SetNGLArray ();
 		selectedsize = 0;
 		parent.SetActive (true);
@@ -232,7 +234,11 @@ public class VRPuzzleLogic : MonoBehaviour {
 				PC.GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (-1, -1);
 				PC.GetComponent<PuzzleCube2D> ().isCorrect = false;
 			} else {
-				Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
+				if (selectedsize == n - 1) {
+					gvreditoremulator.transform.position = new Vector3 (7.19f, 3.9f, -11f);
+				} else {
+					Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
+				}
 			}
 			selected [selectedsize] = PC;
 			selectedsize++;
@@ -307,7 +313,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		}
 		for (int i = 0; i < PuzzleCubePosition.GetLength (0); i++) {
 			for (int j = 0; j < PuzzleCubePosition.GetLength (1); j++) {
-				SaveData.control.Puzzle2DCubePositions [i, j] = (Vector2?)PuzzleCubes [i, j].GetComponent<PuzzleCube2D>().currentPos;
+				SaveData.control.PuzzleVRCubePositions [i, j] = (Vector2?)PuzzleCubes [i, j].GetComponent<PuzzleCube2D>().currentPos;
 				if (PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos == new Vector2 (-1, -1)) {
 					SaveData.control.PuzzleVRNonGridPositions [k] = (int?)PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv;
 				} else {
