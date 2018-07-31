@@ -144,6 +144,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	void SavedPuzzle () {
 		int k = 0;
 		System.Random r = new System.Random ();
+		HashSet<string> hs = new HashSet<string> ();
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				Vector2 a = PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().currentPos = SaveData.control.PuzzleVRCubePositions [i, j].Value;
@@ -157,15 +158,24 @@ public class VRPuzzleLogic : MonoBehaviour {
 					}
 					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = ngv;
 					PuzzleCubes [i, j].transform.position = NonGridLocations [ngv].transform.position;
-					CreateSelector (i, j);
+					NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed = true;
+					PuzzleCubes [i, j].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
 				} else {
 					PuzzleCubes [i, j].transform.localPosition = PuzzleCubePosition [(int)a.x, (int)a.y];
 					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = -2;
 					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().UpdateIsCorrect ();
+					hs.Add ((int)a.x + " " + (int)a.y);
 				}
 				k++;
 				if (k == n*n) {
 					StartCoroutine(checkAll ());
+				}
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (!hs.Contains (i + " " + j)) {
+					CreateSelector (i, j);
 				}
 			}
 		}
@@ -336,6 +346,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		mainMenu.transform.GetChild (0).GetChild (3).gameObject.SetActive (!a);
 	}
 	IEnumerator STD() {
+		yield return new WaitForSeconds (2f);
 		yield return StartCoroutine (SwitchToTwoD ());
 		yield return StartCoroutine (SwitchScene ());
 	}
