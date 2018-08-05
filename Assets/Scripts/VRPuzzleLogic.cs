@@ -156,10 +156,10 @@ public class VRPuzzleLogic : MonoBehaviour {
 					while (NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed) {
 						ngv=(ngv+1)%81;
 					}
+					PuzzleCubes [i, j].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
 					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = ngv;
 					PuzzleCubes [i, j].transform.position = NonGridLocations [ngv].transform.position;
 					NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed = true;
-					PuzzleCubes [i, j].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
 				} else {
 					PuzzleCubes [i, j].transform.localPosition = PuzzleCubePosition [(int)a.x, (int)a.y];
 					PuzzleCubes [i, j].GetComponent<PuzzleCube2D> ().ngv = -2;
