@@ -18,9 +18,10 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject MainMenuPos;
 	public GameObject MainMenuPrompt;
 	private GameObject PuzzlePanel;
-	private GameObject PuzzleCube;
+	private int puzzlec;
+	//private GameObject PuzzleCube;
 	private GameObject[,] PuzzleCubes;
-	private GameObject selector;
+	public GameObject selector;
 	private Vector3[,] PuzzleCubePosition;
 	private GameObject[] NonGridLocations;
 	private Vector3 firstCubeLocation;
@@ -28,7 +29,6 @@ public class VRPuzzleLogic : MonoBehaviour {
 	private GameObject[] selected;
 	private int selectedsize;
 	private GameObject eventSystem;
-	private GameObject infycanva;
 	private GameObject gvreditoremulator;
 	// Use this for initialization
 	void Start () {
@@ -37,9 +37,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		SetNGLArray ();
 		selectedsize = 0;
 		parent.SetActive (true);
-		PuzzleCube = parent.transform.GetChild (2).gameObject;
-		selector = parent.transform.GetChild (3).gameObject;
-		selector.SetActive (false);
+		//PuzzleCube = parent.transform.GetChild (2).gameObject;
 		float z = 26.45f;
 		float y = 19.6f;
 		if (SaveData.control.cubeTex.width > 1024 || SaveData.control.cubeTex.height > 1024) {
@@ -61,11 +59,12 @@ public class VRPuzzleLogic : MonoBehaviour {
 		Destroy (parent);
 		PuzzlePanel.transform.position=new Vector3(7.19f,y,z);
 		PuzzlePanel.transform.rotation = Quaternion.Euler (0, 0, 0);
-		PuzzleCube.transform.position = firstCubeLocation;
-		PuzzleCube.transform.rotation = Quaternion.Euler (0, 0, 0);
-		PuzzleCube.transform.SetParent (PuzzlePanel.transform, true);
-		firstCubeLocation = PuzzleCube.transform.localPosition;
-		MakePuzzle ();
+		PuzzlePanel.transform.GetChild(0).position = firstCubeLocation;
+		PuzzlePanel.transform.GetChild(0).rotation = Quaternion.Euler (0, 0, 0);
+		//PuzzleCube.transform.SetParent (PuzzlePanel.transform, true);
+		firstCubeLocation = PuzzlePanel.transform.GetChild(0).localPosition;
+		StartCoroutine(MakePuzzle ());
+		puzzlec = 0;
 	}
 	void SetNGLArray() {
 		NonGridLocations = new GameObject[81];
@@ -74,32 +73,52 @@ public class VRPuzzleLogic : MonoBehaviour {
 			NonGridLocations [i].GetComponent<NonGridIsUsed> ().actInd = i;
 		}
 	}
-	void MakePuzzle() {
-		Vector2 scale = new Vector2 (1 / (float)n, 1 / (float)n);
-		PuzzleCubes = new GameObject[n, n];
-		PuzzleCubePosition = new Vector3[n, n];
-		scale = new Vector2 (scale.x, 1);
-		PuzzleCubes [0, 0] = PuzzleCube;
-		PuzzleCubePosition [0, 0] = firstCubeLocation;
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				if (!(i == 0 && j == 0)) {
-					PuzzleCubes [i, j] = Object.Instantiate (PuzzleCube, PuzzlePanel.transform, false);
-					PuzzleCubes [i, j].tag = "PuzzleCube";
-					firstCubeLocation = firstCubeLocation + new Vector3 (4.2f, 0, 0);
-					PuzzleCubes [i, j].transform.localPosition = firstCubeLocation;
-					PuzzleCubePosition [i, j] = firstCubeLocation;
-				}
-				Material pc = new Material (shader);
-				pc.mainTexture = SaveData.control.cubeTex;
-				pc.mainTextureOffset = scale;
-				pc.mainTextureScale = new Vector2 (1.0f / n, 1.0f / n);
-				PuzzleCubes [i, j].GetComponent<Renderer> ().material = pc;
-				scale = scale + new Vector2 (1 / (float)n, 0f);
+	IEnumerator stager(Vector2 scale, int i) {
+		yield return StartCoroutine (looper (scale,i));
+		yield return new WaitForSeconds (0f);
+	}
+	IEnumerator looper(Vector2 scale,int i) {
+		for (int j = 0; j < n; j++) {
+			if (!(i == 0 && j == 0)) {
+				PuzzleCubes [i, j] = PuzzlePanel.transform.GetChild(puzzlec).gameObject;
+				PuzzleCubes [i, j].tag = "PuzzleCube";
+				firstCubeLocation = firstCubeLocation + new Vector3 (4.2f, 0, 0);
+				PuzzleCubes [i, j].transform.localPosition = firstCubeLocation;
+				PuzzleCubePosition [i, j] = firstCubeLocation;
 			}
+			puzzlec++;
+			Material pc = new Material (shader);
+			pc.mainTexture = SaveData.control.cubeTex;
+			pc.mainTextureOffset = scale;
+			pc.mainTextureScale = new Vector2 (1.0f / n, 1.0f / n);
+			PuzzleCubes [i, j].GetComponent<Renderer> ().material = pc;
+			scale = scale + new Vector2 (1 / (float)n, 0f);
+		}
+		yield return new WaitForSeconds (0f);
+	}
+	IEnumerator FirstLoop(Vector2 scale) {
+		for (int i = 0; i < n; i++) {
+			StartCoroutine (stager (scale,i));
 			scale = new Vector2 (1/(float)n, scale.y - 1 / (float)n);
 			firstCubeLocation = firstCubeLocation + new Vector3 (-n * 4.2f, -4.2f, 0);
 		}
+		yield return new WaitForSeconds (1f);
+	}
+	IEnumerator MakePuzzle() {
+		Vector2 scale = new Vector2 (1 / (float)n, 1);
+		PuzzleCubes = new GameObject[n, n];
+		PuzzleCubePosition = new Vector3[n, n];
+		PuzzleCubes [0, 0] = PuzzlePanel.transform.GetChild(puzzlec).gameObject;
+		PuzzleCubePosition [0, 0] = firstCubeLocation;
+		yield return StartCoroutine(FirstLoop(scale));
+		yield return StartCoroutine (ProperPosition ());
+		if (SaveData.control.PuzzleVRCubePositions == null) {	
+			JumblePuzzle ();
+		} else {
+			SavedPuzzle ();
+		}
+	}
+	IEnumerator ProperPosition() {
 		GameObject[] ShiftingRow = new GameObject[n];
 		for (int j = 0; j < n; j++) {
 			ShiftingRow [j] = PuzzleCubes [0, j];
@@ -135,11 +154,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			PuzzleCubes [i, 0].name = " " + i + " " + 0;
 		}
 		ShiftingRow = null;
-		if (SaveData.control.PuzzleVRCubePositions == null) {	
-			JumblePuzzle ();
-		} else {
-			SavedPuzzle ();
-		}
+		yield return new WaitForSeconds (1f);
 	}
 	void SavedPuzzle () {
 		int k = 0;
@@ -181,11 +196,9 @@ public class VRPuzzleLogic : MonoBehaviour {
 		}
 	}
 	void CreateSelector(int i,int j) {
-		selector.SetActive (true);
 		GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
 		Sel.name = "Selector " + i + " " + (j + 1);
 		Sel.GetComponent<VRGridSelector> ().pos = new Vector2 (i, j);
-		selector.SetActive (false);
 		Sel.transform.localPosition = PuzzleCubePosition [i, j];
 	}
 	void JumblePuzzle() {
