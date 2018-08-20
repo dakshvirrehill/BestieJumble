@@ -10126,7 +10126,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1392777044404428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.087994, y: 19.38272, z: -28.810818}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4940500804224056}
@@ -17847,9 +17847,9 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 903aabcb035e0924f9836bc1a06a8072, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 1
   SpatializePostEffects: 1
@@ -17885,7 +17885,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -17926,18 +17926,18 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 248799cb4acba48f7b3ee842a80f788c,
     type: 2}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 982b7474e6adcc9409347901f2d79e6c, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
+  Spatialize: 1
+  SpatializePostEffects: 1
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 7
-  MaxDistance: 10
+  MinDistance: 10
+  MaxDistance: 100
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -17966,7 +17966,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -18047,7 +18047,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -18128,7 +18128,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -18209,7 +18209,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -18290,7 +18290,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -19618,6 +19618,11 @@ MonoBehaviour:
   Cowboy: {fileID: 1540397685585004}
   Player: {fileID: 1457225217618416}
   Menu: {fileID: 1276377825280572}
+  clips:
+  - {fileID: 8300000, guid: f8ab0fdd6e00fd946a58b1296c7d8ab1, type: 3}
+  - {fileID: 8300000, guid: ed093418ee905e74c8881e1b3a77a9e2, type: 3}
+  - {fileID: 8300000, guid: 12666ef4f835ef54f8ebe287fdb8bfa3, type: 3}
+  - {fileID: 8300000, guid: a1a3b2b6b6e9cb94b9896f50c4bc6813, type: 3}
 --- !u!114 &114989811277791220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -24608,7 +24613,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1856894713
+  randomSeed: 35671499
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -31375,7 +31380,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 2008983949
+  randomSeed: -1222960867
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -34736,7 +34741,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1844709472
+  randomSeed: -685767445
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -41503,7 +41508,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1926353265
+  randomSeed: -672107200
   InitialModule:
     serializedVersion: 3
     enabled: 1
