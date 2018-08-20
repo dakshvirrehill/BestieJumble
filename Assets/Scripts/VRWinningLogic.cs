@@ -9,6 +9,7 @@ public class VRWinningLogic : MonoBehaviour {
 	public GameObject Cowboy;
 	public GameObject Player;
 	public GameObject Menu;
+	public AudioClip[] clips;
 	// Use this for initialization
 	void Start () {
 		Menu.SetActive (true);
@@ -44,13 +45,33 @@ public class VRWinningLogic : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+		if (Cowboy.GetComponent<Animator> ().GetAnimatorTransitionInfo (0).IsName ("Wave -> SpeakingIdle")) {
+			Cowboy.GetComponent<AudioSource> ().clip = clips [0];
+			Cowboy.GetComponent<AudioSource> ().Play ();
+		}
+		if (Cowboy.GetComponent<Animator> ().GetAnimatorTransitionInfo (0).IsName ("SpeakingIdle -> Remembering")) {
+			Cowboy.GetComponent<AudioSource> ().clip = clips [1];
+			Cowboy.GetComponent<AudioSource> ().Play ();
+		}
 		if (Cowboy.GetComponent<Animator> ().GetAnimatorTransitionInfo (0).IsName ("Remembering -> StartWalking")) {
 			MovePlayer ();
+			StartCoroutine (PlayClip ());
 		}
-		if (Cowboy.GetComponent<Animator> ().GetAnimatorTransitionInfo (0).IsName ("WalkForwardAndTurn -> Speaking Idle")) {
+		if (Cowboy.GetComponent<Animator> ().GetAnimatorTransitionInfo (0).IsName ("WalkForwardAndTurn -> SpeakingIdle")) {
+			Cowboy.GetComponent<AudioSource> ().clip = clips [3];
+			Cowboy.GetComponent<AudioSource> ().Play ();
 			Cowboy.GetComponent<Animator> ().SetBool ("idle", true);
 			Menu.SetActive (true);
 		}
+	}
+	IEnumerator PlayClip() {
+		yield return new WaitForSeconds (3f);
+		yield return StartCoroutine (PlayClip2 ());
+	}
+	IEnumerator PlayClip2() {
+		Cowboy.GetComponent<AudioSource> ().clip = clips [2];
+		Cowboy.GetComponent<AudioSource> ().Play ();
+		yield return new WaitForSeconds (0f);
 	}
 	void MovePlayer() {
 		iTween.MoveTo (Player, iTween.Hash ("position",new Vector3(11.24f,1.5f,2.44f),"speed",1f,"easetype","Linear"));
