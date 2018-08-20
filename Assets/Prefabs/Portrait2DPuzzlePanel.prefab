@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 222426751738989090}
   - component: {fileID: 114098023317252268}
   - component: {fileID: 114124648600171856}
+  - component: {fileID: 82504560978505938}
+  - component: {fileID: 114160694971922680}
   m_Layer: 5
   m_Name: Portrait2DPuzzlePanel
   m_TagString: Untagged
@@ -624,6 +626,86 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!82 &82504560978505938
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1052602206753256}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 987765d6b12373942ba947d308e77f4d, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114010051691227046
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -637,7 +719,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114011584267712666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -729,7 +813,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114040709654563166
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -769,7 +855,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114068138437193632
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1143,7 +1231,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
+--- !u!114 &114160694971922680
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1052602206753256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5e1719799ca4f9b9f5db81449517ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bypassRoomEffects: 0
+  directivityAlpha: 0
+  directivitySharpness: 1
+  listenerDirectivityAlpha: 0
+  listenerDirectivitySharpness: 1
+  gainDb: 0
+  nearFieldEffectEnabled: 0
+  nearFieldEffectGain: 1
+  occlusionEnabled: 0
+  occlusionIntensity: 1
+  quality: 2
 --- !u!114 &114173548647763654
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1198,7 +1310,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114214787791711528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1238,7 +1352,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114252595768771618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1330,7 +1446,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114382049895443508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1840,7 +1958,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114468669436098710
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1895,7 +2015,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114479650182994848
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1909,7 +2031,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114481413345682560
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2195,7 +2319,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114535857538208964
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2343,7 +2469,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114580069605107434
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2357,7 +2485,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114595434129176350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2494,7 +2624,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114684955991572650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2508,7 +2640,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114685851073957088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2522,7 +2656,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114694072747896860
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2536,7 +2672,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114709840343719904
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2550,7 +2688,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114717927796555706
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2975,7 +3115,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114851174748831302
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3056,7 +3198,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114900553888446322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3070,7 +3214,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114911780738408360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3151,7 +3297,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114931531898917122
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3165,7 +3313,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114933812366522268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3179,7 +3329,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPos: {x: 0, y: 0}
   actualPos: {x: 0, y: 0}
+  ngv: 0
   isCorrect: 0
+  selectedPos: 0
 --- !u!114 &114945970736178802
 MonoBehaviour:
   m_ObjectHideFlags: 1
