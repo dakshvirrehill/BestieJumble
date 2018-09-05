@@ -5,7 +5,7 @@ PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 14
   productGUID: 0071f0a6a0a7b624486929e6b70db561
-  AndroidProfiler: 0
+  AndroidProfiler: 1
   AndroidFilterTouchesWhenObscured: 0
   defaultScreenOrientation: 3
   targetDevice: 2
@@ -48,7 +48,7 @@ PlayerSettings:
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 0
   m_MTRendering: 1
-  m_StackTraceTypes: 010000000100000001000000010000000100000001000000
+  m_StackTraceTypes: 020000000100000001000000020000000200000001000000
   iosShowActivityIndicatorOnLoading: -1
   androidShowActivityIndicatorOnLoading: -1
   tizenShowActivityIndicatorOnLoading: -1
@@ -76,7 +76,7 @@ PlayerSettings:
   hideHomeButton: 0
   submitAnalytics: 1
   usePlayerLog: 1
-  bakeCollisionMeshes: 0
+  bakeCollisionMeshes: 1
   forceSingleInstance: 0
   resizableWindow: 0
   useMacAppStoreValidation: 0
@@ -166,7 +166,7 @@ PlayerSettings:
   AndroidPreferredInstallLocation: 1
   aotOptions: 
   stripEngineCode: 1
-  iPhoneStrippingLevel: 0
+  iPhoneStrippingLevel: 1
   iPhoneScriptCallOptimization: 0
   ForceInternetPermission: 0
   ForceSDCardPermission: 1
@@ -176,7 +176,7 @@ PlayerSettings:
   StripUnusedMeshComponents: 1
   VertexChannelCompressionMask:
     serializedVersion: 2
-    m_Bits: 238
+    m_Bits: 4294967295
   iPhoneSdkVersion: 988
   iOSTargetOSVersionString: 7.0
   tvOSSdkVersion: 0
