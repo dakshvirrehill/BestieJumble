@@ -18,6 +18,7 @@ public class PuzzleCube2D : MonoBehaviour {
 				GameObject.Find("GameLogic").GetComponent<VRPuzzleLogic> ().MoveCubeToSelectorUI ((PointerEventData)data, (GameObject)gameObject);
 			});
 			gameObject.GetComponent<EventTrigger> ().triggers.Add (entry);
+			gameObject.GetComponent<Renderer> ().material.mainTexture=SaveData.control.cubeTex;
 		}
 	}
 	

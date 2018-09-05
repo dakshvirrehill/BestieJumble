@@ -8,7 +8,6 @@ using UnityEngine.XR;
 using UnityEngine.SceneManagement;
 public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject parent;
-	public Shader shader;
 	public GameObject SelectorUICanvasPrefab;
 	public GameObject SelectorUIPos;
 	public GameObject PoofPrefab;
@@ -17,7 +16,6 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject MainMenuPos;
 	public GameObject MainMenuPrompt;
 	private GameObject PuzzlePanel;
-	private int puzzlec;
 	private GameObject[,] PuzzleCubes;
 	public GameObject selector;
 	private Vector3[,] PuzzleCubePosition;
@@ -28,12 +26,12 @@ public class VRPuzzleLogic : MonoBehaviour {
 	private GameObject eventSystem;
 	private GameObject gvreditoremulator;
 	// Use this for initialization
-	void Start () {
+	void Awake() {
 		eventSystem = GameObject.Find ("GvrEventSystem");
 		gvreditoremulator = GameObject.Find ("GvrEditorEmulator");
 		selectedsize = 0;
 		parent.SetActive (true);
-		if (SaveData.control.cubeTex.width > 800 || SaveData.control.cubeTex.height > 600) {
+		if (SaveData.control.cubeTex.width > SaveData.control.cubeTex.height) {
 			n = 9;
 			selected = new GameObject[n];
 			PuzzlePanel = parent.transform.GetChild (1).gameObject;
@@ -46,87 +44,26 @@ public class VRPuzzleLogic : MonoBehaviour {
 		}
 		parent.transform.DetachChildren ();
 		Destroy (parent);
+	}
+	void Start () {
 		StartCoroutine(MakePuzzle ());
-		puzzlec = 0;
-	}
-	IEnumerator stager(Vector2 scale, int i) {
-		yield return StartCoroutine (looper (scale,i));
-		yield return new WaitForSeconds (0f);
-	}
-	IEnumerator looper(Vector2 scale,int i) {
-		for (int j = 0; j < n; j++) {
-			if (!(i == 0 && j == 0)) {
-				PuzzleCubes [i, j] = PuzzlePanel.transform.GetChild(puzzlec).gameObject;
-				PuzzleCubes [i, j].tag = "PuzzleCube";
-				PuzzleCubePosition [i, j] = PuzzleCubes[i,j].transform.localPosition;
-			}
-			puzzlec++;
-			Material pc = new Material (shader);
-			pc.mainTexture = SaveData.control.cubeTex;
-			pc.mainTextureOffset = scale;
-			pc.mainTextureScale = new Vector2 (1.0f / n, 1.0f / n);
-			PuzzleCubes [i, j].GetComponent<Renderer> ().material = pc;
-			scale = scale + new Vector2 (1 / (float)n, 0f);
-		}
-		yield return new WaitForSeconds (0f);
-	}
-	IEnumerator FirstLoop(Vector2 scale) {
-		for (int i = 0; i < n; i++) {
-			StartCoroutine (stager (scale,i));
-			scale = new Vector2 (1/(float)n, scale.y - 1 / (float)n);
-		}
-		yield return new WaitForSeconds (0f);
 	}
 	IEnumerator MakePuzzle() {
-		Vector2 scale = new Vector2 (1 / (float)n, 1);
 		PuzzleCubes = new GameObject[n, n];
 		PuzzleCubePosition = new Vector3[n, n];
-		PuzzleCubes [0, 0] = PuzzlePanel.transform.GetChild(puzzlec).gameObject;
-		PuzzleCubePosition [0, 0] = PuzzleCubes[0,0].transform.localPosition;
-		yield return StartCoroutine(FirstLoop(scale));
-		yield return StartCoroutine (ProperPosition ());
+		int k = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				PuzzleCubes [i, j] = PuzzlePanel.transform.GetChild(k).gameObject;
+				PuzzleCubePosition [i, j] = PuzzleCubes[i,j].transform.localPosition;
+				k++;
+			}
+		}
 		if (SaveData.control.PuzzleVRCubePositions == null) {	
 			JumblePuzzle ();
 		} else {
 			SavedPuzzle ();
 		}
-	}
-	IEnumerator ProperPosition() {
-		GameObject[] ShiftingRow = new GameObject[n];
-		for (int j = 0; j < n; j++) {
-			ShiftingRow [j] = PuzzleCubes [0, j];
-		}
-		for (int i = 1; i < n; i++) {
-			for(int j = 0; j < n; j++) {
-				PuzzleCubes [i, j].transform.localPosition = PuzzleCubePosition [i - 1, j];
-				PuzzleCubes [i - 1, j] = PuzzleCubes [i, j];
-			}
-		}
-		for (int j = 0; j < n; j++) {
-			PuzzleCubes [n - 1, j] = ShiftingRow [j];
-			PuzzleCubes [n - 1, j].transform.localPosition = PuzzleCubePosition [n - 1, j];
-		}
-		ShiftingRow = new GameObject[n];
-		for (int i = 0; i < n; i++) {
-			ShiftingRow [i] = PuzzleCubes [i, n - 1];
-		}
-		for (int j = n - 2; j >= 0; j--) {
-			for (int i = 0; i < n; i++) {
-				PuzzleCubes [i, j].transform.localPosition = PuzzleCubePosition [i, j + 1];
-				PuzzleCubes [i, j + 1] = PuzzleCubes [i, j];
-				PuzzleCubes [i, j + 1].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, j + 1);
-				PuzzleCubes [i, j + 1].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (-1, -1);
-				PuzzleCubes [i, j + 1].name = " " + i + " " + (j+1);
-			}
-		}
-		for (int i = 0; i < n; i++) {
-			PuzzleCubes [i, 0] = ShiftingRow [i];
-			PuzzleCubes [i, 0].transform.localPosition = PuzzleCubePosition [i, 0];
-			PuzzleCubes [i, 0].GetComponent<PuzzleCube2D> ().actualPos = new Vector2 (i, 0);
-			PuzzleCubes [i, 0].GetComponent<PuzzleCube2D> ().currentPos = new Vector2 (-1, -1);
-			PuzzleCubes [i, 0].name = " " + i + " " + 0;
-		}
-		ShiftingRow = null;
 		yield return new WaitForSeconds (0f);
 	}
 	void SavedPuzzle () {
