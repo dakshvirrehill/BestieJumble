@@ -119,6 +119,7 @@ ModelImporter:
     100222: Cube_005
     100224: PuzzleCube
     100226: Selector
+    100228: 9x9
     400000: Both_Side_Horizontal
     400002: Both_Side_Vertical
     400004: //RootNode
@@ -233,6 +234,7 @@ ModelImporter:
     400222: Cube_005
     400224: PuzzleCube
     400226: Selector
+    400228: 9x9
     2100000: Front
     2100002: Left
     2100004: Back
@@ -341,6 +343,7 @@ ModelImporter:
     2300190: Cube_005
     2300192: PuzzleCube
     2300194: Selector
+    2300196: 9x9
     3300000: Both_Side_Horizontal
     3300002: Both_Side_Vertical
     3300004: cylinder
@@ -439,6 +442,7 @@ ModelImporter:
     3300190: Cube_005
     3300192: PuzzleCube
     3300194: Selector
+    3300196: 9x9
     4300000: PuzleCube
     4300002: Leftside_Horizontal_001
     4300004: Leftside_Horizontal
@@ -537,6 +541,7 @@ ModelImporter:
     4300190: Cube_001
     4300192: PuzzleCube
     4300194: Selector
+    4300196: 9x9
     7400000: Default Take
     9500000: //RootNode
   externalObjects:
