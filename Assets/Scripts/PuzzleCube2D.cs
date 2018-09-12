@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class PuzzleCube2D : MonoBehaviour {
 	public Vector2 currentPos;
 	public Vector2 actualPos;
+	public int currentPosVR;
+	public int actualPosVR;
 	public int ngv;
 	public bool isCorrect;
 	public int selectedPos;
@@ -27,6 +29,13 @@ public class PuzzleCube2D : MonoBehaviour {
 	}
 	public void UpdateIsCorrect() {
 		if (currentPos == actualPos) {
+			isCorrect = true;
+		} else {
+			isCorrect = false;
+		}
+	}
+	public void UpdateIsCorrectVR() {
+		if (currentPosVR == actualPosVR) {
 			isCorrect = true;
 		} else {
 			isCorrect = false;

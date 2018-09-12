@@ -11,7 +11,7 @@ public class SaveData : MonoBehaviour {
 	public Texture cubeTex;
 	private Texture defaultTex;
 	public Vector2?[,] Puzzle2DCubePositions;
-	public Vector2?[,] PuzzleVRCubePositions;
+	public int?[] PuzzleVRCubePositions;
 	public int?[] PuzzleVRNonGridPositions;
 	public GameObject PreLoader;
 	public bool VRWon;
@@ -24,6 +24,8 @@ public class SaveData : MonoBehaviour {
 			control.VRWon=false;
 			control.defaultTex = control.cubeTex;
 			control.Puzzle2DCubePositions = null;
+			control.PuzzleVRCubePositions = null;
+			control.PuzzleVRNonGridPositions = null;
 		} else if (control != this) {
 			Destroy (gameObject);
 		}
@@ -75,12 +77,10 @@ public class SaveData : MonoBehaviour {
 					}
 				}
 			}
-			if (data.PuzzleVRCubePositions.GetLength (0) >= 6) {
-				PuzzleVRCubePositions = new Vector2?[data.PuzzleVRCubePositions.GetLength (0), data.PuzzleVRCubePositions.GetLength (1)];
+			if (data.PuzzleVRCubePositions.GetLength (0) >= 36) {
+				PuzzleVRCubePositions = new int?[data.PuzzleVRCubePositions.GetLength (0)];
 				for (int i = 0; i < PuzzleVRCubePositions.GetLength (0); i++) {
-					for (int j = 0; j < PuzzleVRCubePositions.GetLength (1); j++) {
-						PuzzleVRCubePositions [i, j] = (Vector2?)data.PuzzleVRCubePositions [i, j];
-					}
+						PuzzleVRCubePositions [i] = (int?)data.PuzzleVRCubePositions [i];
 				}
 			}
 			if (data.PuzzleVRNonGridPositions.Length >= 36) {
@@ -112,9 +112,9 @@ class SaveDataHolder {
 	public string username;
 	public Byte[] cubeTex;
 	public Vector2[,] Puzzle2DCubePositions;
-	public Vector2[,] PuzzleVRCubePositions;
+	public int[] PuzzleVRCubePositions;
 	public int[] PuzzleVRNonGridPositions;
-	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions, Vector2?[,] PuzzleVRCubePositions, int?[] PuzzleVRNonGridPositions) {
+	public SaveDataHolder(string user,Byte[] ct, Vector2?[,] Puzzle2DCubePositions, int?[] PuzzleVRCubePositions, int?[] PuzzleVRNonGridPositions) {
 		this.username = user;
 		this.cubeTex = ct;
 		if (Puzzle2DCubePositions != null) { 
@@ -129,15 +129,13 @@ class SaveDataHolder {
 			this.Puzzle2DCubePositions [0, 0] = new Vector2 (-1, -1);
 		}
 		if (PuzzleVRCubePositions != null) {
-			this.PuzzleVRCubePositions = new Vector2[PuzzleVRCubePositions.GetLength (0), PuzzleVRCubePositions.GetLength (1)];
+			this.PuzzleVRCubePositions = new int[PuzzleVRCubePositions.GetLength (0)];
 			for (int i = 0; i < PuzzleVRCubePositions.GetLength (0); i++) {
-				for (int j = 0; j < PuzzleVRCubePositions.GetLength (1); j++) {
-					this.PuzzleVRCubePositions[i,j] = PuzzleVRCubePositions[i,j].Value;
-				}
+					this.PuzzleVRCubePositions[i] = PuzzleVRCubePositions[i].Value;
 			}
 		} else {
-			this.PuzzleVRCubePositions = new Vector2[1, 1];
-			this.PuzzleVRCubePositions [0, 0] = new Vector2 (-1, -1);
+			this.PuzzleVRCubePositions = new int[1];
+			this.PuzzleVRCubePositions [0] = -1;
 		}
 		if (PuzzleVRNonGridPositions != null) {
 			this.PuzzleVRNonGridPositions = new int[PuzzleVRNonGridPositions.Length];
