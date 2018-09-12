@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Waypoint : MonoBehaviour
 {	public GameObject player;
+	public GameObject pos2;
 	private GameObject eventSystem;
 	private enum State
 	{
@@ -132,7 +133,11 @@ public class Waypoint : MonoBehaviour
 		_audio_source.Play();
 		//eventSystem.SetActive (false);
 		//iTween.MoveTo (player,gameObject.transform.position, 3f);
-		player.transform.position 	= gameObject.transform.position;
+		if (pos2 != null) {
+			player.transform.position = pos2.transform.position;
+		} else {
+			player.transform.position = gameObject.transform.position;
+		}
 	}
 
 	private void Idle()
