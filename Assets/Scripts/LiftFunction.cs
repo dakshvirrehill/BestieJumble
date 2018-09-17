@@ -5,9 +5,11 @@ using UnityEngine;
 public class LiftFunction : MonoBehaviour {
 	public GameObject player;
 	private GameObject eventSystem;
+	bool flag;
 	// Use this for initialization
 	void Start () {
 		eventSystem = GameObject.Find ("GvrEventSystem");
+		flag = false;
 	}
 	
 	// Update is called once per frame
@@ -15,6 +17,10 @@ public class LiftFunction : MonoBehaviour {
 		
 	}
 	public void MoveLift() {
+		if (!flag) {
+			GameObject.Find ("GameLogic").GetComponent<AudioSource> ().Play ();
+			flag = true;
+		}
 		player.transform.SetParent (gameObject.transform);
 		if (transform.position.y >= 17.9f && transform.position.y <= 18.1f) {
 			StartCoroutine(GoingDown ());

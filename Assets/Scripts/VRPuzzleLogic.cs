@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,8 +17,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject MainMenuPos;
 	public GameObject MainMenuPrompt;
 	private GameObject PuzzlePanel;
-	private GameObject[] PuzzleCubes;
-	public GameObject selector;
+	//private GameObject[] PuzzleCubes;
+	//private GameObject[] selector;
 	private Vector3[] PuzzleCubePosition;
 	public GameObject[] NonGridLocations;
 	private int n;
@@ -32,30 +33,38 @@ public class VRPuzzleLogic : MonoBehaviour {
 		selectedsize = 0;
 		parent.SetActive (true);
 		if (SaveData.control.cubeTex.width > SaveData.control.cubeTex.height) {
-			n = 9;
-			selected = new GameObject[n];
+			n = 81;
+			selected = new GameObject[9];
 			PuzzlePanel = parent.transform.GetChild (1).gameObject;
-			Destroy (parent.transform.GetChild (0).gameObject);
+			PuzzlePanel.transform.transform.SetParent(null);
+			//Destroy (parent.transform.GetChild (0).gameObject);
 		} else {
-			n = 6;
-			selected = new GameObject[n];
+			n = 36;
+			selected = new GameObject[6];
 			PuzzlePanel = parent.transform.GetChild (0).gameObject;
-			Destroy (parent.transform.GetChild (1).gameObject);
+			PuzzlePanel.transform.SetParent (null);
+			//Destroy (parent.transform.GetChild (1).gameObject);
 		}
-		parent.transform.DetachChildren ();
-		Destroy (parent);
+		//parent.transform.DetachChildren ();
+		parent.SetActive(false);
 	}
 	void Start () {
 		StartCoroutine(MakePuzzle ());
 	}
 	IEnumerator MakePuzzle() {
-		PuzzleCubes = new GameObject[n*n];
-		PuzzleCubePosition = new Vector3[n*n];
+		//PuzzleCubes = new GameObject[n];
+		PuzzleCubePosition = new Vector3[n];
+		//selector = new GameObject[n];
 		int k = 0;
-		while(k<(n*n)) {
-			PuzzleCubes [k] = PuzzlePanel.transform.GetChild(k).gameObject;
-			PuzzleCubePosition [k] = PuzzleCubes[k].transform.localPosition;
-			PuzzleCubes [k].name = "PuzzleCube " + k;
+		while(k<n) {
+			//PuzzleCubes [k] = PuzzlePanel.transform.GetChild(k).gameObject;
+			PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().actualPosVR = k;
+			PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().currentPosVR = -1;
+			PuzzleCubePosition [k] = PuzzlePanel.transform.GetChild(k).localPosition;
+			PuzzlePanel.transform.GetChild(k).gameObject.name = "PuzzleCube " + k;
+			//selector [k] = PuzzlePanel.transform.GetChild (k + n).gameObject;
+			PuzzlePanel.transform.GetChild(k+n).gameObject.name = "Selector " + k;
+			PuzzlePanel.transform.GetChild(k+n).gameObject.SetActive (false);
 			k++;
 		}
 		if (SaveData.control.PuzzleVRCubePositions == null) {	
@@ -69,8 +78,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 		int k = 0;
 		System.Random r = new System.Random ();
 		HashSet<int> hs = new HashSet<int> ();
-		for (int i = 0; i < (n*n); i++) {
-				int a = PuzzleCubes [i].GetComponent<PuzzleCube2D> ().currentPosVR = SaveData.control.PuzzleVRCubePositions [i].Value;
+		for (int i = 0; i < n; i++) {
+			int a = PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().currentPosVR = SaveData.control.PuzzleVRCubePositions [i].Value;
 				if (a == -1) {
 					int ngv = SaveData.control.PuzzleVRNonGridPositions [k].Value;
 					if (ngv == -2) {
@@ -79,32 +88,29 @@ public class VRPuzzleLogic : MonoBehaviour {
 					while (NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed) {
 						ngv=(ngv+1)%81;
 					}
-					PuzzleCubes [i].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
-					PuzzleCubes [i].GetComponent<PuzzleCube2D> ().ngv = ngv;
-					PuzzleCubes [i].transform.position = NonGridLocations [ngv].transform.position;
+					PuzzlePanel.transform.GetChild(k).localScale = new Vector3 (0.2f, 0.2f, 0.2f);
+					PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().ngv = ngv;
+					PuzzlePanel.transform.GetChild(k).position = NonGridLocations [ngv].transform.position;
 					NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed = true;
 				} else {
-					PuzzleCubes [i].transform.localPosition = PuzzleCubePosition [a];
-					PuzzleCubes [i].GetComponent<PuzzleCube2D> ().ngv = -2;
-					PuzzleCubes [i].GetComponent<PuzzleCube2D> ().UpdateIsCorrectVR ();
+					PuzzlePanel.transform.GetChild(k).localPosition = PuzzleCubePosition [a];
+					PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().ngv = -2;
+					PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().UpdateIsCorrectVR ();
 					hs.Add (a);
 				}
 				k++;
-				if (k == n*n) {
+				if (k == n) {
 					StartCoroutine(checkAll ());
 				}
 		}
-		for (int i = 0; i < (n*n); i++) {
+		for (int i = 0; i < n; i++) {
 				if (!hs.Contains (i)) {
 					CreateSelector (i);
 				}
 		}
 	}
 	void CreateSelector(int i) {
-		GameObject Sel = Object.Instantiate (selector, PuzzlePanel.transform, false);
-		Sel.name = "Selector " + i;
-		Sel.GetComponent<VRGridSelector> ().pos = i;
-		Sel.transform.localPosition = PuzzleCubePosition [i];
+		PuzzlePanel.transform.GetChild(i+n).gameObject.SetActive (true);
 	}
 	void JumblePuzzle() {
 		System.Random r = new System.Random ();
@@ -115,11 +121,11 @@ public class VRPuzzleLogic : MonoBehaviour {
 			NonGridLocations [j] = temp;
 		}
 		int ngv=0;
-		for(int i=0;i<(n*n);i++) {
+		for(int i=0;i<n;i++) {
 				NonGridLocations [ngv].GetComponent<NonGridIsUsed> ().isUsed = true;
-				PuzzleCubes [i].GetComponent<PuzzleCube2D> ().ngv = NonGridLocations[ngv].GetComponent<NonGridIsUsed>().actInd;
-				PuzzleCubes [i].transform.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
-				PuzzleCubes [i].transform.position = NonGridLocations [ngv].transform.position;
+				PuzzlePanel.transform.GetChild(i).gameObject.GetComponent<PuzzleCube2D> ().ngv = NonGridLocations[ngv].GetComponent<NonGridIsUsed>().actInd;
+				PuzzlePanel.transform.GetChild(i).localScale = new Vector3 (0.2f, 0.2f, 0.2f);
+				PuzzlePanel.transform.GetChild(i).position = NonGridLocations [ngv].transform.position;
 				CreateSelector (i);
 				ngv++;
 			}
@@ -152,7 +158,8 @@ public class VRPuzzleLogic : MonoBehaviour {
 		StartCoroutine (checkAll ());
 	}
 	public void MoveCubeToSelectorUI(PointerEventData eventData, GameObject PC) {
-		if (selectedsize == n) {
+		int k = (int)Math.Sqrt (n);
+		if (selectedsize == k) {
 			
 		} else {
 			if (!(PC.GetComponent<PuzzleCube2D> ().currentPosVR == -1)) {
@@ -160,10 +167,10 @@ public class VRPuzzleLogic : MonoBehaviour {
 				PC.GetComponent<PuzzleCube2D> ().currentPosVR =-1;
 				PC.GetComponent<PuzzleCube2D> ().isCorrect = false;
 			} else {
-				if (selectedsize == n - 1) {
+				if (selectedsize == k - 1) {
 					gvreditoremulator.transform.position = new Vector3 (7.19f, 3.9f, -11f);
 				} else {
-					Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
+					UnityEngine.Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
 				}
 			}
 			selected [selectedsize] = PC;
@@ -173,8 +180,9 @@ public class VRPuzzleLogic : MonoBehaviour {
 	}
 	void RestOfCode(GameObject sel) {
 		int GridValue = sel.GetComponent<VRGridSelector> ().pos;
-		Destroy (sel);
-		GameObject selectorUIPanel = Object.Instantiate (SelectorUICanvasPrefab, SelectorUIPos.transform, false);
+		sel.transform.localPosition = PuzzleCubePosition [GridValue];
+		sel.SetActive (false);
+		GameObject selectorUIPanel = UnityEngine.Object.Instantiate (SelectorUICanvasPrefab, SelectorUIPos.transform, false);
 		selectorUIPanel.name = "SelectorUICanvas";
 		selectorUIPanel = selectorUIPanel.transform.GetChild (0).gameObject;
 		int i;
@@ -190,7 +198,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			rm.GetComponent<Button> ().onClick.AddListener (() => MoveCubeToGrid (rk.GetComponent<PuzzleCube2D>().selectedPos));
 			selected [i].transform.position = rm.transform.position;
 		}
-		while (i != n) {
+		while (i != (int)Math.Sqrt(n)) {
 			GameObject rm = selectorUIPanel.transform.GetChild (i).gameObject;
 			rm.GetComponent<Button> ().interactable = false;
 			i++;
@@ -200,7 +208,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	IEnumerator checkAll() {
 		bool complete = true;
 		for (int i = 0; i < n; i++) {
-			complete = PuzzleCubes [i].GetComponent<PuzzleCube2D> ().isCorrect;
+			complete = PuzzlePanel.transform.GetChild(i).gameObject.GetComponent<PuzzleCube2D> ().isCorrect;
 			if (!complete)
 				break;
 		}
@@ -208,7 +216,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		yield return new WaitForSeconds(0f);
 	}
 	public void DisplayMainMenu(GameObject MenuButton) {
-		GameObject mainMenu = Object.Instantiate (MainMenuUICanvasPrefab, MainMenuPos.transform, false);
+		GameObject mainMenu = UnityEngine.Object.Instantiate (MainMenuUICanvasPrefab, MainMenuPos.transform, false);
 		mainMenu.name = "MainMenuUI";
 		mainMenu.transform.GetChild (0).GetChild (0).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveGame());
 		mainMenu.transform.GetChild (0).GetChild (1).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu());
@@ -225,7 +233,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	}
 	void SaveGame () {
 		SaveData.control.PuzzleVRCubePositions = new int?[PuzzleCubePosition.GetLength(0)];
-		SaveData.control.PuzzleVRNonGridPositions = new int?[n * n];
+		SaveData.control.PuzzleVRNonGridPositions = new int?[n];
 		int k = 0;
 		if (selectedsize != 0 && GameObject.Find ("SelectorUICanvas") != null) {
 			for (int i = 0; i < selectedsize; i++) {
@@ -234,9 +242,9 @@ public class VRPuzzleLogic : MonoBehaviour {
 			Destroy(GameObject.Find("SelectorUICanvas"));
 		}
 		for (int i = 0; i < PuzzleCubePosition.GetLength (0); i++) {
-				SaveData.control.PuzzleVRCubePositions [i] = (int?)PuzzleCubes [i].GetComponent<PuzzleCube2D>().currentPosVR;
-				if (PuzzleCubes [i].GetComponent<PuzzleCube2D> ().currentPosVR == -1) {
-					SaveData.control.PuzzleVRNonGridPositions [k] = (int?)PuzzleCubes [i].GetComponent<PuzzleCube2D> ().ngv;
+			SaveData.control.PuzzleVRCubePositions [i] = (int?)PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D>().currentPosVR;
+			if (PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().currentPosVR == -1) {
+				SaveData.control.PuzzleVRNonGridPositions [k] = (int?)PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().ngv;
 				} else {
 					SaveData.control.PuzzleVRNonGridPositions [k] = (int?)-1;
 				}
@@ -247,7 +255,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	void BackToMainMenu() {
 		SaveGame ();
 		Destroy (GameObject.Find ("MainMenuUI"));
-		Object.Instantiate (MainMenuPrompt, MainMenuPos.transform, false);
+		UnityEngine.Object.Instantiate (MainMenuPrompt, MainMenuPos.transform, false);
 		StartCoroutine (STD ());
 	}
 	void ShowHideImage(bool a) {

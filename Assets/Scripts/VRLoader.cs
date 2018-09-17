@@ -31,6 +31,7 @@ public class VRLoader : MonoBehaviour {
 		
 	}
 	IEnumerator LoadingScene(string scenename) {
+		yield return new WaitForSeconds (4f);
 		AsyncOperation SceneLoad = SceneManager.LoadSceneAsync (scenename);
 		while (!SceneLoad.isDone) {
 			yield return null;

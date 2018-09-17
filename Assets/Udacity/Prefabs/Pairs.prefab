@@ -160,8 +160,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1983911747963592}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 878.1447, y: 0, z: -29.207}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 870.9547, y: -0.4, z: -29.207}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4075636715414936}
@@ -183,7 +183,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 04745021e97cfc244b51952b0ba3f11b, type: 2}
+  - {fileID: 2100000, guid: e4c9ab9d26631334ab6ae0135928f6a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -217,7 +217,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 04745021e97cfc244b51952b0ba3f11b, type: 2}
+  - {fileID: 2100000, guid: e4c9ab9d26631334ab6ae0135928f6a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -537,8 +537,8 @@ MonoBehaviour:
   player: {fileID: 0}
   pos2: {fileID: 1830013418286970}
   _state: 0
-  material: {fileID: 2100000, guid: 04745021e97cfc244b51952b0ba3f11b, type: 2}
-  color_hilight: {r: 1, g: 0.93103445, b: 0, a: 1}
+  material: {fileID: 2100000, guid: e4c9ab9d26631334ab6ae0135928f6a8, type: 2}
+  color_hilight: {r: 1, g: 0.3103448, b: 0, a: 1}
   lerp_idle: 0.5
   lerp_focus: 0.5
   lerp_hide: 0.5
@@ -629,8 +629,8 @@ MonoBehaviour:
   player: {fileID: 0}
   pos2: {fileID: 1720371892201380}
   _state: 0
-  material: {fileID: 2100000, guid: 04745021e97cfc244b51952b0ba3f11b, type: 2}
-  color_hilight: {r: 1, g: 0.93103445, b: 0, a: 1}
+  material: {fileID: 2100000, guid: e4c9ab9d26631334ab6ae0135928f6a8, type: 2}
+  color_hilight: {r: 1, g: 0.3103448, b: 0, a: 1}
   lerp_idle: 0.5
   lerp_focus: 0.5
   lerp_hide: 0.5
