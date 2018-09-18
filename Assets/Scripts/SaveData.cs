@@ -105,6 +105,7 @@ public class SaveData : MonoBehaviour {
 		SaveData.control.Puzzle2DCubePositions = null;
 		SaveData.control.PuzzleVRCubePositions = null;
 		SaveData.control.PuzzleVRNonGridPositions = null;
+		SaveData.control.VRWon = false;
 	}
 }
 [Serializable]

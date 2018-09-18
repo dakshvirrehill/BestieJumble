@@ -141,7 +141,7 @@ public class MainSceenLogic : MonoBehaviour {
 		Destroy(GameObject.Find("LoadGameUI"));
 	}
 	public void SelectImage() {
-		if (SaveData.control.Puzzle2DCubePositions != null) {
+		if (SaveData.control.Puzzle2DCubePositions != null || SaveData.control.PuzzleVRCubePositions !=null) {
 			GameObject SelectImageUI = Object.Instantiate (SelectImagePrompt, mainUI.transform, false);
 			SelectImageUI.transform.GetChild (0).GetChild (1).gameObject.GetComponent<Button> ().onClick.AddListener (() => ChangeImage (true));
 			SelectImageUI.transform.GetChild (0).GetChild (2).gameObject.GetComponent<Button> ().onClick.AddListener (() => ChangeImage (false));
@@ -153,6 +153,8 @@ public class MainSceenLogic : MonoBehaviour {
 	public void ChangeImage(bool choice) {
 		if (choice) {
 			SaveData.control.Puzzle2DCubePositions = null;
+			SaveData.control.PuzzleVRCubePositions = null;
+			SaveData.control.PuzzleVRNonGridPositions = null;
 			ImageSelector ();
 		}
 		Destroy (GameObject.Find ("SelectImageUI"));
