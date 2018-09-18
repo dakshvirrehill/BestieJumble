@@ -17,8 +17,6 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public GameObject MainMenuPos;
 	public GameObject MainMenuPrompt;
 	private GameObject PuzzlePanel;
-	//private GameObject[] PuzzleCubes;
-	//private GameObject[] selector;
 	private Vector3[] PuzzleCubePosition;
 	public GameObject[] NonGridLocations;
 	private int n;
@@ -37,32 +35,25 @@ public class VRPuzzleLogic : MonoBehaviour {
 			selected = new GameObject[9];
 			PuzzlePanel = parent.transform.GetChild (1).gameObject;
 			PuzzlePanel.transform.transform.SetParent(null);
-			//Destroy (parent.transform.GetChild (0).gameObject);
 		} else {
 			n = 36;
 			selected = new GameObject[6];
 			PuzzlePanel = parent.transform.GetChild (0).gameObject;
 			PuzzlePanel.transform.SetParent (null);
-			//Destroy (parent.transform.GetChild (1).gameObject);
 		}
-		//parent.transform.DetachChildren ();
 		parent.SetActive(false);
 	}
 	void Start () {
 		StartCoroutine(MakePuzzle ());
 	}
 	IEnumerator MakePuzzle() {
-		//PuzzleCubes = new GameObject[n];
 		PuzzleCubePosition = new Vector3[n];
-		//selector = new GameObject[n];
 		int k = 0;
 		while(k<n) {
-			//PuzzleCubes [k] = PuzzlePanel.transform.GetChild(k).gameObject;
 			PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().actualPosVR = k;
 			PuzzlePanel.transform.GetChild(k).gameObject.GetComponent<PuzzleCube2D> ().currentPosVR = -1;
 			PuzzleCubePosition [k] = PuzzlePanel.transform.GetChild(k).localPosition;
 			PuzzlePanel.transform.GetChild(k).gameObject.name = "PuzzleCube " + k;
-			//selector [k] = PuzzlePanel.transform.GetChild (k + n).gameObject;
 			PuzzlePanel.transform.GetChild(k+n).gameObject.name = "Selector " + k;
 			PuzzlePanel.transform.GetChild(k+n).gameObject.SetActive (false);
 			k++;
@@ -145,8 +136,10 @@ public class VRPuzzleLogic : MonoBehaviour {
 	public void MoveCubeToGrid(int pos) {
 		GameObject shifter = selected [pos];
 		selected [pos] = null;
-		for (int i = pos; i < (selectedsize-1); i++) {
-			selected [i] = selected [i + 1];
+		for (int i = 0; i < (selectedsize-1); i++) {
+			if (i >= pos) {
+				selected [i] = selected [i + 1];
+			}
 			selected [i].GetComponent<PuzzleCube2D> ().currentPosVR = -1;
 		}
 		selectedsize--;
