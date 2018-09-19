@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -160,7 +159,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 				if (selectedsize == 8) {
 					gvreditoremulator.transform.position = new Vector3 (7.19f, 3.9f, -11f);
 				} else {
-					UnityEngine.Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
+					Object.Instantiate (PoofPrefab, PC.transform.position, Quaternion.Euler (-90f, 0f, 0f));
 				}
 			}
 			selected [selectedsize] = PC;
@@ -172,7 +171,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		int GridValue = sel.GetComponent<VRGridSelector> ().pos;
 		sel.transform.localPosition = PuzzleCubePosition [GridValue];
 		sel.SetActive (false);
-		GameObject selectorUIPanel = UnityEngine.Object.Instantiate (SelectorUICanvasPrefab, SelectorUIPos.transform, false);
+		GameObject selectorUIPanel = Object.Instantiate (SelectorUICanvasPrefab, SelectorUIPos.transform, false);
 		selectorUIPanel.name = "SelectorUICanvas";
 		selectorUIPanel = selectorUIPanel.transform.GetChild (0).gameObject;
 		int i;
@@ -188,7 +187,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			rm.GetComponent<Button> ().onClick.AddListener (() => MoveCubeToGrid (rk.GetComponent<PuzzleCube2D>().selectedPos));
 			selected [i].transform.position = rm.transform.position;
 		}
-		while (i != (int)Math.Sqrt(n)) {
+		while (i != 9) {
 			GameObject rm = selectorUIPanel.transform.GetChild (i).gameObject;
 			rm.GetComponent<Button> ().interactable = false;
 			i++;
@@ -206,7 +205,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		yield return new WaitForSeconds(0f);
 	}
 	public void DisplayMainMenu(GameObject MenuButton) {
-		GameObject mainMenu = UnityEngine.Object.Instantiate (MainMenuUICanvasPrefab, MainMenuPos.transform, false);
+		GameObject mainMenu = Object.Instantiate (MainMenuUICanvasPrefab, MainMenuPos.transform, false);
 		mainMenu.name = "MainMenuUI";
 		mainMenu.transform.GetChild (0).GetChild (0).gameObject.GetComponent<Button> ().onClick.AddListener (() => SaveGame());
 		mainMenu.transform.GetChild (0).GetChild (1).gameObject.GetComponent<Button> ().onClick.AddListener (() => BackToMainMenu());
@@ -243,7 +242,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	void BackToMainMenu() {
 		SaveGame ();
 		Destroy (GameObject.Find ("MainMenuUI"));
-		UnityEngine.Object.Instantiate (MainMenuPrompt, MainMenuPos.transform, false);
+		Object.Instantiate (MainMenuPrompt, MainMenuPos.transform, false);
 		StartCoroutine (STD ());
 	}
 	void ShowHideImage(bool a) {
