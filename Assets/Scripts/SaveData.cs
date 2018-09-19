@@ -76,9 +76,9 @@ public class SaveData : MonoBehaviour {
 					}
 				}
 			}
-			if (data.PuzzleVRCubePositions.GetLength (0) >= 36) {
-				PuzzleVRCubePositions = new int?[data.PuzzleVRCubePositions.GetLength (0)];
-				for (int i = 0; i < PuzzleVRCubePositions.GetLength (0); i++) {
+			if (data.PuzzleVRCubePositions.Length >= 36) {
+				PuzzleVRCubePositions = new int?[data.PuzzleVRCubePositions.Length];
+				for (int i = 0; i < PuzzleVRCubePositions.Length; i++) {
 						PuzzleVRCubePositions [i] = (int?)data.PuzzleVRCubePositions [i];
 				}
 			}
@@ -129,8 +129,8 @@ class SaveDataHolder {
 			this.Puzzle2DCubePositions [0, 0] = new Vector2 (-1, -1);
 		}
 		if (PuzzleVRCubePositions != null) {
-			this.PuzzleVRCubePositions = new int[PuzzleVRCubePositions.GetLength (0)];
-			for (int i = 0; i < PuzzleVRCubePositions.GetLength (0); i++) {
+			this.PuzzleVRCubePositions = new int[PuzzleVRCubePositions.Length];
+			for (int i = 0; i < PuzzleVRCubePositions.Length; i++) {
 					this.PuzzleVRCubePositions[i] = PuzzleVRCubePositions[i].Value;
 			}
 		} else {
