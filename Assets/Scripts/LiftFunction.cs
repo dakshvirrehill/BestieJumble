@@ -56,7 +56,7 @@ public class LiftFunction : MonoBehaviour {
 		if (player.transform.position.y < 7.9f) {
 			iTween.MoveTo (player, new Vector3 (7.19f, 8f, 0f), 5f);
 		} else {
-			iTween.MoveTo (player, player.transform.position + new Vector3 (0f, -0.32f, -3.86f), 5f);
+			iTween.MoveTo (player, player.transform.position + new Vector3 (0f, -0.92f, -5f), 5f);
 		}
 		yield return new WaitForSeconds (5f);
 	}
