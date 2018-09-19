@@ -11,8 +11,12 @@ public class PuzzleCube2D : MonoBehaviour {
 	public int ngv;
 	public bool isCorrect;
 	public int selectedPos;
+	AudioSource Winning;
 	// Use this for initialization
-	void Start () {
+	void Start () { 
+		gameObject.AddComponent<AudioSource> ();
+		Winning = gameObject.GetComponent<AudioSource> ();
+		Winning.clip = Resources.Load ("collection") as AudioClip;
 		if (SceneManager.GetActiveScene ().name == "3DPuzzleScene") {
 			EventTrigger.Entry entry = new EventTrigger.Entry ();
 			entry.eventID = EventTriggerType.PointerClick;
@@ -30,6 +34,7 @@ public class PuzzleCube2D : MonoBehaviour {
 	public void UpdateIsCorrect() {
 		if (currentPos == actualPos) {
 			isCorrect = true;
+			Winning.Play ();
 		} else {
 			isCorrect = false;
 		}
@@ -37,6 +42,7 @@ public class PuzzleCube2D : MonoBehaviour {
 	public void UpdateIsCorrectVR() {
 		if (currentPosVR == actualPosVR) {
 			isCorrect = true;
+			Winning.Play ();
 		} else {
 			isCorrect = false;
 		}

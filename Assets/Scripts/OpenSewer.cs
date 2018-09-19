@@ -23,7 +23,7 @@ public class OpenSewer : MonoBehaviour {
 			}
 		}
 		if (found) {
-			iTween.MoveTo (gameObject, iTween.Hash ("position", new Vector3(12.62f,0f,6.93f), "time", 3f, "islocal", true, "oncompletetarget", gameObject, "oncomplete", "BringCubeUp", "oncompleteparams", hitColliders [i].gameObject));
+			iTween.MoveTo (gameObject, iTween.Hash ("position", new Vector3(-1284.13f,0f,-59.67f), "time", 3f, "islocal", true, "oncompletetarget", gameObject, "oncomplete", "BringCubeUp", "oncompleteparams", hitColliders [i].gameObject));
 		} else {
 			
 		}
@@ -32,6 +32,6 @@ public class OpenSewer : MonoBehaviour {
 		iTween.MoveTo(PuzzleCube,iTween.Hash("position",PuzzleCube.transform.position+new Vector3(0f,1.28f,0f),"time",3f,"oncompletetarget", gameObject, "oncomplete", "CloseSewer"));
 	}
 	public void CloseSewer() {
-		iTween.MoveTo (gameObject, iTween.Hash ("position", new Vector3 (10.42f,0f,6.93f), "time", 3f, "islocal", true));
+		iTween.MoveTo (gameObject, iTween.Hash ("position", new Vector3 (-1282.308f,0f,-59.67f), "time", 3f, "islocal", true));
 	}
 }

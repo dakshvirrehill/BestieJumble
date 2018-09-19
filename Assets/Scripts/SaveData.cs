@@ -55,7 +55,6 @@ public class SaveData : MonoBehaviour {
 		file.Close ();
 	}
 	public void Load(string named) {
-		Debug.Log ("in Load");
 		BinaryFormatter bf = new BinaryFormatter ();
 		SurrogateSelector surrogateSelector = new SurrogateSelector();
 		surrogateSelector.AddSurrogate(typeof(Vector2),new StreamingContext(StreamingContextStates.All),new Vector2SurrogateSelector());
