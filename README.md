@@ -18,4 +18,4 @@ Let's see if they value it as much as you do.
 PS Remember this game is just for fun and not a real measure ment of value of friendship. It is actually just a test of your friend's memory and picture retention capabilities.
 
 # GoogleVR SDK Version v1.130.1
-# Unity Editor Version 2017.3.0f3
+# Unity Editor Version 2018.2.8f1
