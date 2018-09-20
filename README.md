@@ -1,5 +1,9 @@
 # BestieJumble
-Learn if your friends remember your memories by giving them a picture puzzle to solve. Both VR and 2D puzzles available
+Learn if your friends remember your memories by giving them a picture puzzle to solve. Both VR and 2D puzzles 
+
+#Walkthrough Video
+
+[![Alt text](https://img.youtube.com/vi/1WQqWdwB100/0.jpg)](https://youtu.be/1WQqWdwB100)
 
 # Features
 
