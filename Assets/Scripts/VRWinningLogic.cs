@@ -31,9 +31,8 @@ public class VRWinningLogic : MonoBehaviour {
 		yield return null;
 	}
 	IEnumerator RestOfCode() {
-		Destroy (GameObject.Find ("VRWinningScene"));
-		GameObject.Find ("FinalSceneInitializer").GetComponent<FinalSceneInitializer> ().SceneStarter ();
-		yield return new WaitForSeconds (0f);
+		SceneManager.LoadSceneAsync("FinalScene");
+		yield return null;
 	}
 	public void QuitGame() {
 		SaveData.control.Save (SaveData.control.username);

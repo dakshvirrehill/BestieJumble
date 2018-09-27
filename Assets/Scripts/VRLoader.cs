@@ -14,14 +14,8 @@ public class VRLoader : MonoBehaviour {
 			}
 			StartCoroutine (LoadingScene ("FinalScene"));
 		} else {
-			int n = 0;
-			if (SaveData.control.cubeTex.width > 1024 || SaveData.control.cubeTex.height > 1024) {
-				n = 9;
-			} else {
-				n = 6;
-			}
 			for (int i = 0; i < 4; i++) {
-				infycanvas.transform.GetChild (i).GetChild (0).GetChild (3).gameObject.GetComponent<TextMeshProUGUI> ().text = "1. The Puzzle Cubes are being hidden in the world. \n2. You need to find them and place them in the grid. \n3. " + n + " cubes can be collected at once and you can change their positions even after placing them on the grid. \n4. You win after all cubes are at the correct position.";
+				infycanvas.transform.GetChild (i).GetChild (0).GetChild (3).gameObject.GetComponent<TextMeshProUGUI> ().text = "1. The Puzzle Cubes are being hidden in the world. \n2. You need to find them and place them in the grid. \n3. 9 cubes can be collected at once and you can change their positions even after placing them on the grid. \n4. You win after all cubes are at the correct position.";
 			}
 			StartCoroutine (LoadingScene ("3DPuzzleScene"));
 		}

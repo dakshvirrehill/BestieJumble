@@ -224,6 +224,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		SaveData.control.PuzzleVRCubePositions = new int?[n];
 		SaveData.control.PuzzleVRNonGridPositions = new int?[n];
 		if (selectedsize != 0 && GameObject.Find ("SelectorUICanvas") != null) {
+			CreateSelector (selected [0].GetComponent<PuzzleCube2D> ().currentPosVR);
 			for (int i = 0; i < selectedsize; i++) {
 				selected [i].GetComponent<PuzzleCube2D> ().currentPosVR = -1;
 			}
