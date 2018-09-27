@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public class VRGridSelector : MonoBehaviour {
-	public int pos;
+	public int pos; //position of selector in grid
 	// Use this for initialization
 	void Start () {
 		EventTrigger.Entry entree = new EventTrigger.Entry ();

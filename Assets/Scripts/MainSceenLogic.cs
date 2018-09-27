@@ -4,12 +4,12 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 public class MainSceenLogic : MonoBehaviour {
-	public GameObject LoadGamePrefab;
-	public GameObject LoadGameNameButton;
-	public GameObject SelectImagePrompt;
-	public GameObject mainUI;
-	private GameObject[] openpuzzlebuttons;
-	private GameObject username;
+	public GameObject LoadGamePrefab; //Prefab for game loading name screen
+	public GameObject LoadGameNameButton; //Prefab for game loading name button on game loading name screen
+	public GameObject SelectImagePrompt; //Prefab for prompt of overwriting the game
+	public GameObject mainUI; //MainUI panel game object
+	private GameObject[] openpuzzlebuttons; //Buttons for opening VR or 2D Puzzles and select image button
+	private GameObject username; //Username of Player
 	// Use this for initialization
 	void Start () {
 		openpuzzlebuttons = new GameObject[3];
@@ -21,7 +21,7 @@ public class MainSceenLogic : MonoBehaviour {
 		if (SaveData.control.cubeTex != null) {
 			mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 		} 
-		if (SaveData.control.username.Equals ("")) {
+		if (SaveData.control.username.Equals ("")) { //If name is not set deactivate all buttons
 			openpuzzlebuttons [0].SetActive (false);
 			openpuzzlebuttons [1].SetActive (false);
 			openpuzzlebuttons [2].SetActive (false);
@@ -32,16 +32,17 @@ public class MainSceenLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (!username.GetComponent<TextMeshProUGUI> ().text.Equals ("")) {
+		if (!username.GetComponent<TextMeshProUGUI> ().text.Equals ("")) { //If name is set activate buttons
 			openpuzzlebuttons [0].SetActive (true);
 			openpuzzlebuttons [1].SetActive (true);
 			openpuzzlebuttons [2].SetActive (true);
-		} else {
+		} else { //Deactivate buttons if name not set
 			openpuzzlebuttons [0].SetActive (false);
 			openpuzzlebuttons [1].SetActive (false);
 			openpuzzlebuttons [2].SetActive (false);
 		}
 	}
+	//When new game button clicked, activate game play buttons and deactivate new game button remove persistant data as well
 	public void NewGame() {
 		mainUI.transform.GetChild (0).GetChild (4).gameObject.SetActive (true);
 		mainUI.transform.GetChild (0).GetChild (5).gameObject.SetActive (true);
@@ -50,12 +51,14 @@ public class MainSceenLogic : MonoBehaviour {
 		SaveData.control.DefaultEverything ();
 		DefaultEverything ();
 	}
+	//Activate new game button and deactivate game play buttons
 	public void ActiveNewGameButton() {
 		mainUI.transform.GetChild (0).GetChild (4).gameObject.SetActive (false);
 		mainUI.transform.GetChild (0).GetChild (5).gameObject.SetActive (false);
 		mainUI.transform.GetChild (0).GetChild (10).gameObject.SetActive (true);
 		mainUI.transform.GetChild (0).GetChild (1).gameObject.SetActive (true);
 	}
+	//Set load game names stored in player prefs and load game if name already in player prefs
 	public void SetNamesForLoad(GameObject inpfield) {
 		string name = inpfield.GetComponent<TMP_InputField> ().text;
 		if (!name.Equals ("")) {
@@ -84,6 +87,7 @@ public class MainSceenLogic : MonoBehaviour {
 			}
 		}
 	}
+	//Quit Game
 	public void QuitGame() {
 		if (!SaveData.control.username.Equals ("")) {
 			SaveData.control.Save (SaveData.control.username);
@@ -94,6 +98,7 @@ public class MainSceenLogic : MonoBehaviour {
 		Application.Quit();
 		#endif
 	}
+	//Initialize load game window with all saved games names and setup buttons dynamically
 	public void LoadGame() {
 		string allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames");
 		if (!allNames.Equals ("")) {
@@ -116,6 +121,7 @@ public class MainSceenLogic : MonoBehaviour {
 			}
 		}
 	}
+	//Load game by the save game name and set everything to save game values
 	public void LoadTextClicked(string name) {
 		SaveData.control.username = name;
 		SaveData.control.Load (name);
@@ -126,6 +132,7 @@ public class MainSceenLogic : MonoBehaviour {
 		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 		ActiveNewGameButton ();
 	}
+	//Delete all saved games
 	public void DeleteAllPlayers() {
 		string[] allNames = PlayerPrefs.GetString ("BestieJumbleFriendNames").Split(',');
 		PlayerPrefs.DeleteKey ("BestieJumbleFriendNames");
@@ -133,13 +140,16 @@ public class MainSceenLogic : MonoBehaviour {
 		SaveData.control.DeleteAllSaveData (allNames);
 		DefaultEverything ();
 	}
+	//Default everything in the current game
 	private void DefaultEverything() {
 		username.GetComponent<TextMeshProUGUI> ().text = "";
 		mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = SaveData.control.cubeTex;
 	}
+	//Go back to Main Scene from load game scene
 	public void BackToScreen() {
 		Destroy(GameObject.Find("LoadGameUI"));
 	}
+	//Select image from gallery for setting up puzzle
 	public void SelectImage() {
 		if (SaveData.control.Puzzle2DCubePositions != null || SaveData.control.PuzzleVRCubePositions !=null) {
 			GameObject SelectImageUI = Object.Instantiate (SelectImagePrompt, mainUI.transform, false);
@@ -150,6 +160,7 @@ public class MainSceenLogic : MonoBehaviour {
 			ImageSelector ();
 		}
 	}
+	//If image already set and prompt opens to reset image, change image funciton is called nulling already set values
 	public void ChangeImage(bool choice) {
 		if (choice) {
 			SaveData.control.Puzzle2DCubePositions = null;
@@ -159,28 +170,25 @@ public class MainSceenLogic : MonoBehaviour {
 		}
 		Destroy (GameObject.Find ("SelectImageUI"));
 	}
+	//Calling native gallery plugin to pick image from android native gallery and making texture from the image
 	void ImageSelector() {
 		if (Application.platform == RuntimePlatform.Android) {
 			if (NativeGallery.IsMediaPickerBusy ())
 				return;
 			else {
 				NativeGallery.Permission p = NativeGallery.GetImageFromGallery (( path) => {
-					Debug.Log ("Image path: " + path);
 					if (path != null) {
 						Texture2D texture = NativeGallery.LoadImageAtPath (path, -1 , false, true, false);
 						if (texture == null) {
-							Debug.Log ("Couldn't load texture from " + path);
 							return;
 						}
 						SaveData.control.cubeTex = texture;
 						mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = texture;
-						//Destroy(texture);
 					}
-				}, "Select a JPG image", "image/jpg", 1280);
+				}, "Select a JPG image", "image/jpg", 3000);
 				SaveData.control.Save (SaveData.control.username);
-				Debug.Log ("Permission result: " + p);
 			}
-		} else {
+		} else { //For testing in editor
 			WWW w = new WWW ("file:///F://workspaceVR//Little Rebel//Assets//Photos//IMG-20160816-WA0008.jpg");
 			SaveData.control.cubeTex = w.texture;
 			mainUI.transform.GetChild (0).GetChild (8).gameObject.GetComponent<RawImage> ().texture = w.texture;

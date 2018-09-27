@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MaxReticleDistanceChanger : MonoBehaviour {
-	private float angley;
+	private float angley; //Absolute value of rotation euler angles
 	// Use this for initialization
 	void Start () {
 		
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () {//Setting reticle distance according to the rotation and position of camera
 		if (transform.GetChild (0).rotation.eulerAngles.y > 180f) {
 			angley = Mathf.Abs (transform.GetChild (0).rotation.eulerAngles.y - 360f);
 		} else {

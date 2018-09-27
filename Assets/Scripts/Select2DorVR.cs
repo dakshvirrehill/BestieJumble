@@ -9,7 +9,7 @@ public class Select2DorVR : MonoBehaviour {
 	void Start () {
 		
 	}
-	IEnumerator SwitchToVR() {
+	IEnumerator SwitchToVR() { //Switching loaded device to VR
 		string desiredDevice = "cardboard";
 		XRSettings.LoadDeviceByName (desiredDevice);
 		StartCoroutine (waitforframe ());
@@ -25,7 +25,7 @@ public class Select2DorVR : MonoBehaviour {
 			SceneManager.LoadSceneAsync ("VRLoadingScene");
 		}
 	}
-	public void changeSelected(string selection) {
+	public void changeSelected(string selection) { //Load either 2d or vr puzzle scene
 		GameObject.Find ("Home Screen").SetActive (false);
 		Object.Instantiate(SaveData.control.PreLoader);
 		if (selection.Equals ("2D")) {

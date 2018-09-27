@@ -6,10 +6,10 @@ using UnityEngine.UI;
 using UnityEngine.XR;
 using TMPro;
 public class VRWinningLogic : MonoBehaviour {
-	public GameObject Cowboy;
-	public GameObject Player;
-	public GameObject Menu;
-	public AudioClip[] clips;
+	public GameObject Cowboy; //cowboy in winning scene
+	public GameObject Player; //player in winning scene
+	public GameObject Menu; //menu of winning vr scene
+	public AudioClip[] clips; //audio clips of cowboy
 	// Use this for initialization
 	void Start () {
 		Menu.SetActive (true);
@@ -19,21 +19,26 @@ public class VRWinningLogic : MonoBehaviour {
 		Menu.transform.GetChild (0).GetChild (4).gameObject.GetComponent<Button> ().onClick.AddListener (() => QuitGame ());
 		Menu.SetActive (false);
 	}
+	//change scene to 2d
 	public void ConvertTo2D() {
 		StartCoroutine (Convert2D ());
 	}
+	//coroutine for changing scene to 2d sequence
 	IEnumerator Convert2D() {
 		yield return StartCoroutine (Conversion ());
 		yield return StartCoroutine (RestOfCode ());
 	}
+	//load none device for 2d conversion
 	IEnumerator Conversion() {
 		XRSettings.LoadDeviceByName("");
 		yield return null;
 	}
+	//load final scene again for 2d final scene
 	IEnumerator RestOfCode() {
 		SceneManager.LoadSceneAsync("FinalScene");
 		yield return null;
 	}
+	//quit game
 	public void QuitGame() {
 		SaveData.control.Save (SaveData.control.username);
 		#if UNITY_EDITOR
@@ -63,15 +68,18 @@ public class VRWinningLogic : MonoBehaviour {
 			Menu.SetActive (true);
 		}
 	}
+	//play sound
 	IEnumerator PlayClip() {
 		yield return new WaitForSeconds (3f);
 		yield return StartCoroutine (PlayClip2 ());
 	}
+	//start second clip
 	IEnumerator PlayClip2() {
 		Cowboy.GetComponent<AudioSource> ().clip = clips [2];
 		Cowboy.GetComponent<AudioSource> ().Play ();
 		yield return new WaitForSeconds (0f);
 	}
+	//move the player with the cowboy
 	void MovePlayer() {
 		iTween.MoveTo (Player, iTween.Hash ("position",new Vector3(11.24f,1.5f,2.44f),"speed",1f,"easetype","Linear"));
 	}

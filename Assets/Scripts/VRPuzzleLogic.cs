@@ -7,22 +7,22 @@ using TMPro;
 using UnityEngine.XR;
 using UnityEngine.SceneManagement;
 public class VRPuzzleLogic : MonoBehaviour {
-	public GameObject parent;
-	public GameObject SelectorUICanvasPrefab;
-	public GameObject SelectorUIPos;
-	public GameObject PoofPrefab;
-	public GameObject InformationCanvasPrefab;
-	public GameObject MainMenuUICanvasPrefab;
-	public GameObject MainMenuPos;
-	public GameObject MainMenuPrompt;
-	private GameObject PuzzlePanel;
-	private Vector3[] PuzzleCubePosition;
-	public GameObject[] NonGridLocations;
-	private int n;
-	private GameObject[] selected;
-	private int selectedsize;
-	private GameObject eventSystem;
-	private GameObject gvreditoremulator;
+	public GameObject parent; //Parent of both puzzles
+	public GameObject SelectorUICanvasPrefab; //selector UI containing selected puzzle cubes
+	public GameObject SelectorUIPos; //position of selector ui
+	public GameObject PoofPrefab; //prefab that dies after seconds
+	public GameObject InformationCanvasPrefab; //information canvas prefab
+	public GameObject MainMenuUICanvasPrefab; //main menu in vr scene prefab 
+	public GameObject MainMenuPos; //position of main menu
+	public GameObject MainMenuPrompt; //prompt of vr to 2d
+	private GameObject PuzzlePanel; //current puzzle panel prefab
+	private Vector3[] PuzzleCubePosition; //positions of puzzle cubes
+	public GameObject[] NonGridLocations; //non grid locations
+	private int n; //size of puzzle
+	private GameObject[] selected; //selected puzzle cubes
+	private int selectedsize; //size of selected puzzle cubes
+	private GameObject eventSystem; //event systems
+	private GameObject gvreditoremulator; //player
 	// Use this for initialization
 	void Awake() {
 		eventSystem = GameObject.Find ("GvrEventSystem");
@@ -44,6 +44,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 	void Start () {
 		StartCoroutine(MakePuzzle ());
 	}
+	//Making puzzle cubes and initializing values
 	IEnumerator MakePuzzle() {
 		PuzzleCubePosition = new Vector3[n];
 		int k = 0;
@@ -64,6 +65,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		}
 		yield return new WaitForSeconds (0f);
 	}
+	//Making puzzle cubes from saved puzzle
 	void SavedPuzzle () {
 		int k = 0;
 		System.Random r = new System.Random ();
@@ -99,9 +101,11 @@ public class VRPuzzleLogic : MonoBehaviour {
 				}
 		}
 	}
+	//making selector in grid true
 	void CreateSelector(int i) {
 		PuzzlePanel.transform.GetChild(i+n).gameObject.SetActive (true);
 	}
+	//making puzzle zumbled using sys . random class
 	void JumblePuzzle() {
 		System.Random r = new System.Random ();
 		for (int i = 80; i > 0; i--) {
@@ -118,6 +122,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			CreateSelector (i);
 			}
 	}
+	//activating the selector ui
 	public void ActivateSelectorUI(PointerEventData eventData, GameObject Sel) {
 		if (selectedsize==0) {
 			
@@ -130,6 +135,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			iTween.MoveTo (Sel, iTween.Hash ("position", SelectorUIPos.transform.position, "time", 2f, "oncomplete", "RestOfCode", "oncompletetarget", gameObject, "oncompleteparams", Sel));
 		} 
 	}
+	//moving cube to the grid
 	public void MoveCubeToGrid(int pos) {
 		GameObject shifter = selected [pos];
 		selected [pos] = null;
@@ -147,6 +153,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		shifter.GetComponent<PuzzleCube2D> ().UpdateIsCorrectVR ();
 		StartCoroutine (checkAll ());
 	}
+	//moving cube to selector ui
 	public void MoveCubeToSelectorUI(PointerEventData eventData, GameObject PC) {
 		if (selectedsize == 9) {
 			
@@ -167,6 +174,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 			PC.SetActive (false);
 		}
 	}
+	//making of selector ui after moving selector to the ui position so that the eyes of the players follow the selected selector
 	void RestOfCode(GameObject sel) {
 		int GridValue = sel.GetComponent<VRGridSelector> ().pos;
 		sel.transform.localPosition = PuzzleCubePosition [GridValue];
@@ -204,6 +212,7 @@ public class VRPuzzleLogic : MonoBehaviour {
 		SaveData.control.VRWon = complete;
 		yield return new WaitForSeconds(0f);
 	}
+	//display menu of vr puzzle
 	public void DisplayMainMenu(GameObject MenuButton) {
 		GameObject mainMenu = Object.Instantiate (MainMenuUICanvasPrefab, MainMenuPos.transform, false);
 		mainMenu.name = "MainMenuUI";
@@ -216,10 +225,12 @@ public class VRPuzzleLogic : MonoBehaviour {
 		mainMenu.transform.GetChild (0).GetChild (4).gameObject.SetActive (false);
 		MenuButton.SetActive (false);
 	}
+	//remove vr puzzle menu
 	void DelMenu(GameObject MenuButton) {
 		MenuButton.SetActive (true);
 		Destroy (GameObject.Find ("MainMenuUI"));
 	}
+	//save vr game
 	void SaveGame () {
 		SaveData.control.PuzzleVRCubePositions = new int?[n];
 		SaveData.control.PuzzleVRNonGridPositions = new int?[n];
@@ -240,26 +251,31 @@ public class VRPuzzleLogic : MonoBehaviour {
 		}
 		SaveData.control.Save (SaveData.control.username);
 	}
+	//back to main menu
 	void BackToMainMenu() {
 		SaveGame ();
 		Destroy (GameObject.Find ("MainMenuUI"));
 		Object.Instantiate (MainMenuPrompt, MainMenuPos.transform, false);
 		StartCoroutine (STD ());
 	}
+	//show or hide image
 	void ShowHideImage(bool a) {
 		GameObject mainMenu = GameObject.Find ("MainMenuUI");
 		mainMenu.transform.GetChild (0).GetChild (4).gameObject.SetActive (a);
 		mainMenu.transform.GetChild (0).GetChild (3).gameObject.SetActive (!a);
 	}
+	//switch to two d coroutine sequence
 	IEnumerator STD() {
 		yield return new WaitForSeconds (2f);
 		yield return StartCoroutine (SwitchToTwoD ());
 		yield return StartCoroutine (SwitchScene ());
 	}
+	//change scene to main scene
 	IEnumerator SwitchScene() {
 		SceneManager.LoadSceneAsync ("MainScene");
 		yield return new WaitForSeconds (0f);
 	}
+	//change device to none for two d
 	IEnumerator SwitchToTwoD() {
 		XRSettings.LoadDeviceByName ("");
 		yield return null;

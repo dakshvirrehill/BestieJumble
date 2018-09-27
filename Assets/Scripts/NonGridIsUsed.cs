@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NonGridIsUsed : MonoBehaviour {
-	public bool isUsed;
-	public int actInd;
+	public bool isUsed; //bool to check if position is used
+	public int actInd; //bool to store actual index after jumbling of array
 	// Use this for initialization
 	void Start () {
 		isUsed = false;

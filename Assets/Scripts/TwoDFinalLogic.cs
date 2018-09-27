@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 public class TwoDFinalLogic : MonoBehaviour {
-	public GameObject winningPanel;
-	private GameObject BackButton;
-	private GameObject PrintButton;
+	public GameObject winningPanel; //panel displaying certificate and fire crackers
+	private GameObject BackButton; //back to main menu
+	private GameObject PrintButton; //print certificate
 	// Use this for initialization
 	void Start () {
 		BackButton = winningPanel.transform.GetChild (6).gameObject;
@@ -26,6 +26,7 @@ public class TwoDFinalLogic : MonoBehaviour {
 	void Update () {
 		
 	}
+	//Print certificate and save image to gallery
 	public void Printed() {
 		Texture2D tex=ScreenCapture.CaptureScreenshotAsTexture ();
 		Debug.Log (tex.width + " w + " + tex.height + " h ");
@@ -41,19 +42,23 @@ public class TwoDFinalLogic : MonoBehaviour {
 		}
 		Destroy (tex1);
 	}
+	//Back to main menu
 	public void BackToMain() {
 		GameObject.Find ("WinningCanvas").SetActive (false);
 		Object.Instantiate (SaveData.control.PreLoader);
 		SceneManager.LoadSceneAsync ("MainScene");
 	}
+	//Activate both buttons
 	public void ActivateButtons(string defaulte) {
 		BackButton.SetActive(true);
 		PrintButton.SetActive(true);
 	}
+	//Deactivate both buttons
 	public void DeactivateButtons(string defaulte) {
 		BackButton.SetActive(false);
 		PrintButton.SetActive(false);
 	}
+	//Quit game
 	public void QuitGame() {
 		SaveData.control.Save (SaveData.control.username);
 		#if UNITY_EDITOR

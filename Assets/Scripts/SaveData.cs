@@ -6,26 +6,20 @@ using System.Runtime.Serialization;
 using System.IO;
 using System;
 public class SaveData : MonoBehaviour {
-	public static SaveData control;
-	public string username;
-	public Texture cubeTex;
-	private Texture defaultTex;
-	public Vector2?[,] Puzzle2DCubePositions;
-	public int?[] PuzzleVRCubePositions;
-	public int?[] PuzzleVRNonGridPositions;
-	public GameObject PreLoader;
-	public bool VRWon;
+	public static SaveData control; //persistant gameobject
+	public string username; //username
+	public Texture cubeTex; //texture
+	private Texture defaultTex; //default texture
+	public Vector2?[,] Puzzle2DCubePositions; //puzzle 2d saved positions
+	public int?[] PuzzleVRCubePositions; //puzzle vr saved positons
+	public int?[] PuzzleVRNonGridPositions; //puzzle vr non grid saved positions
+	public GameObject PreLoader; //prelaoded between scenes
+	public bool VRWon; //vrwon boolean
 	// Use this for initialization
 	void Awake() {
 		if (control == null) {
 			DontDestroyOnLoad (gameObject);
 			control = this;
-			//control.username = "";
-			control.VRWon=false;
-			control.defaultTex = control.cubeTex;
-			control.Puzzle2DCubePositions = null;
-			control.PuzzleVRCubePositions = null;
-			control.PuzzleVRNonGridPositions = null;
 		} else if (control != this) {
 			Destroy (gameObject);
 		}
@@ -34,6 +28,7 @@ public class SaveData : MonoBehaviour {
 		username = named;
 		SaveToFile ();
 	}
+	//Save game using binary formatter
 	public void SaveToFile() {
 		BinaryFormatter bf = new BinaryFormatter ();
 		SurrogateSelector surrogateSelector = new SurrogateSelector();
@@ -51,9 +46,9 @@ public class SaveData : MonoBehaviour {
 		tex.Apply ();
 		SaveDataHolder data = new SaveDataHolder (username,tex.EncodeToJPG(),Puzzle2DCubePositions,PuzzleVRCubePositions,PuzzleVRNonGridPositions);
 		bf.Serialize (file, data);
-		//Destroy (tex);
 		file.Close ();
 	}
+	//Load game from file using binary formatter
 	public void Load(string named) {
 		BinaryFormatter bf = new BinaryFormatter ();
 		SurrogateSelector surrogateSelector = new SurrogateSelector();
@@ -90,6 +85,7 @@ public class SaveData : MonoBehaviour {
 			}
 		}
 	}
+	//Delete all saved files
 	public void DeleteAllSaveData(string[] names) {
 		foreach(string name in names) {
 			if (File.Exists (Application.persistentDataPath + "/" + name + ".dat")) {
@@ -98,6 +94,7 @@ public class SaveData : MonoBehaviour {
 		}
 		DefaultEverything ();
 	}
+	//Default all values
 	public void DefaultEverything() {
 		SaveData.control.username = "";
 		SaveData.control.cubeTex = defaultTex;
@@ -107,6 +104,7 @@ public class SaveData : MonoBehaviour {
 		SaveData.control.VRWon = false;
 	}
 }
+//Serializable class
 [Serializable]
 class SaveDataHolder {
 	public string username;

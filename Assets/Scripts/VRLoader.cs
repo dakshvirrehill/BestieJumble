@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//File for loading either the puzzle scene or the final scene depending on whether the game is complete or not
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -24,6 +26,7 @@ public class VRLoader : MonoBehaviour {
 	void Update () {
 		
 	}
+	//Load scenes
 	IEnumerator LoadingScene(string scenename) {
 		yield return new WaitForSeconds (4f);
 		AsyncOperation SceneLoad = SceneManager.LoadSceneAsync (scenename);

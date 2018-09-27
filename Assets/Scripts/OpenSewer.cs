@@ -12,6 +12,7 @@ public class OpenSewer : MonoBehaviour {
 	void Update () {
 		
 	}
+	//Check if puzzlecube is there and if it is found, move the sewer and start movement using itween
 	public void OpenTheSewer() {
 		Collider[] hitColliders = Physics.OverlapSphere (gameObject.transform.position, 0.65f);
 		bool found = false;
@@ -28,9 +29,11 @@ public class OpenSewer : MonoBehaviour {
 			
 		}
 	}
+	//Bring the cube up
 	public void BringCubeUp(GameObject PuzzleCube) {
 		iTween.MoveTo(PuzzleCube,iTween.Hash("position",PuzzleCube.transform.position+new Vector3(0f,1.28f,0f),"time",3f,"oncompletetarget", gameObject, "oncomplete", "CloseSewer"));
 	}
+	//Close the sewer
 	public void CloseSewer() {
 		iTween.MoveTo (gameObject, iTween.Hash ("position", new Vector3 (-1282.308f,0f,-59.67f), "time", 3f, "islocal", true));
 	}

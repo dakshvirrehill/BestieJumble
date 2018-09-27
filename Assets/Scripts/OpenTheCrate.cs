@@ -13,6 +13,7 @@ public class OpenTheCrate : MonoBehaviour {
 	void Update () {
 		
 	}
+	//Check whether puzzle cube is there in crate and then open the crate and start movement using itween
 	public void OpenCrate() {
 		Collider[] hitColliders = Physics.OverlapSphere (gameObject.transform.position, 0.65f);
 		bool found = false;
@@ -29,9 +30,11 @@ public class OpenTheCrate : MonoBehaviour {
 
 		}
 	}
+	//bring the cube up
 	void BringCubeUp(GameObject PuzzleCube) {
 		iTween.MoveTo(PuzzleCube,iTween.Hash("position",PuzzleCube.transform.position+new Vector3(0f,2.5f,0f),"time",3f,"oncompletetarget", gameObject, "oncomplete", "CloseCrate"));
 	}
+	//close the crate
 	void CloseCrate() {
 		iTween.RotateTo (gameObject, new Vector3 (0f, 0f, 0f), 3f);
 	}

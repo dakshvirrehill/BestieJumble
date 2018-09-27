@@ -4,16 +4,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 public class PuzzleCube2D : MonoBehaviour {
-	public Vector2 currentPos;
-	public Vector2 actualPos;
-	public int currentPosVR;
-	public int actualPosVR;
-	public int ngv;
-	public bool isCorrect;
-	public int selectedPos;
+	public Vector2 currentPos; //Curr Position in 2D Grid
+	public Vector2 actualPos; //Actual Pos in 2D Grid
+	public int currentPosVR; //VR curr pos
+	public int actualPosVR; //VR act pos
+	public int ngv; //Non grid value VR
+	public bool isCorrect; //Bool to check correct position
+	public int selectedPos; //Selected position in VR selector
 	// Use this for initialization
-	void Start () { 
-		gameObject.AddComponent<AudioSource> ();
+	void Start () { //Set event trigger for 3D Puzzle Scene
 		if (SceneManager.GetActiveScene ().name == "3DPuzzleScene") {
 			EventTrigger.Entry entry = new EventTrigger.Entry ();
 			entry.eventID = EventTriggerType.PointerClick;
@@ -28,7 +27,7 @@ public class PuzzleCube2D : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	}
-	public void UpdateIsCorrect() {
+	public void UpdateIsCorrect() {//Set is correct value
 		if (currentPos == actualPos) {
 			isCorrect = true;
 			gameObject.GetComponent<AudioSource>().Play ();
@@ -36,7 +35,7 @@ public class PuzzleCube2D : MonoBehaviour {
 			isCorrect = false;
 		}
 	}
-	public void UpdateIsCorrectVR() {
+	public void UpdateIsCorrectVR() {//Set is correct VR value
 		if (currentPosVR == actualPosVR) {
 			isCorrect = true;
 			gameObject.GetComponent<AudioSource>().Play ();
