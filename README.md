@@ -1,5 +1,9 @@
 # BestieJumble
-Learn if your friends remember your memories by giving them a picture puzzle to solve. Both VR and 2D puzzles available
+Learn if your friends remember your memories by giving them a picture puzzle to solve. Both VR and 2D puzzles 
+
+# Walkthrough Video
+
+[![Alt text](https://img.youtube.com/vi/1WQqWdwB100/0.jpg)](https://youtu.be/1WQqWdwB100)
 
 # Features
 
@@ -18,4 +22,4 @@ Let's see if they value it as much as you do.
 PS Remember this game is just for fun and not a real measure ment of value of friendship. It is actually just a test of your friend's memory and picture retention capabilities.
 
 # GoogleVR SDK Version v1.130.1
-# Unity Editor Version 2017.3.0f3
+# Unity Editor Version 2018.2.8f1
